@@ -8,8 +8,8 @@
 	<p>Authorization</p>
 	<c:choose>
 		<c:when test="${empty sessionScope.user}">
-			<form action="controller" method="post" autocomplete="off">
-				<input type="hidden" name="command" value="login_user_command" />
+			<form action="login-user" method="post">
+				<input type="hidden" name="command" value="login-user" />
 				<div>
 					<input class="inputForm" id="loginAuthForm" name="login"
 						type="text" title="loginAuthForm"/>
@@ -34,8 +34,8 @@
 				<p style="font-size: 12px">User type:
 					${sessionScope.user.userType}</p>
 				<form action="controller" method="post" autocomplete="off">
-					<input type="hidden" name="command" value="logout_user_command" /> <input
-						class="button" type="submit" value="logout" />
+					<input type="hidden" name="command" value="logout_user_command" />
+					<input class="button" type="submit" value="logout" />
 				</form>
 			</div>
 		</c:otherwise>

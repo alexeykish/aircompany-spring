@@ -1,0 +1,15 @@
+<jsp:root xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:jsp="http://java.sun.com/JSP/Page"
+          version="2.0">
+    <div class="user-container">
+        <div style="font-size: 12px;">Current user:
+            ${sessionScope.user.login}</div>
+        <div style="font-size: 12px;">User type:
+            ${sessionScope.user.userType}</div>
+        <div style="margin:0 auto;">
+            <form action="logout-user" method="post">
+                <input class="button" type="submit" value="logout"/>
+            </form>
+        </div>
+    </div>
+</jsp:root>

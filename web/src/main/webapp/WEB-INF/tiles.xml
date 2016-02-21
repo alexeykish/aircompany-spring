@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <definition name="default" template="/WEB-INF/view/layouts/default.jspx">
+        <put-attribute name="title" value=""/>
+        <put-attribute name="header" value="/WEB-INF/view/common/header.jspx"/>
+        <put-attribute name="admin-menu" value="/WEB-INF/view/menu/adminmenu.jspx"/>
+        <put-attribute name="disp-menu" value="/WEB-INF/view/menu/dispmenu.jspx"/>
+        <put-attribute name="right-content" value=""/>
+    </definition>
+
+    <definition name="main" extends="default">
+        <put-attribute name="title" value="Main page"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/main/message.jspx"/>
+    </definition>
+
+    <definition name="users" extends="default">
+        <put-attribute name="title" value="Users info"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/user/main.jspx"/>
+    </definition>
+
+    <definition name="employee/list" extends="default">
+        <put-attribute name="title" value="Employees info"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/employee/employeeList.jspx"/>
+    </definition>
+
+    <definition name="employee/add" extends="default">
+        <put-attribute name="title" value="Add employee"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/employee/addEmployee.jspx"/>
+    </definition>
+
+    <definition name="employee/report" extends="default">
+        <put-attribute name="title" value="Employee report"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/employee/employeeReport.jspx"/>
+    </definition>
+
+    <definition name="employee/update" extends="default">
+        <put-attribute name="title" value="Update employee"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/employee/updateEmployee.jspx"/>
+    </definition>
+</tiles-definitions>

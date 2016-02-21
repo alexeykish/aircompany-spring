@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:jsp="http://java.sun.com/JSP/Page"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:tiles="http://tiles.apache.org/tags-tiles">
+
+<jsp:output doctype-public="-//W3C//DTD XHTML 1.1//EN"
+            doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"
+            doctype-root-element="html" omit-xml-declaration="false"/>
+<jsp:directive.page pageEncoding="UTF-8" contentType="text/html; UTF-8"/>
+<head>
+    <![CDATA[
+    <script src="../assests/js/jquery-1.11.1.min.js" type="text/javascript"><jsp:text/></script>
+    <script src="../assests/js/utils.js" type="text/javascript"><jsp:text/></script>
+    <link rel="stylesheet" href="../assests/css/style.css" type="text/css">
+    ]]>
+    <tiles:insertAttribute name="title"/>
+    <c:if test="${not empty title}">
+        <title>${title}</title>
+    </c:if>
+</head>
+<body>
+<tiles:insertAttribute name="header"/>
+<table style="border-collapse: collapse;">
+    <tbody>
+    <tr>
+        <c:if test="${(not empty sessionScope.userType) and (sessionScope.userType == '2')}">
+            <td id="left-content" class="left-content">
+                <div>
+                    <tiles:insertAttribute name="admin-menu"/>
+                </div>
+            </td>
+        </c:if>
+        <c:if test="${(not empty sessionScope.userType) and (sessionScope.userType == '1')}">
+            <td id="left-content" class="left-content">
+                <div>
+                    <tiles:insertAttribute name="disp-menu"/>
+                </div>
+            </td>
+        </c:if>
+        <td id="right-content" style="border: solid 1px grey; width: 100%; vertical-align: top;">
+            <tiles:insertAttribute name="right-content"/>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

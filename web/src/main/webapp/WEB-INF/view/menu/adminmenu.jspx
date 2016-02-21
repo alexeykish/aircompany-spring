@@ -1,0 +1,49 @@
+<jsp:root xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:jsp="http://java.sun.com/JSP/Page"
+          version="2.0">
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <form action="flights" method="post">
+                        <input class="button"
+                               type="submit"
+                               name="submit"
+                               value="Flights"/>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form action="planes" method="post">
+                        <input class="button"
+                               type="submit"
+                               name="submit"
+                               value="Planes"/>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form action="airports" method="post">
+                        <input class="button"
+                               type="submit"
+                               name="submit"
+                               value="Airports"/>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form action="users" method="post">
+                        <input type="hidden" name="command" value="get_all_users_command"/>
+                        <input class="button"
+                               type="submit"
+                               name="submit"
+                               value="Users"/>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</jsp:root>

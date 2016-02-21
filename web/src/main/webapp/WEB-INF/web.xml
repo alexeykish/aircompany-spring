@@ -4,6 +4,16 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <display-name>aircompany</display-name>
+    
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <servlet>
         <servlet-name>controller</servlet-name>
         <servlet-class>by.pvt.kish.aircompany.controller.Controller</servlet-class>
@@ -14,7 +24,7 @@
     </servlet>
     <servlet>
         <servlet-name>registration-page</servlet-name>
-        <jsp-file>/WEB-INF/view/pages/registration.jsp</jsp-file>
+        <jsp-file>/WEB-INF/view/user/registration.jsp</jsp-file>
     </servlet>
     <servlet>
         <servlet-name>addflight-page</servlet-name>
@@ -26,11 +36,11 @@
     </servlet>
     <servlet>
         <servlet-name>addemployee-page</servlet-name>
-        <jsp-file>/WEB-INF/view/pages/addemployee.jsp</jsp-file>
+        <jsp-file>/WEB-INF/view/employee/addEmployee.jspx</jsp-file>
     </servlet>
     <servlet>
         <servlet-name>updateemployee-page</servlet-name>
-        <jsp-file>/WEB-INF/view/pages/editemployee.jsp</jsp-file>
+        <jsp-file>/WEB-INF/view/employee/updateEmployee.jspx</jsp-file>
     </servlet>
     <servlet>
         <servlet-name>addairport-page</servlet-name>
@@ -49,6 +59,10 @@
         <jsp-file>/WEB-INF/view/pages/editplane.jsp</jsp-file>
     </servlet>
 
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>controller</servlet-name>
         <url-pattern>/controller</url-pattern>
@@ -181,6 +195,10 @@
         <url-pattern>/registration</url-pattern>
     </filter-mapping>
 
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    
     <resource-ref>
         <description>DB Connection</description>
         <res-ref-name>jdbc/aircompany</res-ref-name>
