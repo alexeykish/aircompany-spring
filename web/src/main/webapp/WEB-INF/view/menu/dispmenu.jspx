@@ -5,7 +5,7 @@
         <table>
             <tr>
                 <td>
-                    <form action="flights" method="get">
+                    <form action="/flightList" method="get">
                         <input class="button"
                                type="submit"
                                name="submit"
@@ -15,7 +15,7 @@
             </tr>
             <tr>
                 <td>
-                    <form action="employees" method="get">
+                    <form action="/employeeList" method="get">
                         <input class="button" type="submit" name="submit"/>
                     </form>
                 </td>

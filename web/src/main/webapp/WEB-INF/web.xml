@@ -15,10 +15,6 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
-        <servlet-name>controller</servlet-name>
-        <servlet-class>by.pvt.kish.aircompany.controller.Controller</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>showindex-page</servlet-name>
         <jsp-file>/index.jsp</jsp-file>
     </servlet>
@@ -26,46 +22,10 @@
         <servlet-name>registration-page</servlet-name>
         <jsp-file>/WEB-INF/view/user/registration.jsp</jsp-file>
     </servlet>
-    <servlet>
-        <servlet-name>addflight-page</servlet-name>
-        <jsp-file>/WEB-INF/view/pages/addflight.jsp</jsp-file>
-    </servlet>
-    <servlet>
-        <servlet-name>updateflight-page</servlet-name>
-        <jsp-file>/WEB-INF/view/pages/editflight.jsp</jsp-file>
-    </servlet>
-    <servlet>
-        <servlet-name>addemployee-page</servlet-name>
-        <jsp-file>/WEB-INF/view/employee/addEmployee.jspx</jsp-file>
-    </servlet>
-    <servlet>
-        <servlet-name>updateemployee-page</servlet-name>
-        <jsp-file>/WEB-INF/view/employee/updateEmployee.jspx</jsp-file>
-    </servlet>
-    <servlet>
-        <servlet-name>addairport-page</servlet-name>
-        <jsp-file>/WEB-INF/view/pages/addairport.jsp</jsp-file>
-    </servlet>
-    <servlet>
-        <servlet-name>updateairport-page</servlet-name>
-        <jsp-file>/WEB-INF/view/pages/editairport.jsp</jsp-file>
-    </servlet>
-    <servlet>
-        <servlet-name>addplane-page</servlet-name>
-        <jsp-file>/WEB-INF/view/pages/addplane.jsp</jsp-file>
-    </servlet>
-    <servlet>
-        <servlet-name>updateplane-page</servlet-name>
-        <jsp-file>/WEB-INF/view/pages/editplane.jsp</jsp-file>
-    </servlet>
 
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>controller</servlet-name>
-        <url-pattern>/controller</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>showindex-page</servlet-name>
@@ -74,38 +34,6 @@
     <servlet-mapping>
         <servlet-name>registration-page</servlet-name>
         <url-pattern>/registration</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>addflight-page</servlet-name>
-        <url-pattern>/addflight</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>updateflight-page</servlet-name>
-        <url-pattern>/updateflight</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>addemployee-page</servlet-name>
-        <url-pattern>/addemployee</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>updateemployee-page</servlet-name>
-        <url-pattern>/updateemployee</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>addairport-page</servlet-name>
-        <url-pattern>/addairport</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>updateairport-page</servlet-name>
-        <url-pattern>/updateairport</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>addplane-page</servlet-name>
-        <url-pattern>/addplane</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>updateplane-page</servlet-name>
-        <url-pattern>/updateplane</url-pattern>
     </servlet-mapping>
 
     <filter>
@@ -123,22 +51,6 @@
     <filter>
         <filter-name>DispatcherAuthFilter</filter-name>
         <filter-class>by.pvt.kish.aircompany.filters.DispatcherAuthFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>PreAddFlightFilter</filter-name>
-        <filter-class>by.pvt.kish.aircompany.filters.PreAddFlightFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>PreUpdateFlightFilter</filter-name>
-        <filter-class>by.pvt.kish.aircompany.filters.PreUpdateFlightFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>PreAddEmployeeFilter</filter-name>
-        <filter-class>by.pvt.kish.aircompany.filters.PreAddEmployeeFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>PreUpdateEmployeeFilter</filter-name>
-        <filter-class>by.pvt.kish.aircompany.filters.PreUpdateEmployeeFilter</filter-class>
     </filter>
     <filter>
         <filter-name>PreRegistrationFilter</filter-name>
@@ -171,24 +83,6 @@
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>PreAddFlightFilter</filter-name>
-        <url-pattern>/addflight</url-pattern>
-        <url-pattern>/updateflight</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>PreUpdateFlightFilter</filter-name>
-        <url-pattern>/updateflight</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>PreAddEmployeeFilter</filter-name>
-        <url-pattern>/addemployee</url-pattern>
-        <url-pattern>/updateemployee</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>PreUpdateEmployeeFilter</filter-name>
-        <url-pattern>/updateemployee</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>PreRegistrationFilter</filter-name>

@@ -12,10 +12,7 @@ import by.pvt.kish.aircompany.utils.ErrorHandler;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -31,9 +28,10 @@ public class UserController {
     private static Logger logger = Logger.getLogger(UserController.class.getName());
 
     @RequestMapping(value = "/login-user", method = RequestMethod.POST)
+
     public String loginUser(Model model,
-                            @RequestParam("session") HttpSession session,
-                            @RequestParam("request") HttpServletRequest request,
+                            HttpSession session,
+                            HttpServletRequest request,
                             @RequestParam("login") String login,
                             @RequestParam("password") String password) {
         try {
@@ -50,18 +48,18 @@ public class UserController {
                     break;
             }
             session.setAttribute(Attribute.USER_ATTRIBUTE, user);
-            return "/main";
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceLoginException e) {
             return ErrorHandler.returnLoginErrorPage(request, e.getMessage(), className);
         }
+        return "main";
     }
 
     @RequestMapping(value = "/logout-user", method = RequestMethod.POST)
     public String logoutUser(Model model,
-                             @RequestParam("session") HttpSession session,
-                             @RequestParam("request") HttpServletRequest request) {
+                             HttpSession session,
+                             HttpServletRequest request) {
         if (session != null) {
             try {
                 User user = (User)session.getAttribute(Attribute.USER_ATTRIBUTE);
@@ -75,18 +73,18 @@ public class UserController {
                 return ErrorHandler.returnLoginErrorPage(request, e.getMessage(), className);
             }
         }
-        return "/index";
+        return "index";
     }
 
     @RequestMapping(value = "/add-user", method = RequestMethod.POST)
-    public String addUser(Model model,@ModelAttribute User user,
-                          @RequestParam("request") HttpServletRequest request) {
+    public String addUser(Model model,
+                          @ModelAttribute User user,
+                          HttpServletRequest request) {
         try {
             if (user != null) {
                 UserService.getInstance().add(user);
                 model.addAttribute(Attribute.LOGIN_MESSAGE_ATTRIBUTE, Message.SUCCESS_REG);
             }
-            return "/main";
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceLoginException e) {
@@ -94,9 +92,10 @@ public class UserController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
+        return "main";
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    @RequestMapping(value = "/usersList", method = RequestMethod.GET)
     public String getAllUsers(Model model) {
         try {
             List<User> users = UserService.getInstance().getAll();
@@ -104,6 +103,6 @@ public class UserController {
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
-        return "/users";
+        return "user/list";
     }
 }

@@ -16,7 +16,7 @@
         <put-attribute name="right-content" value="/WEB-INF/view/main/message.jspx"/>
     </definition>
 
-    <definition name="users" extends="default">
+    <definition name="user/list" extends="default">
         <put-attribute name="title" value="Users info"/>
         <put-attribute name="right-content" value="/WEB-INF/view/user/main.jspx"/>
     </definition>
@@ -40,4 +40,60 @@
         <put-attribute name="title" value="Update employee"/>
         <put-attribute name="right-content" value="/WEB-INF/view/employee/updateEmployee.jspx"/>
     </definition>
+
+    <definition name="addCrew" extends="default">
+        <put-attribute name="title" value="Add flight crew"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/employee/addCrew.jspx"/>
+    </definition>
+
+    <definition name="updateCrew" extends="default">
+        <put-attribute name="title" value="Update flight crew"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/employee/updateCrew.jspx"/>
+    </definition>
+
+    <definition name="flight/list" extends="default">
+        <put-attribute name="title" value="Flights info"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/flight/flightList.jspx"/>
+    </definition>
+
+    <definition name="flight/add" extends="default">
+        <put-attribute name="title" value="Add flight"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/flight/addFlight.jspx"/>
+    </definition>
+
+    <definition name="flight/report" extends="default">
+        <put-attribute name="title" value="Flight report"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/flight/flightReport.jspx"/>
+    </definition>
+
+    <definition name="flight/update" extends="default">
+        <put-attribute name="title" value="Update flight"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/flight/updateFlight.jspx"/>
+    </definition>
+
+    <definition name="plane/list" extends="default">
+        <put-attribute name="title" value="Planes info"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/plane/planeList.jspx"/>
+    </definition>
+
+    <definition name="plane/report" extends="default">
+        <put-attribute name="title" value="Plane report"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/plane/planeReport.jspx"/>
+    </definition>
+
+    <definition name="plane/add" extends="default">
+        <put-attribute name="title" value="Add plane"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/plane/addPlane.jspx"/>
+    </definition>
+
+    <definition name="plane/update" extends="default">
+        <put-attribute name="title" value="Update plane"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/plane/updatePlane.jspx"/>
+    </definition>
+
+    <definition name="airport/list" extends="default">
+        <put-attribute name="title" value="Airports info"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/airport/airportList.jspx"/>
+    </definition>
+
 </tiles-definitions>

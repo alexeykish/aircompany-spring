@@ -1,41 +1,53 @@
 <jsp:root xmlns="http://www.w3.org/1999/xhtml"
           xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
-          xmlns:form="http://www.springframework.org/tags/form"
+          xmlns:s="http://www.springframework.org/tags/form"
           version="2.0">
     <div style="margin: 5px;">
         <h2>Update Employee</h2>
-        <form:form name="updateemployee" action="/update-employee" method="post" modelAttribute="employee">
-            <input type="hidden" name="command" value="update_employee_command"/>
+        <s:form name="updateemployee" action="/updateEmployee" method="post" modelAttribute="employee">
             <input type="hidden" name="eid" value="${requestScope.employee.eid}"/>
-            <table>
-                <tr class="input-label">
-                    <td>ID:</td>
-                    <td>${requestScope.employee.eid}</td>
-                </tr>
-                <tr>
-                    <td class="input-label">Firstname:</td>
-                    <td><input class="inputForm" type="text" name="firstName" value="${requestScope.employee.firstName}"
-                               title="Firstname"/></td>
-                </tr>
-                <tr>
-                    <td class="input-label">Lastname:</td>
-                    <td><input class="inputForm" type="text" name="lastName" value="${requestScope.employee.lastName}"
-                               title="Lastname"/></td>
-                </tr>
-                <tr>
-                    <td class="input-label">Position:</td>
-                    <td><select class="inputForm" name="position" title="Position">
-                        <option value="${requestScope.employee.position}">${requestScope.employee.position}</option>
-                        <c:forEach items="${requestScope.positions}" var="position">
-                            <c:if test="${requestScope.employee.position != position}">
-                                <option value="${position}">${position}</option>
-                            </c:if>
-                        </c:forEach>
-                    </select></td>
-                </tr>
-            </table>
+            <fieldset>
+                <table>
+                    <tr class="input-label">
+                        <td>ID:</td>
+                        <td>${requestScope.employee.eid}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="employeeFirstName" class="input-label">Firstname:</label>
+                        </td>
+                        <td>
+                            <s:input id="employeeFirstName" path="firstName" class="inputForm" type="text"
+                                     value="${requestScope.employee.firstName}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="employeeLastName" class="input-label">Lastname:</label>
+                        </td>
+                        <td>
+                            <s:input id="employeeLastName" path="lastName" class="inputForm" type="text"
+                                     value="${requestScope.employee.lastName}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="employeePosition" class="input-label">Position:</label>
+                        </td>
+                        <td>
+                            <s:select id="employeePosition" path="position" class="inputForm">
+                                <option value="${requestScope.employee.position}">${requestScope.employee.position}</option>
+                                <c:forEach items="${requestScope.positions}" var="position">
+                                    <c:if test="${requestScope.employee.position != position}">
+                                        <option value="${position}">${position}</option>
+                                    </c:if>
+                                </c:forEach>
+                            </s:select></td>
+                    </tr>
+                </table>
+            </fieldset>
             <input class="button" type="submit" name="submit" value="update employee"/>
-        </form:form>
+        </s:form>
     </div>
 </jsp:root>

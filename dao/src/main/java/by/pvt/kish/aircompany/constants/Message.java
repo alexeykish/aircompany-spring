@@ -9,7 +9,6 @@ public class Message {
     public static final String SUCCESS_UPDATE_FLIGHT = "The flight was successfully updated";
 
     public static final String SUCCESS_TEAM_CHANGE = "The flight team was successfully changed";
-    public static final String SUCCESS_DELETE_TEAM = "The flight team was successfully deleted";
 
     public static final String SUCCESS_ADD_EMPLOYEE = "The employee was successfully added";
     public static final String SUCCESS_DELETE_EMPLOYEE = "The employee was successfully deleted";
@@ -18,7 +17,12 @@ public class Message {
 
     public static final String SUCCESS_ADD_PLANE = "The plane was successfully added";
     public static final String SUCCESS_DELETE_PLANE = "The plane was successfully deleted";
+    public static final String SUCCESS_UPDATE_PLANE = "The plane was successfully updated";
     public static final String SUCCESS_SET_STATUS_PLANE = "The plane status was successfully changed";
+
+    public static final String SUCCESS_ADD_AIRPORT = "The airport was successfully added";
+    public static final String SUCCESS_DELETE_AIRPORT = "The airport was successfully deleted";
+    public static final String SUCCESS_UPDATE_AIRPORT = "The airport was successfully updated";
 
     public static final String SUCCESS_REG = "You have successfully registered";
 
@@ -48,5 +52,6 @@ public class Message {
     public static final String ERROR_FLIGHT_DATE = "Adding or updating of the flight prohibited, when departure date is earlier than the current";
     public static final String ERROR_STATUS = "Empty status in request";
     public static final String ERROR_TEAM_MEMBER_VALID = "Employee is already busy in the other team at this day";
+
 }
 

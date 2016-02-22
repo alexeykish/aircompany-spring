@@ -1,0 +1,34 @@
+<jsp:root xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          version="2.0">
+    <div>
+        <table class="list">
+            <tr>
+                <th>ID</th>
+                <th>MODEL</th>
+                <th>PASSENGER CAPACITY</th>
+                <th>FLIGHT RANGE, KM</th>
+                <th>STATUS</th>
+            </tr>
+            <c:forEach items="${requestScope.planes}" var="plane">
+                <tr>
+                    <td>${plane.pid}</td>
+                    <td>${plane.model}</td>
+                    <td>${plane.capacity}</td>
+                    <td>${plane.flightRange}</td>
+                    <td>${plane.status}</td>
+                    <td style="width: 70px;">
+                        <form action="/planeReport" method="post">
+                            <input type="hidden" name="pid" value="${plane.pid}"/>
+                            <input class="table-button" type="submit" name="submit" value="details"/>
+                        </form>
+                    </td>
+                </tr>
+            </c:forEach>
+        </table>
+        <form action="/addPlanePage" method="post">
+            <input class="button" type="submit" name="submit" value="add plane"/>
+        </form>
+    </div>
+</jsp:root>

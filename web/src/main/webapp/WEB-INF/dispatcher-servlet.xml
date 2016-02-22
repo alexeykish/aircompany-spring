@@ -12,6 +12,8 @@
 
     <mvc:annotation-driven/>
     <context:component-scan base-package="by.pvt.kish.aircompany.controller"/>
+    <mvc:resources mapping="/resources/**" location="assests"/>
+    <mvc:default-servlet-handler />
 
     <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
         <property name="definitions">

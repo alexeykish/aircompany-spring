@@ -5,7 +5,7 @@
         <table>
             <tr>
                 <td>
-                    <form action="flights" method="post">
+                    <form action="/flightList" method="get">
                         <input class="button"
                                type="submit"
                                name="submit"
@@ -15,7 +15,7 @@
             </tr>
             <tr>
                 <td>
-                    <form action="planes" method="post">
+                    <form action="/planeList" method="get">
                         <input class="button"
                                type="submit"
                                name="submit"
@@ -25,7 +25,7 @@
             </tr>
             <tr>
                 <td>
-                    <form action="airports" method="post">
+                    <form action="/airportList" method="get">
                         <input class="button"
                                type="submit"
                                name="submit"
@@ -35,8 +35,7 @@
             </tr>
             <tr>
                 <td>
-                    <form action="users" method="post">
-                        <input type="hidden" name="command" value="get_all_users_command"/>
+                    <form action="/userList" method="post">
                         <input class="button"
                                type="submit"
                                name="submit"
