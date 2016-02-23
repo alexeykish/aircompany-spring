@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
@@ -30,10 +31,16 @@ import java.util.List;
 public class EmployeeController {
 
     private static String className = EmployeeController.class.getName();
+    private static Logger logger = Logger.getLogger(EmployeeController.class.getName());
+
+    @ModelAttribute("employee")
+    public Employee createEmployee() {
+        return new Employee();
+    }
 
     @RequestMapping(value = "/addEmployee")
     public String addEmployee(Model model,
-                              @ModelAttribute Employee employee,
+                              @ModelAttribute("employee") Employee employee,
                               HttpServletRequest request) {
         try {
             EmployeeService.getInstance().add(employee);

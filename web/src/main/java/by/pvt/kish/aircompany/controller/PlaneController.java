@@ -36,7 +36,6 @@ public class PlaneController {
 
     @ModelAttribute("plane")
     public Plane createPlane() {
-        logger.info("Model attribute plane is created");
         return new Plane();
     }
 

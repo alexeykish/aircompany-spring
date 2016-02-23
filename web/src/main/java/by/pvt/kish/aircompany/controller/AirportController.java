@@ -24,9 +24,14 @@ public class AirportController {
 
     private static String className = PlaneController.class.getName();
 
+    @ModelAttribute("airport")
+    public Airport createAirport() {
+        return new Airport();
+    }
+
     @RequestMapping(value = "/addAirport")
     public String addPlane(Model model,
-                           @ModelAttribute Airport airport,
+                           @ModelAttribute("airport") Airport airport,
                            HttpServletRequest request) {
         try {
             AirportService.getInstance().add(airport);

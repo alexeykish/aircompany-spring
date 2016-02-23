@@ -29,7 +29,6 @@ public class UserController {
 
     @ModelAttribute("user")
     public User createUser() {
-        logger.info("Model attribute user is created");
         return new User();
     }
 

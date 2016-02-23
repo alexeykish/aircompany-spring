@@ -37,7 +37,6 @@ public class FlightController {
 
     @ModelAttribute("flight")
     public Flight createFlight() {
-        logger.info("Model attribute flight is created");
         return new Flight();
     }
 
