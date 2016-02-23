@@ -6,6 +6,7 @@ import by.pvt.kish.aircompany.enums.UserStatus;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceLoginException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
+import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.pojos.User;
 import by.pvt.kish.aircompany.services.impl.UserService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
@@ -27,8 +28,13 @@ public class UserController {
     private static String className = UserController.class.getName();
     private static Logger logger = Logger.getLogger(UserController.class.getName());
 
-    @RequestMapping(value = "/login-user", method = RequestMethod.POST)
+    @ModelAttribute("user")
+    public User createUser() {
+        logger.info("Model attribute user is created");
+        return new User();
+    }
 
+    @RequestMapping(value = "/loginUser")
     public String loginUser(Model model,
                             HttpSession session,
                             HttpServletRequest request,
@@ -56,7 +62,7 @@ public class UserController {
         return "main";
     }
 
-    @RequestMapping(value = "/logout-user", method = RequestMethod.POST)
+    @RequestMapping(value = "/logoutUser")
     public String logoutUser(Model model,
                              HttpSession session,
                              HttpServletRequest request) {
@@ -67,16 +73,16 @@ public class UserController {
                 session.invalidate();
                 logger.info(Message.USER_LOGOUT);
             } catch (ServiceException e) {
-               model.addAttribute(Attribute.LOGIN_MESSAGE_ATTRIBUTE, Message.ERROR_REG_LOGOUT);
+               model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.ERROR_REG_LOGOUT); //LOGIN_MESSAGE
                 return ErrorHandler.returnErrorPage(e.getMessage(), className);
             } catch (ServiceValidateException e) {
                 return ErrorHandler.returnLoginErrorPage(request, e.getMessage(), className);
             }
         }
-        return "index";
+        return "signIn";
     }
 
-    @RequestMapping(value = "/add-user", method = RequestMethod.POST)
+    @RequestMapping(value = "/addUser")
     public String addUser(Model model,
                           @ModelAttribute User user,
                           HttpServletRequest request) {
@@ -92,10 +98,10 @@ public class UserController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "main";
+        return "signIn";
     }
 
-    @RequestMapping(value = "/usersList", method = RequestMethod.GET)
+    @RequestMapping(value = "/userList")
     public String getAllUsers(Model model) {
         try {
             List<User> users = UserService.getInstance().getAll();
@@ -104,5 +110,10 @@ public class UserController {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
         return "user/list";
+    }
+
+    @RequestMapping(value = "/signIn")
+    public String showAuthorisationPage() {
+        return "signIn";
     }
 }

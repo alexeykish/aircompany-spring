@@ -8,8 +8,13 @@
             <fieldset>
                 <table>
                     <tr class="input-label">
-                        <td>ID:</td>
-                        <td>${requestScope.plane.eid}</td>
+                        <td>
+                            <label for="planeId" class="input-label">ID:</label>
+                        </td>
+                        <td>
+                            <s:input id="planeId" path="pid" class="inputForm" type="text"
+                                     value="${requestScope.plane.pid}" readonly="true"/>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -73,6 +78,7 @@
                             <s:input id="planeStewardesses" path="planeCrew.numberOfStewardesses" class="inputForm"
                                      type="text" value="${requestScope.plane.planeCrew.numberOfStewardesses}"/></td>
                     </tr>
+                    <s:input path="planeCrew.pid" value="${requestScope.plane.pid}" style="display: none"/>
                 </table>
                 <input class="button" type="submit" name="submit" value="update plane"/>
             </fieldset>

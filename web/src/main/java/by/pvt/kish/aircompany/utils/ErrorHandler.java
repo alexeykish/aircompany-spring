@@ -16,17 +16,17 @@ public class ErrorHandler {
     public static String returnValidateErrorPage(HttpServletRequest request, String validateResult, String className) {
         request.setAttribute(Attribute.MESSAGE_ATTRIBUTE, validateResult);
         logger.error(className + ": " + validateResult);
-        return Page.ERROR;
+        return "main";
     }
 
     public static String returnLoginErrorPage(HttpServletRequest request, String error, String className) {
         request.setAttribute(Attribute.LOGIN_MESSAGE_ATTRIBUTE, error);
         logger.error(className + ": " + error);
-        return Page.INDEX;
+        return "index";
     }
 
     public static String returnErrorPage(String error, String className) {
         logger.error(className + ": " + error);
-        return Page.ERROR;
+        return "main";
     }
 }

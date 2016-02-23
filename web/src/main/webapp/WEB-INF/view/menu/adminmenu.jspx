@@ -6,6 +6,7 @@
             <tr>
                 <td>
                     <form action="/flightList" method="get">
+                        <input type="hidden" name="page" value="1"/>
                         <input class="button"
                                type="submit"
                                name="submit"

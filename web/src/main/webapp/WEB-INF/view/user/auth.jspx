@@ -1,0 +1,41 @@
+<jsp:root xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          version="2.0">
+
+    <div class="container">
+        <p>Authorization</p>
+        <c:choose>
+            <c:when test="${empty sessionScope.user}">
+                <form action="/loginUser" method="post">
+                    <div>
+                        <input class="inputForm" id="loginAuthForm" name="login"
+                               type="text" title="loginAuthForm"/>
+                    </div>
+                    <div>
+                        <input class="inputForm" id="passAuthForm" name="password"
+                               type="password" title="passAuthForm"/>
+                    </div>
+                    <div>
+                        <input class="button" type="submit" value="login"/>
+                    </div>
+                    <div>
+                        <a href="registration"
+                           style="font-size: 10px; color: #666666; margin: 5px;">registration</a>
+                    </div>
+                </form>
+            </c:when>
+            <c:otherwise>
+                <div class="user-container" style="text-align: left;">
+                    <p style="font-size: 12px">Current user:
+                        ${sessionScope.user.login}</p>
+                    <p style="font-size: 12px">User type:
+                        ${sessionScope.user.userType}</p>
+                    <form action="/logoutUser" method="post" autocomplete="off">
+                        <input class="button" type="submit" value="logout"/>
+                    </form>
+                </div>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</jsp:root>

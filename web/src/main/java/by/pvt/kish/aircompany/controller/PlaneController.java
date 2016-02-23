@@ -8,11 +8,14 @@ import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.pojos.Plane;
+import by.pvt.kish.aircompany.pojos.PlaneCrew;
 import by.pvt.kish.aircompany.services.impl.PlaneService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,12 +32,21 @@ import java.util.Map;
 public class PlaneController {
 
     private static String className = PlaneController.class.getName();
+    private static Logger logger = Logger.getLogger(PlaneController.class.getName());
+
+    @ModelAttribute("plane")
+    public Plane createPlane() {
+        logger.info("Model attribute plane is created");
+        return new Plane();
+    }
 
     @RequestMapping(value = "/addPlane")
     public String addPlane(Model model,
-                           @ModelAttribute Plane plane,
+                           @ModelAttribute("plane") Plane plane,
                            HttpServletRequest request) {
         try {
+            PlaneCrew planeCrew = plane.getPlaneCrew();
+            planeCrew.setPlane(plane);
             PlaneService.getInstance().add(plane);
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_ADD_PLANE);
         } catch (IllegalArgumentException e) {
@@ -47,9 +59,9 @@ public class PlaneController {
         return "main";
     }
 
-    @RequestMapping(value = "/deletePlane")
+    @RequestMapping(value = "/deletePlane/{id}")
     public String deletePlane(Model model,
-                              @RequestParam("pid") Long id) {
+                              @PathVariable("id") Long id) {
         try {
             PlaneService.getInstance().delete(id);
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_DELETE_PLANE);
@@ -94,9 +106,9 @@ public class PlaneController {
         return "plane/report";
     }
 
-    @RequestMapping(value = "/changePlaneStatus")
+    @RequestMapping(value = "/changePlaneStatus/{id}")
     public String changePlaneStatus(Model model,
-                                    @RequestParam("pid") Long id,
+                                    @PathVariable("id") Long id,
                                     @RequestParam("status") String status) {
         try {
             PlaneService.getInstance().setStatus(id, PlaneStatus.valueOf(status));
@@ -109,11 +121,11 @@ public class PlaneController {
 
     @RequestMapping(value = "/updatePlane")
     public String updatePlane(Model model,
-                              @ModelAttribute Plane plane,
+                              @ModelAttribute("plane") Plane plane,
                               HttpServletRequest request) {
         try {
             PlaneService.getInstance().update(plane);
-            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_UPDATE_EMPLOYEE);
+            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_UPDATE_PLANE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
@@ -127,8 +139,15 @@ public class PlaneController {
         return "plane/add";
     }
 
-    @RequestMapping(value = "/updatePlanePage")
-    public String showUpdatePlanePage() {
+    @RequestMapping(value = "/updatePlanePage/{id}")
+    public String showUpdatePlanePage(Model model,
+                                      @PathVariable("id") Long id) {
+        try {
+            Plane plane = PlaneService.getInstance().getById(id);
+            model.addAttribute(Attribute.PLANE_ATTRIBUTE, plane);
+        } catch (ServiceException e) {
+            return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        }
         return "plane/update";
     }
 }

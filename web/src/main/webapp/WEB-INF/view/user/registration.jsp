@@ -13,7 +13,7 @@
 <body>
 
 <div class="container">
-    <form:form action="add-user" method="post" modelAttribute="user">
+    <form:form action="/addUser" method="post" modelAttribute="user">
         <h2 style="text-align: center;">Registration</h2>
         <table class="add_user_table">
             <tr>

@@ -38,7 +38,7 @@
             </tr>
         </table>
         <div>
-            <form action="/changePlaneStatus" method="post">
+            <form action="/changePlaneStatus/${requestScope.plane.pid}" method="post">
                 <h4>Plane status is: ${requestScope.plane.status}</h4>
                 <select class="inputForm" name="status" title="Status">
                     <c:forEach items="${requestScope.statuses}" var="status">
@@ -52,12 +52,10 @@
         <div>
             <c:choose>
                 <c:when test="${requestScope.permissionChangeDeleteStatus =='false'}">
-                    <form action="/deletePlane" method="post">
-                        <input type="hidden" name="pid" value="${requestScope.plane.pid}"/>
+                    <form action="/deletePlane/${requestScope.plane.pid}" method="post">
                         <input class="button" type="submit" name="submit" value="delete"/>
                     </form>
-                    <form action="/updatePlanePage" method="post">
-                        <input type="hidden" name="pid" value="${requestScope.plane.pid}"/>
+                    <form action="/updatePlanePage/${requestScope.plane.pid}" method="post">
                         <input class="button" type="submit" name="submit" value="edit"/>
                     </form>
                 </c:when>

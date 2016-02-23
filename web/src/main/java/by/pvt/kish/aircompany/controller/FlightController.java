@@ -14,8 +14,10 @@ import by.pvt.kish.aircompany.services.impl.PlaneService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
 import by.pvt.kish.aircompany.utils.RequestHandler;
 import by.pvt.kish.aircompany.validators.FlightStatusValidator;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,12 +33,28 @@ import java.util.List;
 public class FlightController {
 
     private static String className = FlightController.class.getName();
+    private static Logger logger = Logger.getLogger(FlightController.class.getName());
+
+    @ModelAttribute("flight")
+    public Flight createFlight() {
+        logger.info("Model attribute flight is created");
+        return new Flight();
+    }
 
     @RequestMapping(value = "/addFlight")
     public String addFlight(Model model,
-                            @ModelAttribute Flight flight,
+                            @ModelAttribute("flight") Flight flight,
+                            BindingResult result,
                             HttpServletRequest request) {
         try {
+            if(!result.hasErrors()) {
+                logger.info("There are errors");
+                if (flight != null) {
+                    logger.info("There are flight is null");
+                    flight = new Flight();
+                    model.addAttribute("flight", flight);
+                }
+            }
             FlightService.getInstance().add(flight);
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_ADD_FLIGHT);
         } catch (IllegalArgumentException e) {
@@ -132,6 +150,7 @@ public class FlightController {
     @RequestMapping(value = "/addFlightPage")
     public String showAddFlightPage(Model model) {
         try {
+            logger.info("showAddFlightPage");
             List<Plane> planes = PlaneService.getInstance().getAll();
             List<Airport> airports = AirportService.getInstance().getAll();
             model.addAttribute(Attribute.AIRPORTS_ATTRIBUTE, airports);

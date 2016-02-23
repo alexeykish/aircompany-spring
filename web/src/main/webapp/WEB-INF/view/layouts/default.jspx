@@ -9,10 +9,7 @@
 <jsp:directive.page pageEncoding="UTF-8" contentType="text/html; UTF-8"/>
 <head>
     <link rel="stylesheet" href="../assests/css/style.css" type="text/css"/>
-    <tiles:insertAttribute name="title"/>
-    <c:if test="${not empty requestScope.title}">
-        <title>${requestScope.title}</title>
-    </c:if>
+    <title><tiles:insertAttribute name="title"/></title>
 </head>
 <body>
 <tiles:insertAttribute name="header"/>

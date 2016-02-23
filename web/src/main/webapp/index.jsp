@@ -26,7 +26,9 @@
         </div>
     </div>
     <div style="text-align: center;">
-        <%@include file="/WEB-INF/view/elements/_auth.jsp" %>
+        <form action="/signIn" method="get">
+            <input class="button" type="submit" value="Sign in"/>
+        </form>
     </div>
     <div>
         <p style="text-align: center; font-size: 12px; color: red;">${requestScope.login_message}
