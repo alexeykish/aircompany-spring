@@ -23,6 +23,10 @@
                         <a href="registration"
                            style="font-size: 10px; color: #666666; margin: 5px;">registration</a>
                     </div>
+                    <div>
+                        <a href="showindex"
+                           style="font-size: 10px; color: #666666; margin: 5px;">back</a>
+                    </div>
                 </form>
             </c:when>
             <c:otherwise>

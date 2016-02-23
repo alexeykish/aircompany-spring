@@ -150,7 +150,6 @@ public class FlightController {
     @RequestMapping(value = "/addFlightPage")
     public String showAddFlightPage(Model model) {
         try {
-            logger.info("showAddFlightPage");
             List<Plane> planes = PlaneService.getInstance().getAll();
             List<Airport> airports = AirportService.getInstance().getAll();
             model.addAttribute(Attribute.AIRPORTS_ATTRIBUTE, airports);

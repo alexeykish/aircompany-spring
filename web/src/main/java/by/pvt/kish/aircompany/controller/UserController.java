@@ -6,7 +6,6 @@ import by.pvt.kish.aircompany.enums.UserStatus;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceLoginException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
-import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.pojos.User;
 import by.pvt.kish.aircompany.services.impl.UserService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;

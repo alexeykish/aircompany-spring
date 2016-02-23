@@ -58,7 +58,7 @@
         </table>
         <input class="button" type="submit" name="submit" value="Register"/>
         </form:form>
-    <form action="showindex" method="get">
+    <form action="signIn" method="get">
         <input class="button" type="submit" name="submit" value="Back"/>
     </form>
 </div>
