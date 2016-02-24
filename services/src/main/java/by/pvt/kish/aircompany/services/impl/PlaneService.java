@@ -1,7 +1,7 @@
 package by.pvt.kish.aircompany.services.impl;
 
 import by.pvt.kish.aircompany.constants.Message;
-import by.pvt.kish.aircompany.dao.impl.PlaneDAO;
+import by.pvt.kish.aircompany.dao.IPlaneDAO;
 import by.pvt.kish.aircompany.enums.PlaneStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
@@ -10,7 +10,6 @@ import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.pojos.Plane;
 import by.pvt.kish.aircompany.services.BaseService;
 import by.pvt.kish.aircompany.services.IPlaneService;
-import by.pvt.kish.aircompany.validators.PlaneValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class PlaneService extends BaseService<Plane> implements IPlaneService{
     private static Logger logger = Logger.getLogger(PlaneService.class);
 
     @Autowired
-    private PlaneDAO planeDAO;
+    private IPlaneDAO planeDAO;
 
     /**
      * Set plane status to the DB

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author Kish Alexey
  */
-public interface IEmployeeDAO {
+public interface IEmployeeDAO extends IDAO<Employee>{
 
     /**
      * Returns a list of all available employees at this date from the DB

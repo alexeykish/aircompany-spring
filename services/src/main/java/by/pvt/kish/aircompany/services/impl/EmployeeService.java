@@ -2,7 +2,6 @@ package by.pvt.kish.aircompany.services.impl;
 
 import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.dao.IEmployeeDAO;
-import by.pvt.kish.aircompany.dao.impl.EmployeeDAO;
 import by.pvt.kish.aircompany.enums.EmployeeStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
@@ -11,7 +10,6 @@ import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.services.BaseService;
 import by.pvt.kish.aircompany.services.IEmployeeService;
-import by.pvt.kish.aircompany.validators.EmployeeValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +31,7 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
     private static Logger logger = Logger.getLogger(EmployeeService.class);
 
     @Autowired
-    private EmployeeDAO employeeDAO;
+    private IEmployeeDAO employeeDao;
 
     /**
      * Set employees status to the DB
@@ -49,7 +47,7 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
             throw new ServiceValidateException(Message.ERROR_ID_MISSING);
         }
         try {
-            employeeDAO.setEmployeeStatus(id, status);
+            employeeDao.setEmployeeStatus(id, status);
             logger.debug(SUCCESSFUL_TRANSACTION);
         } catch (DaoException e) {
             logger.debug(TRANSACTION_FAILED);
@@ -68,7 +66,7 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
     public List<Employee> getAllAvailable(Date date) throws ServiceException {
         List<Employee> results;
         try {
-            results =  employeeDAO.getAllAvailableEmployee(date);
+            results =  employeeDao.getAllAvailableEmployee(date);
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -90,7 +88,7 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
             throw new ServiceValidateException(Message.ERROR_ID_MISSING);
         }
         try {
-            result =  employeeDAO.checkEmployeeAvailability(id, flightDate);
+            result =  employeeDao.checkEmployeeAvailability(id, flightDate);
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -111,7 +109,7 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
             throw new ServiceValidateException(Message.ERROR_ID_MISSING);
         }
         try {
-            results =  employeeDAO.getEmployeeLastFiveFlights(id);
+            results =  employeeDao.getEmployeeLastFiveFlights(id);
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -132,7 +130,7 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
             throw new ServiceValidateException(Message.ERROR_ID_MISSING);
         }
         try {
-            results =  employeeDAO.getFlightCrewByFlightId(id);
+            results =  employeeDao.getFlightCrewByFlightId(id);
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage());
         }

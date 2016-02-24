@@ -11,8 +11,6 @@ import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Plane;
 import by.pvt.kish.aircompany.services.IEmployeeService;
 import by.pvt.kish.aircompany.services.IFlightService;
-import by.pvt.kish.aircompany.services.impl.EmployeeService;
-import by.pvt.kish.aircompany.services.impl.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

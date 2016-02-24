@@ -1,7 +1,7 @@
 package by.pvt.kish.aircompany.services.impl;
 
 import by.pvt.kish.aircompany.constants.Message;
-import by.pvt.kish.aircompany.dao.impl.UserDAO;
+import by.pvt.kish.aircompany.dao.IUserDAO;
 import by.pvt.kish.aircompany.enums.UserStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 /**
  * This class represents a concrete implementation of the IUserService interface for user model.
  *
@@ -32,7 +30,7 @@ public class UserService extends BaseService<User> implements IUserService {
     private UserValidator userValidator = new UserValidator();
 
     @Autowired
-    private UserDAO userDAO;
+    private IUserDAO userDAO;
 
     /**
      * Create the user Entity

@@ -4,9 +4,7 @@
  */
 package by.pvt.kish.aircompany.filters;
 
-import by.pvt.kish.aircompany.utils.HibernateUtil;
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
 
 import javax.servlet.*;
 import java.io.IOException;
@@ -24,9 +22,9 @@ public class SessionFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-		Session session = HibernateUtil.getUtil().getSession();
+//		Session session = HibernateUtil.getUtil().getSession();
 		chain.doFilter(request, response);
-		HibernateUtil.getUtil().closeSession(session);
+//		HibernateUtil.getUtil().closeSession(session);
 
 	}
 

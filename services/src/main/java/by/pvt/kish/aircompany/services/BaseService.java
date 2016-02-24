@@ -8,10 +8,7 @@ import by.pvt.kish.aircompany.dao.IDAO;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
-import by.pvt.kish.aircompany.utils.HibernateUtil;
-import by.pvt.kish.aircompany.validators.IValidator;
 import org.apache.log4j.Logger;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,6 +26,7 @@ import java.util.List;
 public abstract class BaseService<T> implements IService<T> {
 
     private static Logger logger = Logger.getLogger(BaseService.class);
+    @Autowired
     private IDAO<T> dao;
     public static final String SUCCESSFUL_TRANSACTION = "Successful transaction";
     public static final String TRANSACTION_FAILED = "Transaction failed";
@@ -36,7 +34,6 @@ public abstract class BaseService<T> implements IService<T> {
     public BaseService() {
     }
 
-    @Autowired
     protected BaseService(IDAO<T> dao) {
         this.dao = dao;
     }
@@ -63,7 +60,6 @@ public abstract class BaseService<T> implements IService<T> {
         }
         return t;
     }
-
 
     /**
      * Update the Entity

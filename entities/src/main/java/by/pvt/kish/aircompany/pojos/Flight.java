@@ -85,7 +85,7 @@ public class Flight implements Serializable {
     }
     private FlightStatus status = FlightStatus.CREATED;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "t_flights_employees",
             joinColumns = @JoinColumn(name = "f_fid"),

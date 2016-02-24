@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Kish Alexey
  */
-public interface IFlightDAO {
+public interface IFlightDAO extends IDAO<Flight>{
 
     /**
      * Update particular plane status int the DB matching the given ID

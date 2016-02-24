@@ -1,7 +1,7 @@
 package by.pvt.kish.aircompany.services.impl;
 
 import by.pvt.kish.aircompany.constants.Message;
-import by.pvt.kish.aircompany.dao.impl.FlightDAO;
+import by.pvt.kish.aircompany.dao.IFlightDAO;
 import by.pvt.kish.aircompany.enums.FlightStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
@@ -11,7 +11,6 @@ import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.services.BaseService;
 import by.pvt.kish.aircompany.services.IFlightService;
 import by.pvt.kish.aircompany.utils.TeamCreator;
-import by.pvt.kish.aircompany.validators.FlightValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,7 @@ public class FlightService extends BaseService<Flight> implements IFlightService
     private static Logger logger = Logger.getLogger(FlightService.class);
 
     @Autowired
-    private FlightDAO flightDAO;
+    private IFlightDAO flightDAO;
 
     @Autowired
     private TeamCreator teamCreator;

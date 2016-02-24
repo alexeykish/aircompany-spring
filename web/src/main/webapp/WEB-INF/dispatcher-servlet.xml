@@ -13,7 +13,7 @@
     <import resource="classpath*:beans-service.xml"/>
     <import resource="classpath*:beans-dao.xml"/>
     <mvc:annotation-driven/>
-    <context:component-scan base-package="by.pvt.kish.aircompany.controller"/>
+    <context:component-scan base-package="by.pvt.kish.aircompany"/>
     <mvc:resources mapping="/resources/**" location="assests"/>
     <mvc:default-servlet-handler/>
 

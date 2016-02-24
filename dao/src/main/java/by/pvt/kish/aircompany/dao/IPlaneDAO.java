@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Kish Alexey
  */
-public interface IPlaneDAO {
+public interface IPlaneDAO extends IDAO<Plane>{
 
     /**
      * Update particular plane status int the DB matching the given ID

@@ -11,7 +11,7 @@ import by.pvt.kish.aircompany.pojos.User;
  *
  * @author Kish Alexey
  */
-public interface IUserDAO {
+public interface IUserDAO extends IDAO<User>{
 
     /**
      * Checks unique login to the DB

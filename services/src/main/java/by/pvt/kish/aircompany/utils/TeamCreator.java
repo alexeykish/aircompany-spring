@@ -6,9 +6,7 @@ import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Plane;
 import by.pvt.kish.aircompany.pojos.PlaneCrew;
 import by.pvt.kish.aircompany.services.IEmployeeService;
-import by.pvt.kish.aircompany.services.impl.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
