@@ -5,7 +5,7 @@
     <div style="margin: 5px;">
         <c:set var="totalRecords" value="0"/>
         <h2>Add crew to flight</h2>
-        <form name="setteam" action="/saveCrewToFlight" method="post">
+        <form name="setteam" action="/saveCrewToFlight/${requestScope.flight.fid}" method="post">
             <table>
                 <tr>
                     <td>

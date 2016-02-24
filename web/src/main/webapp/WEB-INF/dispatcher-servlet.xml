@@ -10,6 +10,8 @@
 	   					   http://www.springframework.org/schema/context
 	   					   http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <import resource="classpath*:beans-service.xml"/>
+    <import resource="classpath*:beans-dao.xml"/>
     <mvc:annotation-driven/>
     <context:component-scan base-package="by.pvt.kish.aircompany.controller"/>
     <mvc:resources mapping="/resources/**" location="assests"/>

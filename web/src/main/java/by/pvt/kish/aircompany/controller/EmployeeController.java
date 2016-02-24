@@ -8,15 +8,21 @@ import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Flight;
+import by.pvt.kish.aircompany.services.IEmployeeService;
+import by.pvt.kish.aircompany.services.IFlightService;
+import by.pvt.kish.aircompany.services.IPlaneService;
 import by.pvt.kish.aircompany.services.impl.EmployeeService;
 import by.pvt.kish.aircompany.services.impl.FlightService;
 import by.pvt.kish.aircompany.services.impl.PlaneService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
 import by.pvt.kish.aircompany.utils.TeamCreator;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -33,18 +39,26 @@ public class EmployeeController {
     private static String className = EmployeeController.class.getName();
     private static Logger logger = Logger.getLogger(EmployeeController.class.getName());
 
+    @Autowired
+    private IEmployeeService employeeService;
+
+    @Autowired
+    private IFlightService flightService;
+
+    @Autowired
+    private IPlaneService planeService;
+
     @ModelAttribute("employee")
     public Employee createEmployee() {
         return new Employee();
     }
 
     @RequestMapping(value = "/addEmployee")
-    public String addEmployee(Model model,
+    public String addEmployee(ModelMap model,
                               @ModelAttribute("employee") Employee employee,
                               HttpServletRequest request) {
         try {
-            EmployeeService.getInstance().add(employee);
-
+            employeeService.add(employee);
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_ADD_EMPLOYEE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
@@ -55,11 +69,9 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "/deleteEmployee")
-    public String deleteEmployee(Model model,
-                                 @RequestParam("eid") Long id) {
+    public String deleteEmployee(ModelMap model, Employee employee) {
         try {
-            EmployeeService.getInstance().delete(id);
-
+            employeeService.delete(employee);
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_DELETE_EMPLOYEE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
@@ -67,12 +79,13 @@ public class EmployeeController {
         return "main";
     }
 
-    @RequestMapping(value = "/employeeReport")
-    public String createEmployeeReport(Model model,
-                                 @RequestParam("eid") Long id) {
+    @RequestMapping(value = "/employeeReport/{id}")
+    public String createEmployeeReport(ModelMap model,
+                                       @PathVariable("id") Long id,
+                                       HttpServletRequest request) {
         try {
-            Employee employee = EmployeeService.getInstance().getById(id);
-            List<Flight> flights = EmployeeService.getInstance().getEmployeeLastFiveFlights(employee.getEid());
+            Employee employee = employeeService.getById(id);
+            List<Flight> flights = employeeService.getEmployeeLastFiveFlights(employee.getEid());
             boolean permissionChangeDeleteStatus = flights.size() != 0;
             List<EmployeeStatus> employeeStatuses = Arrays.asList(EmployeeStatus.values());
 
@@ -82,14 +95,16 @@ public class EmployeeController {
             model.addAttribute(Attribute.PERMISSION_CHANGE_DELETE_STATUS_ATTRIBUTE, permissionChangeDeleteStatus);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "employee/report";
     }
 
     @RequestMapping(value = "/employeeList")
-    public String getAllEmployees(Model model) {
+    public String getAllEmployees(ModelMap model) {
         try {
-            List<Employee> employees = EmployeeService.getInstance().getAll();
+            List<Employee> employees = employeeService.getAll();
 
             model.addAttribute(Attribute.EMPLOYEES_ATTRIBUTE, employees);
         } catch (ServiceException e) {
@@ -98,26 +113,28 @@ public class EmployeeController {
         return "employee/list";
     }
 
-    @RequestMapping(value = "/changeEmployeeStatus")
-    public String changeEmployeeStatus(Model model,
-                                       @RequestParam("eid") Long id,
-                                       @RequestParam("status") String status) {
+    @RequestMapping(value = "/changeEmployeeStatus/{id}")
+    public String changeEmployeeStatus(ModelMap model,
+                                       @PathVariable("id") Long id,
+                                       @RequestParam("status") String status,
+                                       HttpServletRequest request) {
         try {
-            EmployeeService.getInstance().setStatus(id, EmployeeStatus.valueOf(status));
-
+            employeeService.setStatus(id, EmployeeStatus.valueOf(status));
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_SET_STATUS_EMPLOYEE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "main";
     }
 
     @RequestMapping(value = "/updateEmployee")
-    public String updateEmployee(Model model,
+    public String updateEmployee(ModelMap model,
                                  @ModelAttribute Employee employee,
                                  HttpServletRequest request) {
         try {
-            EmployeeService.getInstance().update(employee);
+            employeeService.update(employee);
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_UPDATE_EMPLOYEE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
@@ -127,40 +144,42 @@ public class EmployeeController {
         return "main";
     }
 
-    @RequestMapping(value = "/addCrewPage")
-    public String addCrew(Model model,
-                          @RequestParam("fid") Long id) {
+    @RequestMapping(value = "/addCrewPage/{id}")
+    public String addCrew(ModelMap model,
+                          @PathVariable("id") Long id,
+                          HttpServletRequest request) {
         try {
-            List<Employee> crew = EmployeeService.getInstance().getFlightCrewByFlightId(id);
-            Flight flight = FlightService.getInstance().getById(id);
-            List<Employee> employees = EmployeeService.getInstance().getAllAvailable(flight.getDate());
-            List<String> positions = TeamCreator.getPlanePositions(PlaneService.getInstance().getById(flight.getPlane().getPid()));
+            List<Employee> crew = employeeService.getFlightCrewByFlightId(id);
+            Flight flight = flightService.getById(id);
+            List<Employee> employees = employeeService.getAllAvailable(flight.getDate());
+            List<String> positions = TeamCreator.getPlanePositions(planeService.getById(flight.getPlane().getPid()));
             model.addAttribute(Attribute.FLIGHT_ATTRIBUTE, flight);
             model.addAttribute(Attribute.EMPLOYEES_ATTRIBUTE, employees);
             model.addAttribute(Attribute.POSITIONS_ATTRIBUTE, positions);
-
             if (crew.size() != 0) {
                 model.addAttribute(Attribute.TEAM_ATTRIBUTE, crew);
                 return "updateCrew";
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "addCrew";
     }
 
     @RequestMapping(value = "/addEmployeePage")
-    public String showAddEmployeePage(Model model) {
+    public String showAddEmployeePage(ModelMap model) {
         List<Position> positions = Arrays.asList(Position.values());
         model.addAttribute(Attribute.POSITIONS_ATTRIBUTE, positions);
         return "employee/add";
     }
 
     @RequestMapping(value = "/updateEmployeePage")
-    public String showUpdateEmployeePage(Model model,
+    public String showUpdateEmployeePage(ModelMap model,
                                          @RequestParam("eid") Long id) {
         try {
-            Employee employee = EmployeeService.getInstance().getById(id);
+            Employee employee = employeeService.getById(id);
             List<Position> positions = Arrays.asList(Position.values());
             model.addAttribute(Attribute.EMPLOYEE_ATTRIBUTE, employee);
             model.addAttribute(Attribute.POSITIONS_ATTRIBUTE, positions);

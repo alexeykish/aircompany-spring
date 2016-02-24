@@ -41,8 +41,7 @@
                     </form>
                 </c:if>
                 <c:if test="${(sessionScope.userType == '1')}">
-                    <form action="/addCrewPage" method="post">
-                        <input type="hidden" name="fid" value="${requestScope.flight.fid}"/>
+                    <form action="/addCrewPage/${requestScope.flight.fid}" method="post">
                         <c:if test="${(requestScope.flight.crew.size() == 0)}">
                             <input class="table-button" style="width: 90px;  color:red;" type="submit" name="submit"
                                    value="set flight team"/>

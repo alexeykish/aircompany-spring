@@ -19,7 +19,7 @@ import java.util.Set;
  * @author Kish Alexey
  */
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Employee implements Serializable {
     @Id
     @GeneratedValue

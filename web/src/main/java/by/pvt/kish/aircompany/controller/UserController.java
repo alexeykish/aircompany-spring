@@ -7,11 +7,15 @@ import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceLoginException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.User;
+import by.pvt.kish.aircompany.services.IService;
+import by.pvt.kish.aircompany.services.IUserService;
 import by.pvt.kish.aircompany.services.impl.UserService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,19 +31,22 @@ public class UserController {
     private static String className = UserController.class.getName();
     private static Logger logger = Logger.getLogger(UserController.class.getName());
 
+    @Autowired
+    private IUserService userService;
+
     @ModelAttribute("user")
     public User createUser() {
         return new User();
     }
 
     @RequestMapping(value = "/loginUser")
-    public String loginUser(Model model,
+    public String loginUser(ModelMap model,
                             HttpSession session,
                             HttpServletRequest request,
                             @RequestParam("login") String login,
                             @RequestParam("password") String password) {
         try {
-            User user = UserService.getInstance().getUser(login, password);
+            User user = userService.getUser(login, password);
             switch (user.getUserType()) {
                 case ADMINISTRATOR:
                     session.setAttribute(Attribute.USERTYPE_ATTRIBUTE, 2);
@@ -61,13 +68,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/logoutUser")
-    public String logoutUser(Model model,
+    public String logoutUser(ModelMap model,
                              HttpSession session,
                              HttpServletRequest request) {
         if (session != null) {
             try {
                 User user = (User)session.getAttribute(Attribute.USER_ATTRIBUTE);
-                UserService.getInstance().setStatus(user.getUid(), UserStatus.OFFLINE);
+                userService.setStatus(user.getUid(), UserStatus.OFFLINE);
                 session.invalidate();
                 logger.info(Message.USER_LOGOUT);
             } catch (ServiceException e) {
@@ -81,12 +88,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/addUser")
-    public String addUser(Model model,
+    public String addUser(ModelMap model,
                           @ModelAttribute User user,
                           HttpServletRequest request) {
         try {
             if (user != null) {
-                UserService.getInstance().add(user);
+                userService.addUser(user);
                 model.addAttribute(Attribute.LOGIN_MESSAGE_ATTRIBUTE, Message.SUCCESS_REG);
             }
         } catch (ServiceException e) {
@@ -100,9 +107,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/userList")
-    public String getAllUsers(Model model) {
+    public String getAllUsers(ModelMap model) {
         try {
-            List<User> users = UserService.getInstance().getAll();
+            List<User> users = userService.getAll();
             model.addAttribute(Attribute.USERS_ATTRIBUTE, users);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);

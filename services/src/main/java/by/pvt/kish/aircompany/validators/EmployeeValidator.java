@@ -5,12 +5,14 @@ package by.pvt.kish.aircompany.validators;
 
 import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.pojos.Employee;
+import org.springframework.stereotype.Component;
 
 /**
  * Describes the utility class to test the Employee object before adding or changing it in the DB
  *
  * @author Kish Alexey
  */
+@Component
 public class EmployeeValidator implements IValidator<Employee> {
 
     /**

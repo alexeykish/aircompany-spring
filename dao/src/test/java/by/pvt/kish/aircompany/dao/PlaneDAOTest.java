@@ -11,24 +11,36 @@ import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 /**
  * @author Kish Alexey
  */
+@ContextConfiguration("/testDaoContext.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class PlaneDAOTest {
 
-    private PlaneDAO planeDAO = PlaneDAO.getInstance();;
+    @Autowired
+    private PlaneDAO planeDAO;
+
+    @Autowired
+    private FlightDAO flightDao;
+
     private Long id;
     private Plane testPlane;
     private PlaneCrew testCrew;
-    private HibernateUtil util = HibernateUtil.getUtil();
-    private Transaction transaction;
 
     @Before
     public void setUp() throws Exception {
@@ -38,16 +50,17 @@ public class PlaneDAOTest {
         testPlane.setPlaneCrew(testCrew);
         testCrew.setPlane(testPlane);
 
-        transaction = util.getSession().beginTransaction();
-        id = planeDAO.add(testPlane);
+        testPlane = planeDAO.add(testPlane);
+        id = testPlane.getPid();
     }
 
     @Test
     public void testAdd() throws Exception {
+        assertNotNull("Add method failed: null", testPlane);
+        assertNotNull("Add method failed: null", testCrew);
         Plane addedPlane = planeDAO.getById(id);
         assertEquals("Add method failed: wrong plane", addedPlane, testPlane);
         assertEquals("Add method failed: wrong planeCrew", addedPlane.getPlaneCrew(), testCrew);
-        planeDAO.delete(id);
     }
 
     @Test
@@ -65,7 +78,6 @@ public class PlaneDAOTest {
         Plane updatedPlane = planeDAO.getById(id);
         assertEquals("Update method failed: wrong pid", prepareToUpdatePlane, updatedPlane);
         assertEquals("Update method failed: wrong model", prepareToUpdatePlane.getPlaneCrew(), updatedPlane.getPlaneCrew());
-        planeDAO.delete(id);
     }
 
     @Test
@@ -73,12 +85,11 @@ public class PlaneDAOTest {
         int countPlanes = planeDAO.getAll().size();
         int countLines = planeDAO.getCount();
         assertEquals("Get all method failed", countLines, countPlanes);
-        planeDAO.delete(id);
     }
 
     @Test
     public void testDelete() throws Exception {
-        planeDAO.delete(id);
+        planeDAO.delete(testPlane);
         assertNull("Delete method: failed", planeDAO.getById(id));
     }
 
@@ -89,7 +100,6 @@ public class PlaneDAOTest {
         planeDAO.setPlaneStatus(id, PlaneStatus.BLOCKED);
         Plane updatedStatusPlane = planeDAO.getById(id);
         assertEquals("Update method failed: wrong status", updatedStatusPlane.getStatus(), prepareToUpdateStatusPlane.getStatus());
-        planeDAO.delete(id);
     }
 
     @Test
@@ -98,25 +108,17 @@ public class PlaneDAOTest {
         plane1.setStatus(PlaneStatus.AVAILABLE);
         Plane plane2 = new Plane("model2", 100, 100);
         plane2.setStatus(PlaneStatus.BLOCKED);
-        Long pid1 = planeDAO.add(plane1);
-        Long pid2 = planeDAO.add(plane2);
+        planeDAO.add(plane1);
+        planeDAO.add(plane2);
         Flight flight = new Flight();
         Date testDate1 = new Date(System.currentTimeMillis() + 1000L * 60L * 60L * 24L);
         flight.setDate(testDate1);
         flight.setPlane(testPlane);
-        Long fid = FlightDAO.getInstance().add(flight);
+        flightDao.add(flight);
         List<Plane> planes = planeDAO.getAllAvailablePlanes(testDate1);
         for (Plane p: planes) {
             System.out.println(p);
         }
         System.out.println("List size = " + planes.size());
-        planeDAO.delete(pid1);
-        planeDAO.delete(pid2);
-        FlightDAO.getInstance().delete(fid);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        transaction.commit();
     }
 }

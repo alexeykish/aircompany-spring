@@ -6,11 +6,10 @@ import by.pvt.kish.aircompany.enums.FlightStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.utils.HibernateUtil;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
+import org.hibernate.*;
 import org.hibernate.criterion.Order;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,29 +19,16 @@ import java.util.List;
  *
  * @author Kish Alexey
  */
+@Repository
 public class FlightDAO extends BaseDAO<Flight> implements IFlightDAO{
 
     private static final String HQL_UPDATE_FLIGHT_STATUS = "UPDATE FROM Flight f SET f.status =:flightstatus WHERE f.fid =:id";
 
     private static final String UPDATE_FLIGHT_STATUS_FAIL = "Updating flight status failed";
 
-
-    private static FlightDAO instance;
-    private HibernateUtil util = HibernateUtil.getUtil();
-
-    private FlightDAO() {
-        super(Flight.class);
-    }
-
-    /**
-     * Returns an synchronized instance of a FlightDAO, if the instance does not exist yet - create a new
-     * @return - a instance of a FlightDAO
-     */
-    public synchronized static FlightDAO getInstance() {
-        if (instance == null) {
-            instance = new FlightDAO();
-        }
-        return instance;
+    @Autowired
+    private FlightDAO(SessionFactory sessionFactory) {
+        super(Flight.class, sessionFactory);
     }
 
     /**
@@ -53,8 +39,7 @@ public class FlightDAO extends BaseDAO<Flight> implements IFlightDAO{
      */
     public void setFlightStatus(Long id, FlightStatus status) throws DaoException {
         try {
-            Session session = util.getSession();
-            Query query = session.createQuery(HQL_UPDATE_FLIGHT_STATUS);
+            Query query = getSession().createQuery(HQL_UPDATE_FLIGHT_STATUS);
             query.setParameter("flightstatus",status);
             query.setParameter("id",id);
             query.executeUpdate();
@@ -74,8 +59,7 @@ public class FlightDAO extends BaseDAO<Flight> implements IFlightDAO{
     public List<Flight> getAllToPage(int pageSize, int pageNumber) throws DaoException {
         List<Flight> results = new ArrayList<>();
         try {
-            Session session = util.getSession();
-            Criteria criteria = session.createCriteria(Flight.class);
+            Criteria criteria = getSession().createCriteria(Flight.class);
             criteria.addOrder(Order.desc("date"));
             criteria.setFirstResult((pageNumber - 1) * pageSize);
             criteria.setMaxResults(pageSize);

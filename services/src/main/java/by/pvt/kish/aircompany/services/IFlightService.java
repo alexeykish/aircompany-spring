@@ -3,6 +3,7 @@ package by.pvt.kish.aircompany.services;
 import by.pvt.kish.aircompany.enums.FlightStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
+import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Flight;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * @author Kish Alexey
  */
-public interface IFlightService {
+public interface IFlightService extends IService<Flight> {
 
     /**
      * Set flight status to the DB
@@ -19,7 +20,7 @@ public interface IFlightService {
      * @param status - The status to be changed
      * @throws ServiceException If something fails at DAO level
      */
-    void setStatus(Long id, FlightStatus status) throws ServiceException;
+    void setStatus(Long id, FlightStatus status) throws ServiceException, ServiceValidateException;
 
     /**
      * Add flight crew to existed flight
@@ -28,7 +29,7 @@ public interface IFlightService {
      * @param team - The set of the employees that is flight crew
      * @throws ServiceException If something fails at DAO level
      */
-    void addTeam(Long id, List<Long> team) throws ServiceException;
+    void addTeam(Long id, List<Long> team) throws ServiceException, ServiceValidateException;
 
     /**
      * Returns a list of flights ordered by date, prepared for pagination from the DB

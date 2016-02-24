@@ -20,26 +20,26 @@ public class HibernateUtil {
     private static HibernateUtil util = null;
 
     private HibernateUtil() {
-        try {
-            Configuration configuration = new Configuration().configure();
-            configuration.setNamingStrategy(new CustomNamingStrategy());
-            StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
-            sessionFactory = configuration.buildSessionFactory(builder.build());
-        } catch (Exception e) {
-            logger.error("Initial session factory creating failed" + e);
-            throw new ExceptionInInitializerError(e);
-        }
+//        try {
+//            Configuration configuration = new Configuration().configure();
+//            configuration.setNamingStrategy(new CustomNamingStrategy());
+//            StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+//            sessionFactory = configuration.buildSessionFactory(builder.build());
+//        } catch (Exception e) {
+//            logger.error("Initial session factory creating failed" + e);
+//            throw new ExceptionInInitializerError(e);
+//        }
     }
 
-    public Session getSession() {
-        Session session = threadSession.get();
-        if (session == null) {
-            session = sessionFactory.openSession();
-            threadSession.set(session);
-            logger.info("open session: " + session);
-        }
-        return session;
-    }
+//    public Session getSession() {
+//        Session session = threadSession.get();
+//        if (session == null) {
+//            session = sessionFactory.openSession();
+//            threadSession.set(session);
+//            logger.info("open session: " + session);
+//        }
+//        return session;
+//    }
 
     public static HibernateUtil getUtil() {
         if (util == null) {

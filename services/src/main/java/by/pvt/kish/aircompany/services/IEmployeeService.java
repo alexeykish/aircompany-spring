@@ -3,6 +3,7 @@ package by.pvt.kish.aircompany.services;
 import by.pvt.kish.aircompany.enums.EmployeeStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
+import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Flight;
 
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * @author Kish Alexey
  */
-public interface IEmployeeService {
+public interface IEmployeeService extends IService<Employee>{
 
     /**
      * Set employees status to the DB
@@ -21,7 +22,7 @@ public interface IEmployeeService {
      * @param status - The status to be changed
      * @throws ServiceException If something fails at DAO level
      */
-    void setStatus(Long id, EmployeeStatus status) throws ServiceException;
+    void setStatus(Long id, EmployeeStatus status) throws ServiceException, ServiceValidateException;
 
     /**
      * Returns a list of all available employees at this date from the DB
@@ -40,7 +41,7 @@ public interface IEmployeeService {
      * @return - false if employee isn't in another flights at that date, true - if employee is busy at that date
      * @throws DaoException If something fails at DB level
      */
-    boolean checkEmployeeAvailability(Long id, Date flightDate) throws ServiceException;
+    boolean checkEmployeeAvailability(Long id, Date flightDate) throws ServiceException, ServiceValidateException;
 
     /**
      * Returns a list of five last flights of the concrete employee from the DB
@@ -49,7 +50,7 @@ public interface IEmployeeService {
      * @return - the list of last five flight of the concrete employee
      * @throws DaoException If something fails at DB level
      */
-    List<Flight> getEmployeeLastFiveFlights(Long id) throws ServiceException;
+    List<Flight> getEmployeeLastFiveFlights(Long id) throws ServiceException, ServiceValidateException;
 
     /**
      * Returns a list of employees as flight crew of the concrete flight from the DB
@@ -58,5 +59,5 @@ public interface IEmployeeService {
      * @return - the list of the employees as flight crew
      * @throws DaoException If something fails at DB level
      */
-    List<Employee> getFlightCrewByFlightId(Long id) throws ServiceException;
+    List<Employee> getFlightCrewByFlightId(Long id) throws ServiceException, ServiceValidateException;
 }

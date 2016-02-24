@@ -52,7 +52,7 @@
         <div>
             <c:choose>
                 <c:when test="${requestScope.permissionChangeDeleteStatus =='false'}">
-                    <form action="/deletePlane/${requestScope.plane.pid}" method="post">
+                    <form action="/deletePlane" method="post">
                         <input class="button" type="submit" name="submit" value="delete"/>
                     </form>
                     <form action="/updatePlanePage/${requestScope.plane.pid}" method="post">

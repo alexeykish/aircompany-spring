@@ -11,10 +11,9 @@ import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.utils.HibernateUtil;
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
+import org.hibernate.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +24,7 @@ import java.util.List;
  *
  * @author  Kish Alexey
  */
+@Repository
 public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 
 	private static Logger logger = Logger.getLogger(EmployeeDAO.class);
@@ -41,23 +41,10 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 	private static final String GET_EMPLOYEES_FLIGHTS_FAIL = "Getting employees flights failed";
 	private static final String GET_EMPLOYEE_BY_FLIGHTID_FAIL = "Getting employees by flight id failed";
 
-	private static EmployeeDAO instance;
-	private HibernateUtil util = HibernateUtil.getUtil();
-
-	private EmployeeDAO() {
-		super(Employee.class);
+	@Autowired
+	private EmployeeDAO(SessionFactory sessionFactory) {
+		super(Employee.class, sessionFactory);
 	}
-
-	/**
-	 * Returns an synchronized instance of a EmployeeDAO, if the instance does not exist yet - create a new
-	 * @return - a instance of a EmployeeDAO
-	 */
-	public synchronized static EmployeeDAO getInstance() {
-        if (instance == null) {
-            instance = new EmployeeDAO();
-        }
-        return instance;
-    }
 
 	/**
 	 * Returns a list of all available employees at this date from the DB
@@ -69,8 +56,7 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 	public List<Employee> getAllAvailableEmployee(Date date) throws DaoException {
 		List<Employee> employees = new ArrayList<>();
 		try {
-			Session session = util.getSession();
-			Query query = session.createQuery(HQL_GET_ALL_AVAILABLE_EMPLOYEES);
+			Query query = getSession().createQuery(HQL_GET_ALL_AVAILABLE_EMPLOYEES);
 			query.setParameter("date", date);
 			query.setParameter("employeestatus", EmployeeStatus.AVAILABLE);
 			employees = query.list();
@@ -89,8 +75,7 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 	@Override
 	public void setEmployeeStatus(Long id, EmployeeStatus status) throws DaoException {
 		try {
-			Session session = util.getSession();
-			Query query = session.createQuery(HQL_UPDATE_EMPLOYEE_STATUS);
+			Query query = getSession().createQuery(HQL_UPDATE_EMPLOYEE_STATUS);
 			query.setParameter("employeestatus",status);
 			query.setParameter("id",id);
 			query.executeUpdate();
@@ -111,8 +96,7 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 	public boolean checkEmployeeAvailability(Long id, Date flightDate) throws DaoException {
 		List results;
 		try {
-			Session session = util.getSession();
-			Query query = session.createQuery(HQL_GET_EMPLOYEE_AVAILABILITY);
+			Query query = getSession().createQuery(HQL_GET_EMPLOYEE_AVAILABILITY);
 			query.setParameter("date", flightDate);
 			query.setParameter("id", id);
 			results = query.list();
@@ -136,8 +120,7 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 	public List<Flight> getEmployeeLastFiveFlights(Long id) throws DaoException {
 		List<Flight> flights = new ArrayList<>();
 		try {
-			Session session = util.getSession();
-			Query query = session.createQuery(HQL_GET_EMPLOYEES_LAST_FIVE_FLIGHTS);
+			Query query = getSession().createQuery(HQL_GET_EMPLOYEES_LAST_FIVE_FLIGHTS);
 			query.setParameter("eid",id);
 			query.setMaxResults(5);
 			flights = query.list();
@@ -158,8 +141,7 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 	public List<Employee> getFlightCrewByFlightId(Long id) throws DaoException {
 		List<Employee> employees = new ArrayList<>();
 		try {
-			Session session = util.getSession();
-			Query query = session.createQuery(HQL_GET_EMPLOYEES_BY_FLIGHTID);
+			Query query = getSession().createQuery(HQL_GET_EMPLOYEES_BY_FLIGHTID);
 			query.setParameter("id", id);
 			employees = query.list();
 		} catch (HibernateException e) {
@@ -180,8 +162,7 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 	public List<Employee> getAllToPage(int pageSize, int pageNumber) throws DaoException {
 		List<Employee> results = new ArrayList<>();
 		try {
-			Session session = util.getSession();
-			Criteria criteria = session.createCriteria(Employee.class);
+			Criteria criteria = getSession().createCriteria(Employee.class);
 			criteria.setFirstResult((pageNumber - 1) * pageSize);
 			criteria.setMaxResults(pageSize);
 			results = criteria.list();

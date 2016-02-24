@@ -11,6 +11,9 @@ import by.pvt.kish.aircompany.pojos.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -19,6 +22,7 @@ import java.util.List;
  *
  * @author Kish Alexey
  */
+@Repository
 public class UserDAO extends BaseDAO<User> implements IUserDAO {
 
     private static final String HQL_CHECK_LOGIN = "SELECT U.uid FROM User U WHERE U.login=:login ";
@@ -29,24 +33,10 @@ public class UserDAO extends BaseDAO<User> implements IUserDAO {
     private static final String GET_USER_FAILED = "Get user by login and password failed";
     private static final String UPDATE_USER_STATUS_FAILED = "Set user status failed";
 
-    private static UserDAO instance;
-
-    private UserDAO() {
-        super(User.class);
+    @Autowired
+    private UserDAO(SessionFactory sessionFactory) {
+        super(User.class, sessionFactory);
     }
-
-    /**
-     * Returns an synchronized instance of a UserDAO, if the instance does not exist yet - create a new
-     *
-     * @return - a instance of a UserDAO
-     */
-    public synchronized static UserDAO getInstance() {
-        if (instance == null) {
-            instance = new UserDAO();
-        }
-        return instance;
-    }
-
 
     /**
      * Checks unique login of the user in the DB
@@ -59,8 +49,7 @@ public class UserDAO extends BaseDAO<User> implements IUserDAO {
     public boolean checkLogin(String login) throws DaoException {
         List results;
         try {
-            Session session = util.getSession();
-            Query query = session.createQuery(HQL_CHECK_LOGIN);
+            Query query = getSession().createQuery(HQL_CHECK_LOGIN);
             query.setParameter("login", login);
             results = query.list();
             if (!results.isEmpty()) {
@@ -84,8 +73,7 @@ public class UserDAO extends BaseDAO<User> implements IUserDAO {
     public User getUser(String login, String password) throws DaoException {
         User user;
         try {
-            Session session = util.getSession();
-            Query query = session.createQuery(HQL_GET_USER);
+            Query query = getSession().createQuery(HQL_GET_USER);
             query.setParameter("login", login);
             query.setParameter("password", password);
             user = (User) query.uniqueResult();
@@ -105,8 +93,7 @@ public class UserDAO extends BaseDAO<User> implements IUserDAO {
     @Override
     public void setStatus(Long id, UserStatus status) throws DaoException {
         try {
-            Session session = util.getSession();
-            Query query = session.createQuery(HQL_UPDATE_USER_STATUS);
+            Query query = getSession().createQuery(HQL_UPDATE_USER_STATUS);
             query.setParameter("userstatus",status);
             query.setParameter("uid",id);
             query.executeUpdate();

@@ -2,12 +2,14 @@ package by.pvt.kish.aircompany.validators;
 
 import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.pojos.Airport;
+import org.springframework.stereotype.Component;
 
 /**
  * Describes the utility class to test the Airport object before adding or changing it in the DB
  *
  * @author Kish Alexey
  */
+@Component
 public class AirportValidator implements IValidator<Airport> {
 
     /**

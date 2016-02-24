@@ -19,8 +19,7 @@
                     <td>${plane.flightRange}</td>
                     <td>${plane.status}</td>
                     <td style="width: 70px;">
-                        <form action="/planeReport" method="post">
-                            <input type="hidden" name="pid" value="${plane.pid}"/>
+                        <form action="/planeReport/${plane.pid}" method="post">
                             <input class="table-button" type="submit" name="submit" value="details"/>
                         </form>
                     </td>

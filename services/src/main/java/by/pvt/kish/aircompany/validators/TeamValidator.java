@@ -6,10 +6,15 @@ package by.pvt.kish.aircompany.validators;
 import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.enums.Position;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
+import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Plane;
+import by.pvt.kish.aircompany.services.IEmployeeService;
+import by.pvt.kish.aircompany.services.IFlightService;
 import by.pvt.kish.aircompany.services.impl.EmployeeService;
 import by.pvt.kish.aircompany.services.impl.FlightService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -22,7 +27,14 @@ import java.util.Set;
  *
  * @author Kish Alexey, 2015
  */
+@Component
 public class TeamValidator {
+
+    @Autowired
+    private IFlightService flightService;
+
+    @Autowired
+    private IEmployeeService employeeService;
 
     /**
      * Check the validity of:
@@ -35,7 +47,7 @@ public class TeamValidator {
      * @param team - The flight team being checked
      * @return - Null, if everything checks out correctly; error page if the data is incorrect
      */
-    public static String validate(Long id, List<Long> team) throws ServiceException {
+    public String validate(Long id, List<Long> team) throws ServiceException, ServiceValidateException {
         if (checkEmpty(team)) {
             return Message.ERROR_EMPTY;
         }
@@ -58,12 +70,12 @@ public class TeamValidator {
      * @param team - The flight team being checked
      * @return false if it corresponds to the position correctly, true if found at least one to inadequate
      */
-    private static boolean checkPositions(Long fid, List<Long> team) throws ServiceException {
+    private boolean checkPositions(Long fid, List<Long> team) throws ServiceException {
         List<Employee> list = new ArrayList<>();
         for (Long i : team) {
-            list.add(EmployeeService.getInstance().getById(i));
+            list.add(employeeService.getById(i));
         }
-        Plane plane = FlightService.getInstance().getById(fid).getPlane();
+        Plane plane = flightService.getById(fid).getPlane();
         int num_pilots = 0;
         int num_navigators = 0;
         int num_radiooperators = 0;
@@ -94,7 +106,7 @@ public class TeamValidator {
      * @param team - The flight team being checked
      * @return - false if all positions are filled, true if one of the items is null
      */
-    private static boolean checkEmpty(List<Long> team) {
+    private boolean checkEmpty(List<Long> team) {
         if (team == null) {
             return true;
         }
@@ -112,15 +124,15 @@ public class TeamValidator {
      * @param team - The flight team being checked
      * @return - false all items are unique, true if a match is found
      */
-    private static boolean checkEntry(List<Long> team) {
+    private boolean checkEntry(List<Long> team) {
         Set<Long> set = new HashSet<>(team);
         return set.size() != team.size();
     }
 
-    public static boolean checkEmployee(Long id, List<Long> team) throws ServiceException {
-        Date flightDate = (Date) FlightService.getInstance().getById(id).getDate();
+    public boolean checkEmployee(Long id, List<Long> team) throws ServiceException, ServiceValidateException {
+        Date flightDate = (Date) flightService.getById(id).getDate();
         for (Long eid : team) {
-            if (EmployeeService.getInstance().checkEmployeeAvailability(eid, flightDate)) {
+            if (employeeService.checkEmployeeAvailability(eid, flightDate)) {
                 return true;
             }
         }

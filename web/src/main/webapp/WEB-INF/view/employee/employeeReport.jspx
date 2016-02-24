@@ -19,14 +19,13 @@
             </tr>
         </table>
         <div>
-            <form action="/changeEmployeeStatus" method="post">
+            <form action="/changeEmployeeStatus/${requestScope.employee.eid}" method="post">
                 <h4>Employee status is: ${requestScope.employee.status}</h4>
                 <select class="inputForm" name="status" title="Status">
                     <c:forEach items="${requestScope.statuses}" var="status">
                         <option value="${status}">${status}</option>
                     </c:forEach>
                 </select>
-                <input type="hidden" name="eid" value="${requestScope.employee.eid}"/>
                 <input class="button" type="submit" name="submit" value="set status"/>
             </form>
         </div>

@@ -5,7 +5,11 @@ import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Plane;
 import by.pvt.kish.aircompany.pojos.PlaneCrew;
+import by.pvt.kish.aircompany.services.IEmployeeService;
 import by.pvt.kish.aircompany.services.impl.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,7 +21,11 @@ import java.util.Set;
  *
  * @author Kish Alexey
  */
+@Service
 public class TeamCreator {
+
+    @Autowired
+    private IEmployeeService employeeService;
 
     /**
      * Returns list of team members, according to the needs of the crew for a specific aircraft.
@@ -43,10 +51,10 @@ public class TeamCreator {
         return positions;
     }
 
-    public static Set<Employee> getEmployeeListById(List<Long> team) throws ServiceException {
+    public Set<Employee> getEmployeeListById(List<Long> team) throws ServiceException {
         Set<Employee> employees = new HashSet<>();
         for (Long l: team) {
-            employees.add(EmployeeService.getInstance().getById(l));
+            employees.add(employeeService.getById(l));
         }
         return employees;
     }

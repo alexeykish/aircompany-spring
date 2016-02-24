@@ -9,11 +9,14 @@ import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.pojos.Plane;
 import by.pvt.kish.aircompany.pojos.PlaneCrew;
+import by.pvt.kish.aircompany.services.IPlaneService;
 import by.pvt.kish.aircompany.services.impl.PlaneService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,19 +37,22 @@ public class PlaneController {
     private static String className = PlaneController.class.getName();
     private static Logger logger = Logger.getLogger(PlaneController.class.getName());
 
+    @Autowired
+    private IPlaneService planeService;
+
     @ModelAttribute("plane")
     public Plane createPlane() {
         return new Plane();
     }
 
     @RequestMapping(value = "/addPlane")
-    public String addPlane(Model model,
+    public String addPlane(ModelMap model,
                            @ModelAttribute("plane") Plane plane,
                            HttpServletRequest request) {
         try {
             PlaneCrew planeCrew = plane.getPlaneCrew();
             planeCrew.setPlane(plane);
-            PlaneService.getInstance().add(plane);
+            planeService.add(plane);
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_ADD_PLANE);
         } catch (IllegalArgumentException e) {
             return ErrorHandler.returnErrorPage(Message.ERROR_IAE, className);
@@ -58,11 +64,10 @@ public class PlaneController {
         return "main";
     }
 
-    @RequestMapping(value = "/deletePlane/{id}")
-    public String deletePlane(Model model,
-                              @PathVariable("id") Long id) {
+    @RequestMapping(value = "/deletePlane}")
+    public String deletePlane(ModelMap model, Plane plane) {
         try {
-            PlaneService.getInstance().delete(id);
+            planeService.delete(plane);
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_DELETE_PLANE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
@@ -71,9 +76,9 @@ public class PlaneController {
     }
 
     @RequestMapping(value = "/planeList")
-    public String getAllPlanes(Model model) {
+    public String getAllPlanes(ModelMap model) {
         try {
-            List<Plane> planes = PlaneService.getInstance().getAll();
+            List<Plane> planes = planeService.getAll();
             model.addAttribute(Attribute.PLANES_ATTRIBUTE, planes);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
@@ -81,17 +86,18 @@ public class PlaneController {
         return "plane/list";
     }
 
-    @RequestMapping(value = "/planeReport")
-    public String createPlaneReport(Model model,
-                                    @RequestParam("pid") Long id) {
+    @RequestMapping(value = "/planeReport/{id}")
+    public String createPlaneReport(ModelMap model,
+                                    @PathVariable("id") Long id,
+                                    HttpServletRequest request) {
         try {
-            Plane plane = PlaneService.getInstance().getById(id);
+            Plane plane = planeService.getById(id);
             Map<String, Integer> team = new HashMap<>();
             team.put(Position.PILOT.toString(), plane.getPlaneCrew().getNumberOfPilots());
             team.put(Position.NAVIGATOR.toString(), plane.getPlaneCrew().getNumberOfNavigators());
             team.put(Position.RADIOOPERATOR.toString(), plane.getPlaneCrew().getNumberOfRadiooperators());
             team.put(Position.STEWARDESS.toString(), plane.getPlaneCrew().getNumberOfStewardesses());
-            List<Flight> flights = PlaneService.getInstance().getPlaneLastFiveFlights(plane.getPid());
+            List<Flight> flights = planeService.getPlaneLastFiveFlights(plane.getPid());
             boolean permissionChangeDeleteStatus = flights.size() != 0;
             List<PlaneStatus> planeStatuses = Arrays.asList(PlaneStatus.values());
             model.addAttribute(Attribute.PLANE_ATTRIBUTE, plane);
@@ -101,29 +107,34 @@ public class PlaneController {
             model.addAttribute(Attribute.PERMISSION_CHANGE_DELETE_STATUS_ATTRIBUTE, permissionChangeDeleteStatus);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "plane/report";
     }
 
     @RequestMapping(value = "/changePlaneStatus/{id}")
-    public String changePlaneStatus(Model model,
+    public String changePlaneStatus(ModelMap model,
                                     @PathVariable("id") Long id,
-                                    @RequestParam("status") String status) {
+                                    @RequestParam("status") String status,
+                                    HttpServletRequest request) {
         try {
-            PlaneService.getInstance().setStatus(id, PlaneStatus.valueOf(status));
+            planeService.setStatus(id, PlaneStatus.valueOf(status));
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_SET_STATUS_PLANE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "main";
     }
 
     @RequestMapping(value = "/updatePlane")
-    public String updatePlane(Model model,
+    public String updatePlane(ModelMap model,
                               @ModelAttribute("plane") Plane plane,
                               HttpServletRequest request) {
         try {
-            PlaneService.getInstance().update(plane);
+            planeService.update(plane);
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_UPDATE_PLANE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
@@ -139,10 +150,10 @@ public class PlaneController {
     }
 
     @RequestMapping(value = "/updatePlanePage/{id}")
-    public String showUpdatePlanePage(Model model,
+    public String showUpdatePlanePage(ModelMap model,
                                       @PathVariable("id") Long id) {
         try {
-            Plane plane = PlaneService.getInstance().getById(id);
+            Plane plane = planeService.getById(id);
             model.addAttribute(Attribute.PLANE_ATTRIBUTE, plane);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);

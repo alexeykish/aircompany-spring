@@ -3,6 +3,7 @@ package by.pvt.kish.aircompany.services;
 import by.pvt.kish.aircompany.enums.PlaneStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
+import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.pojos.Plane;
 
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * @author Kish Alexey
  */
-public interface IPlaneService {
+public interface IPlaneService extends IService<Plane>{
 
     /**
      * Set plane status to the DB
@@ -21,7 +22,7 @@ public interface IPlaneService {
      * @param status - The status to be changed
      * @throws ServiceException If something fails at DAO level
      */
-    void setStatus(Long id, PlaneStatus status) throws ServiceException;
+    void setStatus(Long id, PlaneStatus status) throws ServiceException, ServiceValidateException;
 
     /**
      * Returns a list of five last flights of the concrete plane from the DB
@@ -30,7 +31,7 @@ public interface IPlaneService {
      * @return - the list of last five flight of the concrete plane
      * @throws DaoException If something fails at DB level
      */
-    List<Flight> getPlaneLastFiveFlights(Long id) throws ServiceException;
+    List<Flight> getPlaneLastFiveFlights(Long id) throws ServiceException, ServiceValidateException;
 
     /**
      * Returns a list of all available planes at this date from the DB

@@ -17,8 +17,7 @@
                     <td>${airport.address.city}</td>
                     <td>${airport.address.country}</td>
                     <td style="width: 70px;">
-                        <form action="/airportReport" method="post">
-                            <input type="hidden" name="aid" value="${airport.aid}"/>
+                        <form action="/airportReport/${airport.aid}" method="post">
                             <input class="table-button" type="submit" name="submit" value="details"/>
                         </form>
                     </td>

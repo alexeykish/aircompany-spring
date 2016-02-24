@@ -1,10 +1,13 @@
 package by.pvt.kish.aircompany.validators;
 
+import org.springframework.stereotype.Component;
+
 /**
  * This interface represents a contract for a IValidator.
  *
  * @author Kish Alexey
  */
+@Component
 public interface IValidator<T> {
 
     /**

@@ -10,6 +10,9 @@ import by.pvt.kish.aircompany.utils.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.List;
  *
  * @author Kish Alexey
  */
+@Repository
 public class PlaneDAO extends BaseDAO<Plane> implements IPlaneDAO{
 
     private static final String HQL_UPDATE_PLANE_STATUS = "update FROM Plane P set P.status =:planestatus where P.pid =:id";
@@ -29,23 +33,9 @@ public class PlaneDAO extends BaseDAO<Plane> implements IPlaneDAO{
     private static final String GET_PLANE_FLIGHTS_FAIL = "Getting planes flights failed";
     private static final String GET_ALL_AVAILABLE_PLANES_FAIL = "Getting all available planes failed";
 
-    private static PlaneDAO instance;
-    private HibernateUtil util = HibernateUtil.getUtil();
-
-    private PlaneDAO() {
-        super(Plane.class);
-    }
-
-    /**
-     * Returns an synchronized instance of a PlaneDAO, if the instance does not exist yet - create a new
-     *
-     * @return - a instance of a PlaneDAO
-     */
-    public synchronized static PlaneDAO getInstance() {
-        if (instance == null) {
-            instance = new PlaneDAO();
-        }
-        return instance;
+    @Autowired
+    private PlaneDAO(SessionFactory sessionFactory) {
+        super(Plane.class, sessionFactory);
     }
 
     /**
@@ -57,8 +47,7 @@ public class PlaneDAO extends BaseDAO<Plane> implements IPlaneDAO{
     @Override
     public void setPlaneStatus(Long id, PlaneStatus status) throws DaoException {
         try {
-            Session session = util.getSession();
-            Query query = session.createQuery(HQL_UPDATE_PLANE_STATUS);
+            Query query = getSession().createQuery(HQL_UPDATE_PLANE_STATUS);
             query.setParameter("planestatus",status);
             query.setParameter("id",id);
             query.executeUpdate();
@@ -77,8 +66,7 @@ public class PlaneDAO extends BaseDAO<Plane> implements IPlaneDAO{
     public List<Flight> getPlaneLastFiveFlights(Long id) throws DaoException {
         List<Flight> flights;
         try {
-            Session session = util.getSession();
-            Query query = session.createQuery(HQL_GET_PLANES_LAST_FIVE_FLIGHTS);
+            Query query = getSession().createQuery(HQL_GET_PLANES_LAST_FIVE_FLIGHTS);
             query.setParameter("pid",id);
             query.setMaxResults(5);
             flights = query.list();
@@ -98,8 +86,7 @@ public class PlaneDAO extends BaseDAO<Plane> implements IPlaneDAO{
     public List<Plane> getAllAvailablePlanes(Date date) throws DaoException {
         List<Plane> planes;
         try {
-            Session session = util.getSession();
-            Query query = session.createQuery(HQL_GET_ALL_AVAILABLE_PLANES);
+            Query query = getSession().createQuery(HQL_GET_ALL_AVAILABLE_PLANES);
             query.setParameter("date", date);
             query.setParameter("planestatus", PlaneStatus.AVAILABLE);
             planes = query.list();

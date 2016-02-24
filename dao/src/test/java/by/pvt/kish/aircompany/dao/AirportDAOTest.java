@@ -8,37 +8,50 @@ import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 /**
  * @author Kish Alexey
  */
+@ContextConfiguration("/testDaoContext.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class AirportDAOTest {
 
-    private AirportDAO airportDAO = AirportDAO.getInstance();
+    @Autowired
+    private AirportDAO airportDAO;
+
     private Long id;
     private Airport testAirport;
-    private Address testAddress;
-    private HibernateUtil util = HibernateUtil.getUtil();
-    private Transaction transaction;
+    Airport addedAirport;
 
     @Before
     public void setUp() throws Exception {
-        testAddress = new Address("testCountry", "testCity");
+        Address testAddress = new Address("testCountry", "testCity");
         testAirport = new Airport();
         testAirport.setName("testName");
         testAirport.setAddress(testAddress);
-        transaction = util.getSession().beginTransaction();
-        id = airportDAO.add(testAirport);
+        testAirport = airportDAO.add(testAirport);
+        id = testAirport.getAid();
     }
 
     @Test
     public void testAdd() throws Exception {
-        Airport addedAirport = airportDAO.getById(id);
-        assertEquals("Add method failed", addedAirport, testAirport);
-        airportDAO.delete(id);
+        assertNotNull("Add method failed: null", testAirport);
+        addedAirport = airportDAO.getById(id);
+        assertEquals("Add method failed: notEquals", testAirport, addedAirport);
     }
 
     @Test
@@ -49,7 +62,6 @@ public class AirportDAOTest {
         airportDAO.update(prepareToUpdateAirport);
         Airport updatedAirport = airportDAO.getById(id);
         assertEquals("Update method failed", prepareToUpdateAirport, updatedAirport);
-        airportDAO.delete(id);
     }
 
     @Test
@@ -57,17 +69,11 @@ public class AirportDAOTest {
         int countAirports = airportDAO.getAll().size();
         int countLines = airportDAO.getCount();
         assertEquals("Get all method failed", countLines, countAirports);
-        airportDAO.delete(id);
     }
 
     @Test
     public void testDelete() throws Exception {
-        airportDAO.delete(id);
+        airportDAO.delete(testAirport);
         assertNull("Delete method: failed", airportDAO.getById(id));
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        transaction.commit();
     }
 }

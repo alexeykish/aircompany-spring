@@ -9,18 +9,30 @@ import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 /**
  * @author Kish Alexey
  */
+@ContextConfiguration("/testDaoContext.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class FlightDAOTest {
+
+    @Autowired
+    private FlightDAO flightDAO;
 
     private Flight testFlight1;
     private Flight testFlight2;
@@ -28,9 +40,6 @@ public class FlightDAOTest {
     Address testAddress2;
     private Long id1;
     private Long id2;
-    private FlightDAO flightDAO = FlightDAO.getInstance();
-    private HibernateUtil util = HibernateUtil.getUtil();
-    private Transaction transaction = null;
 
     @Before
     public void setUp() throws Exception {
@@ -47,8 +56,6 @@ public class FlightDAOTest {
         plane2.setPlaneCrew(planeCrew2);
         planeCrew1.setPlane(plane1);
         planeCrew2.setPlane(plane2);
-
-        transaction = util.getSession().beginTransaction();
 
         testFlight1 = new Flight();
         testFlight1.setDate(new Date());
@@ -88,18 +95,21 @@ public class FlightDAOTest {
         testFlight1.setCrew(testCrew1);
         testFlight2.setCrew(testCrew2);
 
-        id1 = flightDAO.add(testFlight1);
-        id2 = flightDAO.add(testFlight2);
+        testFlight1 = flightDAO.add(testFlight1);
+        testFlight2 = flightDAO.add(testFlight2);
+
+        id1 = testFlight1.getFid();
+        id2 = testFlight2.getFid();
     }
 
     @Test
     public void testAdd() throws Exception {
+        assertNotNull("Add method failed: null", testFlight1);
+        assertNotNull("Add method failed: null", testFlight2);
         Flight addedFlight1 = flightDAO.getById(id1);
         Flight addedFlight2 = flightDAO.getById(id2);
         assertEquals("Add method failed: wrong firstname", addedFlight1.getCrew().size(), testFlight1.getCrew().size());
         assertEquals("Add method failed: wrong firstname", addedFlight2.getCrew().size(), testFlight2.getCrew().size());
-        flightDAO.delete(id1);
-        flightDAO.delete(id2);
     }
 
     @Test
@@ -111,11 +121,8 @@ public class FlightDAOTest {
         prepareToUpdateFlight.setDeparture(changedDepartureAirport);
         prepareToUpdateFlight.setArrival(changedArrivalAirport);
         flightDAO.update(prepareToUpdateFlight);
-
         Flight updatedFlight = flightDAO.getById(id1);
         assertEquals("Update method failed: wrong eid", updatedFlight, prepareToUpdateFlight);
-        flightDAO.delete(id1);
-        flightDAO.delete(id2);
     }
 
     @Test
@@ -123,14 +130,12 @@ public class FlightDAOTest {
         int count = flightDAO.getAll().size();
         int countFact = flightDAO.getCount();
         assertEquals("Get all method failed", count, countFact);
-        flightDAO.delete(id1);
-        flightDAO.delete(id2);
     }
 
     @Test
     public void testDelete() throws Exception {
-        flightDAO.delete(id1);
-        flightDAO.delete(id2);
+        flightDAO.delete(testFlight1);
+        flightDAO.delete(testFlight2);
         assertNull("Delete employee: failed", flightDAO.getById(id1));
         assertNull("Delete employee: failed", flightDAO.getById(id2));
     }
@@ -141,12 +146,5 @@ public class FlightDAOTest {
         flightDAO.setFlightStatus(id1, FlightStatus.CANCELED);
         Flight updatedStatusFlight = flightDAO.getById(id1);
         assertEquals("Update method failed: wrong status", updatedStatusFlight.getStatus(), prepareToUpdateStatusFlight.getStatus());
-        flightDAO.delete(id1);
-        flightDAO.delete(id2);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        transaction.commit();
     }
 }

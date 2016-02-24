@@ -19,8 +19,7 @@
                     <td>${employee.position}</td>
                     <td>${employee.status}</td>
                     <td style="width: 70px;">
-                        <form action="/employeeReport" method="post">
-                            <input type="hidden" name="eid" value="${employee.eid}"/>
+                        <form action="/employeeReport/${employee.eid}" method="post">
                             <input class="table-button" type="submit" name="submit" value="details"/>
                         </form>
                     </td>

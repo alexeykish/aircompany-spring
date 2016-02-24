@@ -26,8 +26,7 @@
                     <td>${flight.plane.model}</td>
                     <td>${flight.status}</td>
                     <td style="width: 70px;">
-                        <form action="/flightReport" method="post">
-                            <input type="hidden" name="fid" value="${flight.fid}"/>
+                        <form action="/flightReport/${flight.fid}" method="post">
                             <c:if test="${(flight.crew.size() == 0)}">
                                 <input class="table-button" style="width: 90px;  color:red;" type="submit" name="submit"
                                        value="details"/>

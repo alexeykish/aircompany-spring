@@ -12,6 +12,10 @@ import by.pvt.kish.aircompany.services.BaseService;
 import by.pvt.kish.aircompany.services.IUserService;
 import by.pvt.kish.aircompany.validators.UserValidator;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,24 +24,15 @@ import java.util.List;
  *
  * @author Kish Alexey
  */
+@Service
+@Transactional(propagation = Propagation.REQUIRED)
 public class UserService extends BaseService<User> implements IUserService {
 
     private static Logger logger = Logger.getLogger(UserService.class);
-    private static UserService instance;
-    private UserDAO userDAO = UserDAO.getInstance();
     private UserValidator userValidator = new UserValidator();
 
-    /**
-     * Returns an synchronized instance of a UserService, if the instance does not exist yet - create a new
-     *
-     * @return - a instance of a UserService
-     */
-    public synchronized static UserService getInstance() {
-        if (instance == null) {
-            instance = new UserService();
-        }
-        return instance;
-    }
+    @Autowired
+    private UserDAO userDAO;
 
     /**
      * Create the user Entity
@@ -49,8 +44,7 @@ public class UserService extends BaseService<User> implements IUserService {
      * @throws ServiceLoginException    - if something fails at Service user authorisation
      */
     @Override
-    public Long add(User user) throws ServiceException, ServiceLoginException, ServiceValidateException {
-        Long id;
+    public User addUser(User user) throws ServiceException, ServiceLoginException, ServiceValidateException {
         try {
             String validateResult = userValidator.validate(user);
             if (validateResult != null) {
@@ -59,63 +53,14 @@ public class UserService extends BaseService<User> implements IUserService {
             if (!userDAO.checkLogin(user.getLogin())) {
                 throw new ServiceLoginException(Message.ERROR_REG_USER_EXISTS);
             } else {
-                transaction = util.getSession().beginTransaction();
-                id =  userDAO.add(user);
-                transaction.commit();
-                logger.info(SUCCESSFUL_TRANSACTION);
+                user =  userDAO.add(user);
+                logger.debug(SUCCESSFUL_TRANSACTION);
             }
         } catch (DaoException e) {
-            transaction.rollback();
-            logger.info(TRANSACTION_FAILED);
+            logger.debug(TRANSACTION_FAILED);
             throw new ServiceException(e);
         }
-        return id;
-    }
-
-    /**
-     * Update the user Entity
-     *
-     * @param user - The user object to be updated
-     * @throws ServiceException         - if something fails at Service layer
-     * @throws ServiceValidateException - if something fails at Service validation
-     */
-    @Override
-    public void update(User user) throws ServiceException, ServiceValidateException {
-        serviceUtils.updateEntity(userDAO, user, userValidator);
-    }
-
-    /**
-     * Returns a list of all users
-     *
-     * @return a list of all users
-     * @throws ServiceException - if something fails at Service layer
-     */
-    @Override
-    public List<User> getAll() throws ServiceException {
-        return serviceUtils.getAllEntities(userDAO);
-    }
-
-    /**
-     * Delete the user Entity
-     *
-     * @param id - The ID of the user entity to be deleted
-     * @throws ServiceException - if something fails at Service layer
-     */
-    @Override
-    public void delete(Long id) throws ServiceException {
-        serviceUtils.deleteEntity(userDAO, id);
-    }
-
-    /**
-     * Returns the user entity matching the given ID
-     *
-     * @param id - The ID of the user entity to be returned
-     * @return - the user entity matching the given ID
-     * @throws ServiceException - if something fails at Service layer
-     */
-    @Override
-    public User getById(Long id) throws ServiceException {
-        return serviceUtils.getByIdEntity(userDAO, id);
+        return user;
     }
 
     /**
@@ -126,16 +71,12 @@ public class UserService extends BaseService<User> implements IUserService {
      * @throws DaoException If something fails at DB level
      */
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public boolean checkLogin(String login) throws ServiceException {
         boolean result;
         try {
-            transaction = util.getSession().beginTransaction();
             result = userDAO.checkLogin(login);
-            transaction.commit();
-            logger.info(SUCCESSFUL_TRANSACTION);
         } catch (DaoException e) {
-            transaction.rollback();
-            logger.info(TRANSACTION_FAILED);
             throw new ServiceException(e.getMessage());
         }
         return result;
@@ -153,7 +94,6 @@ public class UserService extends BaseService<User> implements IUserService {
     public User getUser(String login, String password) throws ServiceException, ServiceLoginException {
         User user;
         try {
-            transaction = util.getSession().beginTransaction();
             user = userDAO.getUser(login, password);
             if (user == null) {
                 throw new ServiceLoginException(Message.ERROR_REG_LOGIN);
@@ -163,11 +103,9 @@ public class UserService extends BaseService<User> implements IUserService {
                 userDAO.setStatus(user.getUid(), UserStatus.ONLINE);
                 user.setStatus(UserStatus.ONLINE);
             }
-            transaction.commit();
-            logger.info(SUCCESSFUL_TRANSACTION);
+            logger.debug(SUCCESSFUL_TRANSACTION);
         } catch (DaoException e) {
-            transaction.rollback();
-            logger.info(TRANSACTION_FAILED);
+            logger.debug(TRANSACTION_FAILED);
             throw new ServiceException(e.getMessage());
         }
         return user;
@@ -183,17 +121,27 @@ public class UserService extends BaseService<User> implements IUserService {
     @Override
     public void setStatus(Long id, UserStatus status) throws ServiceException, ServiceValidateException {
         try {
-            if (id < 0) {
+            if (id == null) {
                 throw new ServiceException(Message.ERROR_ID_MISSING);
             }
-            transaction = util.getSession().beginTransaction();
             userDAO.setStatus(id, status);
-            transaction.commit();
             logger.info(SUCCESSFUL_TRANSACTION);
         } catch (DaoException e) {
-            transaction.rollback();
             logger.info(TRANSACTION_FAILED);
             throw new ServiceException(e.getMessage());
         }
+    }
+
+    /**
+     * Create the given Entity
+     *
+     * @param user - object to be created
+     * @return - The ID of the object, generated by DB
+     * @throws ServiceException         - if something fails at Service layer
+     * @throws ServiceValidateException - if something fails at Service validation
+     */
+    @Override
+    public User add(User user) throws ServiceException, ServiceValidateException {
+        throw new UnsupportedOperationException();
     }
 }
