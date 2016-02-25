@@ -32,12 +32,10 @@
         <div>
             <c:choose>
                 <c:when test="${requestScope.permissionChangeDeleteStatus =='false'}">
-                    <form action="/deleteEmployee" method="post">
-                        <input type="hidden" name="eid" value="${requestScope.employee.eid}"/>
+                    <form action="/deleteEmployee/${requestScope.employee.eid}" method="post">
                         <input class="button" type="submit" name="submit" value="delete"/>
                     </form>
-                    <form action="/updateEmployeePage" method="post">
-                        <input type="hidden" name="eid" value="${requestScope.employee.eid}"/>
+                    <form action="/updateEmployeePage/${requestScope.employee.eid}" method="post">
                         <input class="button" type="submit" name="submit" value="edit"/>
                     </form>
                 </c:when>

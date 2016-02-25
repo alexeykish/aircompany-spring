@@ -134,8 +134,8 @@ public class FlightDAOTest {
 
     @Test
     public void testDelete() throws Exception {
-        flightDAO.delete(testFlight1);
-        flightDAO.delete(testFlight2);
+        flightDAO.delete(id1);
+        flightDAO.delete(id2);
         assertNull("Delete employee: failed", flightDAO.getById(id1));
         assertNull("Delete employee: failed", flightDAO.getById(id2));
     }

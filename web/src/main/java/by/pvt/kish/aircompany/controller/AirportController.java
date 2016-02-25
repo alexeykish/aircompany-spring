@@ -12,12 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -38,11 +41,17 @@ public class AirportController {
 
     @RequestMapping(value = "/addAirport")
     public String addPlane(ModelMap model,
-                           @ModelAttribute("airport") Airport airport,
+                           @Valid @ModelAttribute("airport") Airport airport,
+                           BindingResult bindingResult,
                            HttpServletRequest request) {
         try {
-            airportService.add(airport);
-            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_ADD_AIRPORT);
+            if (!bindingResult.hasErrors()) {
+                if (airport != null) {
+                    airportService.add(airport);
+                    model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_ADD_AIRPORT);
+                    return "main";
+                }
+            }
         } catch (IllegalArgumentException e) {
             return ErrorHandler.returnErrorPage(Message.ERROR_IAE, className);
         } catch (ServiceException e) {
@@ -50,13 +59,14 @@ public class AirportController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "main";
+        return "airport/add";
     }
 
-    @RequestMapping(value = "/deleteAirport")
-    public String deletePlane(ModelMap model, Airport airport) {
+    @RequestMapping(value = "/deleteAirport/{id}")
+    public String deletePlane(ModelMap model,
+                              @PathVariable("id") Long id) {
         try {
-            airportService.delete(airport);
+            airportService.delete(id);
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_DELETE_AIRPORT);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
@@ -66,6 +76,12 @@ public class AirportController {
 
     @RequestMapping(value = "/airportReport/{id}")
     public String airportReport(ModelMap model, @PathVariable("id") Long id) {
+        try {
+            Airport airport = airportService.getById(id);
+            model.addAttribute(Attribute.AIRPORT_ATTRIBUTE, airport);
+        } catch (ServiceException e) {
+            return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        }
         return "airport/report";
     }
 
@@ -82,21 +98,39 @@ public class AirportController {
 
     @RequestMapping(value = "/updateAirport")
     public String updatePlane(Model model,
-                              @ModelAttribute Airport airport,
+                              @Valid @ModelAttribute("airport") Airport airport,
+                              BindingResult bindingResult,
                               HttpServletRequest request) {
         try {
-            airportService.update(airport);
-            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_UPDATE_AIRPORT);
+            if (!bindingResult.hasErrors()) {
+                if (airport != null) {
+                    airportService.update(airport);
+                    model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_UPDATE_AIRPORT);
+                    return "main";
+                }
+            }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "main";
+        return "airport/update";
     }
 
     @RequestMapping(value = "/addAirportPage")
     public String showAddAirportPage() {
         return "airport/add";
+    }
+
+    @RequestMapping(value = "/updateAirportPage/{id}")
+    public String showUpdateAirportPage(ModelMap model,
+                                        @PathVariable("id") Long id) {
+        try {
+            Airport airport = airportService.getById(id);
+            model.addAttribute(Attribute.AIRPORT_ATTRIBUTE, airport);
+        } catch (ServiceException e) {
+            return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        }
+        return "airport/update";
     }
 }

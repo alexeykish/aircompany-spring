@@ -117,11 +117,13 @@ public abstract class BaseDAO<T> implements IDAO<T> {
     /**
      * Delete the given pojos from the DB
      *
-     * @param t - entity to be deleted from the DB
+     * @param id - The ID of the entity to be deleted from the DB
      * @throws DaoException If something fails at DB level
      */
-    public void delete(T t) throws DaoException {
+    public void delete(Long id) throws DaoException {
+        T t;
         try {
+            t = (T) getSession().get(className, id);
             getSession().delete(t);
             logger.debug("Deleted object: " + t);
         } catch (HibernateException e) {

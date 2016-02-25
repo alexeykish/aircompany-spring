@@ -1,0 +1,60 @@
+<jsp:root xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:s="http://www.springframework.org/tags/form"
+          version="2.0">
+    <div style="margin:5px;">
+        <h2>Update airport</h2>
+        <s:form action="/updateAirport" method="post" modelAttribute="airport">
+            <fieldset>
+                <table>
+                    <tr class="input-label">
+                        <td>
+                            <label for="airportId" class="input-label">ID:</label>
+                        </td>
+                        <td>
+                            <s:input id="airportId" path="aid" class="inputForm" type="text"
+                                     value="${airport.aid}" readonly="true"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="airportName" class="input-label">Name:</label>
+                        </td>
+                        <td>
+                            <s:input id="airportName" path="name" class="inputForm" type="text"
+                                     value="${airport.name}"  maxlength="30"/>
+                        </td>
+                        <td>
+                            <s:errors path="name" class="reg-hint"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="airportCountry" class="input-label">Country:</label>
+                        </td>
+                        <td>
+                            <s:input id="airportCountry" path="address.country" class="inputForm" type="text"
+                                     value="${airport.address.country}"  maxlength="20"/>
+                        </td>
+                        <td>
+                            <s:errors path="address.country" class="reg-hint"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="airportCity" class="input-label">City:</label>
+                        </td>
+                        <td>
+                            <s:input id="airportCity" path="address.city" class="inputForm" type="text"
+                                     value="${airport.address.city}" maxlength="20"/>
+                        </td>
+                        <td>
+                            <s:errors path="address.city" class="reg-hint"/>
+                        </td>
+                    </tr>
+                </table>
+                <input class="button" type="submit" name="submit" value="update plane"/>
+            </fieldset>
+        </s:form>
+    </div>
+</jsp:root>

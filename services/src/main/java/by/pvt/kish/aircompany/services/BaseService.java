@@ -102,12 +102,12 @@ public abstract class BaseService<T> implements IService<T> {
     /**
      * Delete the given entity
      *
-     * @param t - The entity to be deleted
+     * @param id - The ID of the entity to be deleted
      * @throws ServiceException - if something fails at Service layer
      */
-    public void delete(T t) throws ServiceException {
+    public void delete(Long id) throws ServiceException {
         try {
-            dao.delete(t);
+            dao.delete(id);
             logger.debug(SUCCESSFUL_TRANSACTION);
         } catch (DaoException e) {
             logger.debug(TRANSACTION_FAILED);

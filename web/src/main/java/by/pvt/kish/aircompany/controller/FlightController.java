@@ -81,10 +81,11 @@ public class FlightController {
         return "main";
     }
 
-    @RequestMapping(value = "/deleteFlight")
-    public String deleteFlight(ModelMap model, Flight flight) {
+    @RequestMapping(value = "/deleteFlight/{id}")
+    public String deleteFlight(ModelMap model,
+                               @PathVariable("id") Long id) {
         try {
-            flightService.delete(flight);
+            flightService.delete(id);
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_DELETE_FLIGHT);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);

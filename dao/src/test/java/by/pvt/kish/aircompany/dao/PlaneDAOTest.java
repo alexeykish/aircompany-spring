@@ -89,7 +89,7 @@ public class PlaneDAOTest {
 
     @Test
     public void testDelete() throws Exception {
-        planeDAO.delete(testPlane);
+        planeDAO.delete(id);
         assertNull("Delete method: failed", planeDAO.getById(id));
     }
 

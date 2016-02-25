@@ -19,15 +19,16 @@
                     <div>
                         <input class="button" type="submit" value="login"/>
                     </div>
-                    <div>
-                        <a href="registration"
-                           style="font-size: 10px; color: #666666; margin: 5px;">registration</a>
-                    </div>
-                    <div>
-                        <a href="showindex"
-                           style="font-size: 10px; color: #666666; margin: 5px;">back</a>
-                    </div>
                 </form>
+                <div>
+                    <a href="/registrationPage"
+                       style="font-size: 10px; color: #666666; margin: 5px;">registration</a>
+                </div>
+                <div>
+                    <a href="showindex"
+                       style="font-size: 10px; color: #666666; margin: 5px;">back</a>
+                </div>
+                <p style="text-align: center; font-size: 12px; color: red;">${requestScope.login_message}</p>
             </c:when>
             <c:otherwise>
                 <div class="user-container" style="text-align: left;">

@@ -80,7 +80,7 @@ public class EmployeeDAOTest {
 
     @Test
     public void testDelete() throws Exception {
-        employeeDao.delete(testEmployee);
+        employeeDao.delete(id);
         assertNull("Delete employee: failed", employeeDao.getById(id));
     }
 

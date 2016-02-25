@@ -1,8 +1,14 @@
 package by.pvt.kish.aircompany.pojos;
 
 import by.pvt.kish.aircompany.enums.PlaneStatus;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -32,6 +38,7 @@ public class Plane implements Serializable {
     private Long pid;
 
     @Column(nullable = false)
+    @NotEmpty(message = "Please enter plane model")
     public String getModel() {
         return model;
     }
@@ -41,22 +48,26 @@ public class Plane implements Serializable {
     private String model;
 
     @Column(nullable = false)
-    public int getCapacity() {
+    @NotNull(message = "Please enter plane capacity")
+    @Min(value = 0, message = "Capacity must be a greater than 0")
+    public Integer getCapacity() {
         return capacity;
     }
-    public void setCapacity(int capacity) {
+    public void setCapacity(Integer capacity) {
         this.capacity = capacity;
     }
-    private int capacity;
+    private Integer capacity;
 
     @Column(nullable = false)
-    public int getFlightRange() {
+    @NotNull(message = "Please enter plane flight range")
+    @Min(value = 0, message = "Flight range must be a greater than 0")
+    public Integer getFlightRange() {
         return flightRange;
     }
-    public void setFlightRange(int flightRange) {
+    public void setFlightRange(Integer flightRange) {
         this.flightRange = flightRange;
     }
-    private int flightRange;
+    private Integer flightRange;
 
     @OneToMany(mappedBy = "plane")
     public Set<Flight> getFlights() {
@@ -78,6 +89,7 @@ public class Plane implements Serializable {
     private PlaneStatus status = PlaneStatus.AVAILABLE;
 
     @OneToOne(mappedBy = "plane", cascade=CascadeType.ALL)
+    @Valid
     public PlaneCrew getPlaneCrew() {
         return planeCrew;
     }
@@ -108,11 +120,9 @@ public class Plane implements Serializable {
 
         Plane plane = (Plane) o;
 
-        if (capacity != plane.capacity) return false;
-        if (flightRange != plane.flightRange) return false;
         if (pid != null ? !pid.equals(plane.pid) : plane.pid != null) return false;
         if (model != null ? !model.equals(plane.model) : plane.model != null) return false;
-        return status == plane.status;
+        return capacity != null ? capacity.equals(plane.capacity) : plane.capacity == null;
 
     }
 
@@ -120,9 +130,7 @@ public class Plane implements Serializable {
     public int hashCode() {
         int result = pid != null ? pid.hashCode() : 0;
         result = 31 * result + (model != null ? model.hashCode() : 0);
-        result = 31 * result + capacity;
-        result = 31 * result + flightRange;
-        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (capacity != null ? capacity.hashCode() : 0);
         return result;
     }
 

@@ -1,6 +1,10 @@
 package by.pvt.kish.aircompany.pojos;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -27,6 +31,7 @@ public class Airport implements Serializable {
     private Long aid;
 
     @Column(nullable = false)
+    @NotEmpty(message = "Please enter airport name")
     public String getName() {
         return name;
     }
@@ -58,6 +63,7 @@ public class Airport implements Serializable {
             @AttributeOverride(name = "country", column = @Column(name = "F_CONTRY")),
             @AttributeOverride(name = "city", column = @Column(name = "F_CITY"))
     })
+    @Valid
     public Address getAddress() {
         return address;
     }

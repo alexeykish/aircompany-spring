@@ -99,7 +99,7 @@ public class UserService extends BaseService<User> implements IUserService {
                 throw new ServiceLoginException(Message.ERROR_REG_USER_EXISTS);
             } else {
                 userDAO.setStatus(user.getUid(), UserStatus.ONLINE);
-                user.setStatus(UserStatus.ONLINE);
+                user.setStatus(UserStatus.ONLINE); //TODO возможно лишнее
             }
             logger.debug(SUCCESSFUL_TRANSACTION);
         } catch (DaoException e) {

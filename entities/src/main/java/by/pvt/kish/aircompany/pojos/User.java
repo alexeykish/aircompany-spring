@@ -5,9 +5,13 @@ package by.pvt.kish.aircompany.pojos;
 
 import by.pvt.kish.aircompany.enums.UserStatus;
 import by.pvt.kish.aircompany.enums.UserType;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * This class represents the User model.
@@ -31,6 +35,9 @@ public class User implements Serializable {
     private Long uid;
 
     @Column(nullable = false)
+    @NotEmpty(message = "Please enter your firstname")
+    @Size(min=2, max=15, message = "Your firstname must be between 2 and 15 characters")
+    @Pattern(regexp="^[A-Z]+[a-z]+$", message="Incorrectly filled 'firstname' field: user firstname must be alphabetic with no spaces and first capital")
     public String getFirstName() {
         return firstName;
     }
@@ -40,6 +47,9 @@ public class User implements Serializable {
     private String firstName;
 
     @Column(nullable = false)
+    @NotEmpty(message = "Please enter your lastname")
+    @Size(min=2, max=15, message = "Your lastname must be between 2 and 15 characters")
+    @Pattern(regexp="^[A-Z]+[a-z]+$", message="Incorrectly filled 'lastname' field: user lastname must be alphabetic with no spaces and first capital")
     public String getLastName() {
         return lastName;
     }
@@ -49,6 +59,9 @@ public class User implements Serializable {
     private String lastName;
 
     @Column(nullable = false, unique = true)
+    @NotEmpty(message = "Please enter your login")
+    @Size(min=3, max=10, message = "Your login must be between 3 and 10 characters")
+    @Pattern(regexp="[a-zA-Z0-9_]+$", message="Incorrectly filled 'login' field: user login must be latin alphanumeric with no spaces")
     public String getLogin() {
         return login;
     }
@@ -58,6 +71,9 @@ public class User implements Serializable {
     private String login;
 
     @Column(nullable = false)
+    @NotEmpty(message = "Please enter your password")
+    @Size(min=6, max=15, message = "Your password must be between 6 and 15 characters")
+    @Pattern(regexp="[a-zA-Z0-9_]+$", message="Incorrectly filled 'password' field: user password must be latin alphanumeric with no spaces")
     public String getPassword() {
         return password;
     }
@@ -67,6 +83,8 @@ public class User implements Serializable {
     private String password;
 
     @Column(nullable = false)
+    @NotEmpty(message = "Please enter your email")
+    @Email(message = "Incorrectly filled 'e-mail' fiel")
     public String getEmail() {
         return email;
     }

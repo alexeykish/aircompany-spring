@@ -3,7 +3,7 @@
           xmlns:s="http://www.springframework.org/tags/form"
           version="2.0">
     <div style="margin:5px;">
-        <h2>Add Plane</h2>
+        <h2>Update Plane</h2>
         <s:form action="/updatePlane" method="post" modelAttribute="plane">
             <fieldset>
                 <table>
@@ -24,6 +24,9 @@
                             <s:input id="planeModel" path="model" class="inputForm" type="text"
                                      value="${requestScope.plane.model}"/>
                         </td>
+                        <td>
+                            <s:errors path="model" class="reg-hint"/>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -32,6 +35,9 @@
                         <td>
                             <s:input id="planeCapacity" path="capacity" class="inputForm" type="text"
                                      value="${requestScope.plane.capacity}"/>
+                        </td>
+                        <td>
+                            <s:errors path="capacity" class="reg-hint"/>
                         </td>
                     </tr>
                     <tr>
@@ -42,6 +48,9 @@
                             <s:input id="planeFlightRange" path="flightRange" class="inputForm" type="text"
                                      value="${requestScope.plane.flightRange}"/>
                         </td>
+                        <td>
+                            <s:errors path="flightRange" class="reg-hint"/>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -50,6 +59,9 @@
                         <td>
                             <s:input id="planePilots" path="planeCrew.numberOfPilots" class="inputForm" type="text"
                                      value="${requestScope.plane.planeCrew.numberOfPilots}"/>
+                        </td>
+                        <td>
+                            <s:errors path="planeCrew.numberOfPilots" class="reg-hint"/>
                         </td>
                     </tr>
                     <tr>
@@ -60,6 +72,9 @@
                             <s:input id="planeNavigators" path="planeCrew.numberOfNavigators" class="inputForm"
                                      type="text" value="${requestScope.plane.planeCrew.numberOfNavigators}"/>
                         </td>
+                        <td>
+                            <s:errors path="planeCrew.numberOfNavigators" class="reg-hint"/>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -69,6 +84,9 @@
                             <s:input id="planeRadiooperators" path="planeCrew.numberOfRadiooperators" class="inputForm"
                                      type="text" value="${requestScope.plane.planeCrew.numberOfRadiooperators}"/>
                         </td>
+                        <td>
+                            <s:errors path="planeCrew.numberOfRadiooperators" class="reg-hint"/>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -76,7 +94,11 @@
                         </td>
                         <td>
                             <s:input id="planeStewardesses" path="planeCrew.numberOfStewardesses" class="inputForm"
-                                     type="text" value="${requestScope.plane.planeCrew.numberOfStewardesses}"/></td>
+                                     type="text" value="${requestScope.plane.planeCrew.numberOfStewardesses}"/>
+                        </td>
+                        <td>
+                            <s:errors path="planeCrew.numberOfStewardesses" class="reg-hint"/>
+                        </td>
                     </tr>
                     <s:input path="planeCrew.pid" value="${requestScope.plane.pid}" style="display: none"/>
                 </table>

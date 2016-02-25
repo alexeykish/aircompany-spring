@@ -2,8 +2,10 @@ package by.pvt.kish.aircompany.pojos;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 /**
  * This class represents the Plane crew model
@@ -27,40 +29,48 @@ public class PlaneCrew {
     private Long pid;
 
     @Column(nullable = false)
-    public int getNumberOfPilots() {
+    @NotNull(message = "Please enter plane number of pilots")
+    @Min(value = 1, message = "Plane number of pilots range must be a greater than 1")
+    public Integer getNumberOfPilots() {
         return numberOfPilots;
     }
-    public void setNumberOfPilots(int numberOfPilots) {
+    public void setNumberOfPilots(Integer numberOfPilots) {
         this.numberOfPilots = numberOfPilots;
     }
-    private int numberOfPilots;
+    private Integer numberOfPilots;
 
     @Column
-    public int getNumberOfNavigators() {
+    @NotNull(message = "Please enter plane number of navigators")
+    @Min(value = 0, message = "Plane number of navigators range must be a greater than 0")
+    public Integer getNumberOfNavigators() {
         return numberOfNavigators;
     }
-    public void setNumberOfNavigators(int numberOfNavigators) {
+    public void setNumberOfNavigators(Integer numberOfNavigators) {
         this.numberOfNavigators = numberOfNavigators;
     }
-    private int numberOfNavigators;
+    private Integer numberOfNavigators;
 
     @Column
-    public int getNumberOfRadiooperators() {
+    @NotNull(message = "Please enter plane number of radiooperators")
+    @Min(value = 0, message = "Plane number of radiooperators range must be a greater than 0")
+    public Integer getNumberOfRadiooperators() {
         return numberOfRadiooperators;
     }
-    public void setNumberOfRadiooperators(int numberOfRadiooperators) {
+    public void setNumberOfRadiooperators(Integer numberOfRadiooperators) {
         this.numberOfRadiooperators = numberOfRadiooperators;
     }
-    private int numberOfRadiooperators;
+    private Integer numberOfRadiooperators;
 
     @Column
-    public int getNumberOfStewardesses() {
+    @NotNull(message = "Please enter plane number of stewardesses")
+    @Min(value = 0, message = "Plane number of stewardesses range must be a greater than 0")
+    public Integer getNumberOfStewardesses() {
         return numberOfStewardesses;
     }
-    public void setNumberOfStewardesses(int numberOfStewardesses) {
+    public void setNumberOfStewardesses(Integer numberOfStewardesses) {
         this.numberOfStewardesses = numberOfStewardesses;
     }
-    private int numberOfStewardesses;
+    private Integer numberOfStewardesses;
 
     @OneToOne
     @PrimaryKeyJoinColumn
@@ -89,21 +99,24 @@ public class PlaneCrew {
 
         PlaneCrew planeCrew = (PlaneCrew) o;
 
-        if (numberOfPilots != planeCrew.numberOfPilots) return false;
-        if (numberOfNavigators != planeCrew.numberOfNavigators) return false;
-        if (numberOfRadiooperators != planeCrew.numberOfRadiooperators) return false;
-        if (numberOfStewardesses != planeCrew.numberOfStewardesses) return false;
-        return pid != null ? pid.equals(planeCrew.pid) : planeCrew.pid == null;
+        if (pid != null ? !pid.equals(planeCrew.pid) : planeCrew.pid != null) return false;
+        if (numberOfPilots != null ? !numberOfPilots.equals(planeCrew.numberOfPilots) : planeCrew.numberOfPilots != null)
+            return false;
+        if (numberOfNavigators != null ? !numberOfNavigators.equals(planeCrew.numberOfNavigators) : planeCrew.numberOfNavigators != null)
+            return false;
+        if (numberOfRadiooperators != null ? !numberOfRadiooperators.equals(planeCrew.numberOfRadiooperators) : planeCrew.numberOfRadiooperators != null)
+            return false;
+        return numberOfStewardesses != null ? numberOfStewardesses.equals(planeCrew.numberOfStewardesses) : planeCrew.numberOfStewardesses == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = pid != null ? pid.hashCode() : 0;
-        result = 31 * result + numberOfPilots;
-        result = 31 * result + numberOfNavigators;
-        result = 31 * result + numberOfRadiooperators;
-        result = 31 * result + numberOfStewardesses;
+        result = 31 * result + (numberOfPilots != null ? numberOfPilots.hashCode() : 0);
+        result = 31 * result + (numberOfNavigators != null ? numberOfNavigators.hashCode() : 0);
+        result = 31 * result + (numberOfRadiooperators != null ? numberOfRadiooperators.hashCode() : 0);
+        result = 31 * result + (numberOfStewardesses != null ? numberOfStewardesses.hashCode() : 0);
         return result;
     }
 

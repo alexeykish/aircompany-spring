@@ -43,10 +43,10 @@ public interface IService<T> {
     /**
      * Delete the given Entity
      *
-     * @param t - The entity to be deleted
+     * @param id - The ID of the entity to be deleted
      * @throws ServiceException - if something fails at Service layer
      */
-    void delete(T t) throws ServiceException;
+    void delete(Long id) throws ServiceException;
 
     /**
      * Returns the Entity matching the given ID

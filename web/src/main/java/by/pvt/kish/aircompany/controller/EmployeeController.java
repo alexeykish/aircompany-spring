@@ -68,10 +68,11 @@ public class EmployeeController {
         return "main";
     }
 
-    @RequestMapping(value = "/deleteEmployee")
-    public String deleteEmployee(ModelMap model, Employee employee) {
+    @RequestMapping(value = "/deleteEmployee/{id}")
+    public String deleteEmployee(ModelMap model,
+                                 @PathVariable("id") Long id) {
         try {
-            employeeService.delete(employee);
+            employeeService.delete(id);
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_DELETE_EMPLOYEE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);

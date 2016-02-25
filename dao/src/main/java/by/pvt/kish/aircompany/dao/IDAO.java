@@ -48,10 +48,10 @@ public interface IDAO<T> {
     /**
      * Delete the given entity from the DB
      *
-     * @param t - entity to be deleted from the DB
+     * @param id - The ID of the entity to be deleted from the DB
      * @throws DaoException If something fails at DB level
      */
-    void delete(T t) throws DaoException;
+    void delete(Long id) throws DaoException;
 
     /**
      * Returns the number of entities in the DB

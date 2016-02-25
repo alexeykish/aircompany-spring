@@ -28,15 +28,13 @@
         <div>
             <c:if test="${(requestScope.flight.status == 'CREATED')}">
                 <c:if test="${(sessionScope.userType == '2')}">
-                    <form action="/deleteFlight" method="post">
-                        <input type="hidden" name="fid" value="${requestScope.flight.fid}"/>
+                    <form action="/deleteFlight/${requestScope.flight.fid}" method="post">
                         <input class="table-button" type="submit"
                                name="submit"
                                value="delete"/>
                     </form>
 
-                    <form action="/updateFlightPage" method="post">
-                        <input type="hidden" name="fid" value="${requestScope.flight.fid}"/>
+                    <form action="/updateFlightPage/${requestScope.flight.fid}" method="post">
                         <input class="table-button" type="submit" name="submit" value="edit"/>
                     </form>
                 </c:if>

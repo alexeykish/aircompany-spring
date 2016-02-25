@@ -9,6 +9,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
     </context-param>
+
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -18,10 +19,6 @@
         <servlet-name>showindex-page</servlet-name>
         <jsp-file>/index.jsp</jsp-file>
     </servlet>
-    <servlet>
-        <servlet-name>registration-page</servlet-name>
-        <jsp-file>/WEB-INF/view/user/registration.jsp</jsp-file>
-    </servlet>
 
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
@@ -30,10 +27,6 @@
     <servlet-mapping>
         <servlet-name>showindex-page</servlet-name>
         <url-pattern>/showindex</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>registration-page</servlet-name>
-        <url-pattern>/registration</url-pattern>
     </servlet-mapping>
 
     <filter>
@@ -51,10 +44,6 @@
     <filter>
         <filter-name>DispatcherAuthFilter</filter-name>
         <filter-class>by.pvt.kish.aircompany.filters.DispatcherAuthFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>PreRegistrationFilter</filter-name>
-        <filter-class>by.pvt.kish.aircompany.filters.PreRegistrationFilter</filter-class>
     </filter>
 
 
@@ -83,10 +72,6 @@
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>PreRegistrationFilter</filter-name>
-        <url-pattern>/registration</url-pattern>
     </filter-mapping>
 
     <listener>

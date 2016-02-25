@@ -17,12 +17,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -47,13 +50,19 @@ public class PlaneController {
 
     @RequestMapping(value = "/addPlane")
     public String addPlane(ModelMap model,
-                           @ModelAttribute("plane") Plane plane,
+                           @Valid @ModelAttribute("plane") Plane plane,
+                           BindingResult bindingResult,
                            HttpServletRequest request) {
         try {
-            PlaneCrew planeCrew = plane.getPlaneCrew();
-            planeCrew.setPlane(plane);
-            planeService.add(plane);
-            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_ADD_PLANE);
+            if (!bindingResult.hasErrors()) {
+                if (plane != null) {
+                    PlaneCrew planeCrew = plane.getPlaneCrew();
+                    planeCrew.setPlane(plane);
+                    planeService.add(plane);
+                    model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_ADD_PLANE);
+                    return "main";
+                }
+            }
         } catch (IllegalArgumentException e) {
             return ErrorHandler.returnErrorPage(Message.ERROR_IAE, className);
         } catch (ServiceException e) {
@@ -61,13 +70,14 @@ public class PlaneController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "main";
+        return "plane/add";
     }
 
-    @RequestMapping(value = "/deletePlane}")
-    public String deletePlane(ModelMap model, Plane plane) {
+    @RequestMapping(value = "/deletePlane/{id}")
+    public String deletePlane(ModelMap model,
+                              @PathVariable("id") Long id) {
         try {
-            planeService.delete(plane);
+            planeService.delete(id);
             model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_DELETE_PLANE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
@@ -131,17 +141,23 @@ public class PlaneController {
 
     @RequestMapping(value = "/updatePlane")
     public String updatePlane(ModelMap model,
-                              @ModelAttribute("plane") Plane plane,
+                              @Valid @ModelAttribute("plane") Plane plane,
+                              BindingResult bindingResult,
                               HttpServletRequest request) {
         try {
-            planeService.update(plane);
-            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_UPDATE_PLANE);
+            if (!bindingResult.hasErrors()) {
+                if (plane != null) {
+                    planeService.update(plane);
+                    model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_UPDATE_PLANE);
+                    return "main";
+                }
+            }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "main";
+        return "plane/update";
     }
 
     @RequestMapping(value = "/addPlanePage")

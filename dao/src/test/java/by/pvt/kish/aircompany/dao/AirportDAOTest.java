@@ -73,7 +73,7 @@ public class AirportDAOTest {
 
     @Test
     public void testDelete() throws Exception {
-        airportDAO.delete(testAirport);
+        airportDAO.delete(id);
         assertNull("Delete method: failed", airportDAO.getById(id));
     }
 }

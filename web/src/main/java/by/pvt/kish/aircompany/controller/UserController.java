@@ -3,6 +3,7 @@ package by.pvt.kish.aircompany.controller;
 import by.pvt.kish.aircompany.constants.Attribute;
 import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.enums.UserStatus;
+import by.pvt.kish.aircompany.enums.UserType;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceLoginException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
@@ -16,10 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -73,12 +77,12 @@ public class UserController {
                              HttpServletRequest request) {
         if (session != null) {
             try {
-                User user = (User)session.getAttribute(Attribute.USER_ATTRIBUTE);
+                User user = (User) session.getAttribute(Attribute.USER_ATTRIBUTE);
                 userService.setStatus(user.getUid(), UserStatus.OFFLINE);
                 session.invalidate();
                 logger.info(Message.USER_LOGOUT);
             } catch (ServiceException e) {
-               model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.ERROR_REG_LOGOUT); //LOGIN_MESSAGE
+                model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.ERROR_REG_LOGOUT); //LOGIN_MESSAGE
                 return ErrorHandler.returnErrorPage(e.getMessage(), className);
             } catch (ServiceValidateException e) {
                 return ErrorHandler.returnLoginErrorPage(request, e.getMessage(), className);
@@ -89,12 +93,16 @@ public class UserController {
 
     @RequestMapping(value = "/addUser")
     public String addUser(ModelMap model,
-                          @ModelAttribute User user,
+                          @Valid @ModelAttribute User user,
+                          BindingResult bindingResult,
                           HttpServletRequest request) {
         try {
-            if (user != null) {
-                userService.addUser(user);
-                model.addAttribute(Attribute.LOGIN_MESSAGE_ATTRIBUTE, Message.SUCCESS_REG);
+            if (!bindingResult.hasErrors()) {
+                if (user != null) {
+                    userService.addUser(user);
+                    model.addAttribute(Attribute.LOGIN_MESSAGE_ATTRIBUTE, Message.SUCCESS_REG);
+                    return "signIn";
+                }
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
@@ -103,7 +111,7 @@ public class UserController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "signIn";
+        return "registration";
     }
 
     @RequestMapping(value = "/userList")
@@ -120,5 +128,12 @@ public class UserController {
     @RequestMapping(value = "/signIn")
     public String showAuthorisationPage() {
         return "signIn";
+    }
+
+    @RequestMapping(value = "/registrationPage")
+    public String showRegistrationPage(ModelMap model) {
+        List<UserType> userTypes = Arrays.asList(UserType.values());
+        model.addAttribute(Attribute.USERTYPES_ATTRIBUTE, userTypes);
+        return "registration";
     }
 }

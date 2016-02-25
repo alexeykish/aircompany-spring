@@ -78,7 +78,7 @@ public class UserDAOTest {
 
     @Test
     public void testDelete() throws Exception {
-        userDao.delete(testUser);
+        userDao.delete(id);
         assertNull("Delete user: failed", userDao.getById(id));
     }
 

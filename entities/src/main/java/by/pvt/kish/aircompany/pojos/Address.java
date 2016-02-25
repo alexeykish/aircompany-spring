@@ -1,7 +1,10 @@
 package by.pvt.kish.aircompany.pojos;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Pattern;
 
 /**
  * This class represents the Address component for Airport model
@@ -12,6 +15,7 @@ import javax.persistence.Embeddable;
 public class Address {
 
     @Column
+    @NotEmpty(message = "Please enter airport country")
     public String getCountry() {
         return country;
     }
@@ -21,6 +25,7 @@ public class Address {
     private String country;
 
     @Column
+    @NotEmpty(message = "Please enter airport city")
     public String getCity() {
         return city;
     }

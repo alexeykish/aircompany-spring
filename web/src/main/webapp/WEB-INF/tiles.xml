@@ -16,6 +16,11 @@
         <put-attribute name="authorisation" value="/WEB-INF/view/user/auth.jspx"/>
     </definition>
 
+    <definition name="registration" template="/WEB-INF/view/user/authorisation.jspx">
+        <put-attribute name="title" value="Authorisation"/>
+        <put-attribute name="authorisation" value="/WEB-INF/view/user/registration.jspx"/>
+    </definition>
+
     <definition name="main" extends="default">
         <put-attribute name="title" value="Main page"/>
         <put-attribute name="right-content" value="/WEB-INF/view/main/message.jspx"/>
@@ -99,6 +104,21 @@
     <definition name="airport/list" extends="default">
         <put-attribute name="title" value="Airports info"/>
         <put-attribute name="right-content" value="/WEB-INF/view/airport/airportList.jspx"/>
+    </definition>
+
+    <definition name="airport/add" extends="default">
+        <put-attribute name="title" value="Add airports"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/airport/addAirport.jspx"/>
+    </definition>
+
+    <definition name="airport/report" extends="default">
+        <put-attribute name="title" value="Airport report"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/airport/airportReport.jspx"/>
+    </definition>
+
+    <definition name="airport/update" extends="default">
+        <put-attribute name="title" value="Update airport"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/airport/updateAirport.jspx"/>
     </definition>
 
 </tiles-definitions>
