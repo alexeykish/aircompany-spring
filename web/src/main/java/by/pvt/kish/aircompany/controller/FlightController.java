@@ -7,7 +7,6 @@ import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Airport;
 import by.pvt.kish.aircompany.pojos.Flight;
-import by.pvt.kish.aircompany.pojos.Plane;
 import by.pvt.kish.aircompany.services.IFlightService;
 import by.pvt.kish.aircompany.services.IPlaneService;
 import by.pvt.kish.aircompany.services.IService;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -59,18 +59,20 @@ public class FlightController {
     @RequestMapping(value = "/addFlight")
     public String addFlight(ModelMap model,
                             @Valid @ModelAttribute("flight") Flight flight,
-                            BindingResult result,
+                            BindingResult bindingResult,
+                            RedirectAttributes redirectAttributes,
                             HttpServletRequest request) {
         try {
-            if(!result.hasErrors()) {
+            if(!bindingResult.hasErrors()) {
                 if (flight != null) {
-                    flight = new Flight();
-                    model.addAttribute("flight", flight);
-                    return "main";
+                    flightService.add(flight);
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_ADD_FLIGHT);
+                    return "redirect:/flightList";
                 }
+            } else {
+                model.addAttribute(Attribute.AIRPORTS, airportService.getAll());
+                model.addAttribute(Attribute.PLANES, planeService.getAll());
             }
-            flightService.add(flight);
-            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_ADD_FLIGHT);
         } catch (IllegalArgumentException e) {
             return ErrorHandler.returnErrorPage(Message.ERROR_IAE, className);
         } catch (ServiceException e) {
@@ -82,25 +84,23 @@ public class FlightController {
     }
 
     @RequestMapping(value = "/deleteFlight/{id}")
-    public String deleteFlight(ModelMap model,
+    public String deleteFlight(RedirectAttributes redirectAttributes,
                                @PathVariable("id") Long id) {
         try {
             flightService.delete(id);
-            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_DELETE_FLIGHT);
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_DELETE_FLIGHT);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
-        return "main";
+        return "redirect:/flightList";
     }
 
     @RequestMapping(value = "/flightReport/{id}")
     public String createFlightReport(ModelMap model,
                                     @PathVariable("id") Long id) {
         try {
-            Flight flight = flightService.getById(id);
-            List<FlightStatus> flightStatuses = Arrays.asList(FlightStatus.values());
-            model.addAttribute(Attribute.FLIGHT_ATTRIBUTE, flight);
-            model.addAttribute(Attribute.STATUSES_ATTRIBUTE, flightStatuses);
+            model.addAttribute(Attribute.FLIGHT, flightService.getById(id));
+            model.addAttribute(Attribute.STATUSES, Arrays.asList(FlightStatus.values()));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
@@ -111,7 +111,7 @@ public class FlightController {
     public String getAllFlights(ModelMap model,
                                 @RequestParam("page") Integer page,
                                 HttpServletRequest request) {
-        int recordsPerPage = 5;
+        int recordsPerPage = 10;
         int currentPage = 1;
         if(page != null) {
             currentPage = page;
@@ -120,8 +120,7 @@ public class FlightController {
             int noOfRecords = flightService.getCount();
             int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
             flightStatusValidator.updateFlightsStatus();
-            List<Flight> flights = flightService.getAllToPage(recordsPerPage, currentPage);
-            model.addAttribute(Attribute.FLIGHTS_ATTRIBUTE, flights);
+            model.addAttribute(Attribute.FLIGHTS, flightService.getAllToPage(recordsPerPage, currentPage));
             model.addAttribute("noOfPages", noOfPages);
             model.addAttribute("currentPage", currentPage);
         } catch (ServiceException e) {
@@ -134,11 +133,22 @@ public class FlightController {
 
     @RequestMapping(value = "/updateFlight")
     public String updateFlight(ModelMap model,
+                               RedirectAttributes redirectAttributes,
                                @ModelAttribute Flight flight,
+                               BindingResult bindingResult,
                                HttpServletRequest request) {
         try {
-            flightService.update(flight);
-            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_UPDATE_FLIGHT);
+            if(!bindingResult.hasErrors()) {
+                if (flight != null) {
+                    flightService.update(flight);
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_UPDATE_FLIGHT);
+                    return "redirect:/flightList";
+                }
+            } else {
+                model.addAttribute(Attribute.STATUSES, Arrays.asList(FlightStatus.values()));
+                model.addAttribute(Attribute.AIRPORTS, airportService.getAll());
+                model.addAttribute(Attribute.PLANES, planeService.getAll());
+            }
         } catch (IllegalArgumentException e) {
             return ErrorHandler.returnErrorPage(Message.ERROR_IAE, className);
         } catch (ServiceException e) {
@@ -146,33 +156,31 @@ public class FlightController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(),className);
         }
-        return "main";
+        return "flight/update";
     }
 
     @RequestMapping(value = "/saveCrewToFlight/{id}")
     public String saveCrewToFlight(ModelMap model,
                                    @PathVariable("id") Long id,
                                    @RequestParam("num") Integer num,
+                                   RedirectAttributes redirectAttributes,
                                    HttpServletRequest request) {
         try {
-            List<Long> team = getTeam(request, num);
-            flightService.addTeam(id, team);
-            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_TEAM_CHANGE);
+            flightService.addTeam(id, getTeam(request, num));
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_TEAM_CHANGE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(),className);
         }
-        return "main";
+        return "redirect:/flightList";
     }
 
     @RequestMapping(value = "/addFlightPage")
     public String showAddFlightPage(Model model) {
         try {
-            List<Plane> planes = planeService.getAll();
-            List<Airport> airports = airportService.getAll();
-            model.addAttribute(Attribute.AIRPORTS_ATTRIBUTE, airports);
-            model.addAttribute(Attribute.PLANES_ATTRIBUTE, planes);
+            model.addAttribute(Attribute.AIRPORTS, airportService.getAll());
+            model.addAttribute(Attribute.PLANES, planeService.getAll());
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
@@ -183,14 +191,10 @@ public class FlightController {
     public String showUpdateFlightPage(Model model,
                                        @RequestParam("fid") Long id) {
         try {
-            Flight flight = flightService.getById(id);
-            List<FlightStatus> statuses = Arrays.asList(FlightStatus.values());
-            List<Plane> planes = planeService.getAll();
-            List<Airport> airports = airportService.getAll();
-            model.addAttribute(Attribute.FLIGHT_ATTRIBUTE, flight);
-            model.addAttribute(Attribute.STATUSES_ATTRIBUTE, statuses);
-            model.addAttribute(Attribute.AIRPORTS_ATTRIBUTE, airports);
-            model.addAttribute(Attribute.PLANES_ATTRIBUTE, planes);
+            model.addAttribute(Attribute.FLIGHT, flightService.getById(id));
+            model.addAttribute(Attribute.STATUSES, Arrays.asList(FlightStatus.values()));
+            model.addAttribute(Attribute.AIRPORTS, airportService.getAll());
+            model.addAttribute(Attribute.PLANES, planeService.getAll());
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }

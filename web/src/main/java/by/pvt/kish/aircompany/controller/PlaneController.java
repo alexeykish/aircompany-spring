@@ -10,12 +10,10 @@ import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.pojos.Plane;
 import by.pvt.kish.aircompany.pojos.PlaneCrew;
 import by.pvt.kish.aircompany.services.IPlaneService;
-import by.pvt.kish.aircompany.services.impl.PlaneService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -52,6 +50,7 @@ public class PlaneController {
     public String addPlane(ModelMap model,
                            @Valid @ModelAttribute("plane") Plane plane,
                            BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes,
                            HttpServletRequest request) {
         try {
             if (!bindingResult.hasErrors()) {
@@ -59,8 +58,8 @@ public class PlaneController {
                     PlaneCrew planeCrew = plane.getPlaneCrew();
                     planeCrew.setPlane(plane);
                     planeService.add(plane);
-                    model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_ADD_PLANE);
-                    return "main";
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_ADD_PLANE);
+                    return "redirect:/planeList";
                 }
             }
         } catch (ServiceException e) {
@@ -72,22 +71,21 @@ public class PlaneController {
     }
 
     @RequestMapping(value = "/deletePlane/{id}")
-    public String deletePlane(ModelMap model,
+    public String deletePlane(RedirectAttributes redirectAttributes,
                               @PathVariable("id") Long id) {
         try {
             planeService.delete(id);
-            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_DELETE_PLANE);
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_DELETE_PLANE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
-        return "main";
+        return "redirect:/planeList";
     }
 
     @RequestMapping(value = "/planeList")
     public String getAllPlanes(ModelMap model) {
         try {
-            List<Plane> planes = planeService.getAll();
-            model.addAttribute(Attribute.PLANES_ATTRIBUTE, planes);
+            model.addAttribute(Attribute.PLANES, planeService.getAll());
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
@@ -100,19 +98,12 @@ public class PlaneController {
                                     HttpServletRequest request) {
         try {
             Plane plane = planeService.getById(id);
-            Map<String, Integer> team = new HashMap<>();
-            team.put(Position.PILOT.toString(), plane.getPlaneCrew().getNumberOfPilots());
-            team.put(Position.NAVIGATOR.toString(), plane.getPlaneCrew().getNumberOfNavigators());
-            team.put(Position.RADIOOPERATOR.toString(), plane.getPlaneCrew().getNumberOfRadiooperators());
-            team.put(Position.STEWARDESS.toString(), plane.getPlaneCrew().getNumberOfStewardesses());
             List<Flight> flights = planeService.getPlaneLastFiveFlights(plane.getPid());
-            boolean permissionChangeDeleteStatus = flights.size() != 0;
-            List<PlaneStatus> planeStatuses = Arrays.asList(PlaneStatus.values());
-            model.addAttribute(Attribute.PLANE_ATTRIBUTE, plane);
-            model.addAttribute(Attribute.TEAM_ATTRIBUTE, team);
-            model.addAttribute(Attribute.FLIGHTS_ATTRIBUTE, flights);
-            model.addAttribute(Attribute.STATUSES_ATTRIBUTE, planeStatuses);
-            model.addAttribute(Attribute.PERMISSION_CHANGE_DELETE_STATUS_ATTRIBUTE, permissionChangeDeleteStatus);
+            model.addAttribute(Attribute.PLANE, plane);
+            model.addAttribute(Attribute.TEAM, getCrew(plane));
+            model.addAttribute(Attribute.FLIGHTS, flights);
+            model.addAttribute(Attribute.STATUSES, Arrays.asList(PlaneStatus.values()));
+            model.addAttribute(Attribute.PERMISSION_CHANGE_DELETE_STATUS, flights.size() != 0);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
@@ -122,32 +113,32 @@ public class PlaneController {
     }
 
     @RequestMapping(value = "/changePlaneStatus/{id}")
-    public String changePlaneStatus(ModelMap model,
+    public String changePlaneStatus(RedirectAttributes redirectAttributes,
                                     @PathVariable("id") Long id,
                                     @RequestParam("status") String status,
                                     HttpServletRequest request) {
         try {
             planeService.setStatus(id, PlaneStatus.valueOf(status));
-            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_SET_STATUS_PLANE);
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_SET_STATUS_PLANE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "main";
+        return "redirect:/planeList";
     }
 
     @RequestMapping(value = "/updatePlane")
-    public String updatePlane(ModelMap model,
-                              @Valid @ModelAttribute("plane") Plane plane,
+    public String updatePlane(@Valid @ModelAttribute("plane") Plane plane,
                               BindingResult bindingResult,
+                              RedirectAttributes redirectAttributes,
                               HttpServletRequest request) {
         try {
             if (!bindingResult.hasErrors()) {
                 if (plane != null) {
                     planeService.update(plane);
-                    model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_UPDATE_PLANE);
-                    return "main";
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_UPDATE_PLANE);
+                    return "redirect:/planeList";
                 }
             }
         } catch (ServiceException e) {
@@ -167,11 +158,20 @@ public class PlaneController {
     public String showUpdatePlanePage(ModelMap model,
                                       @PathVariable("id") Long id) {
         try {
-            Plane plane = planeService.getById(id);
-            model.addAttribute(Attribute.PLANE_ATTRIBUTE, plane);
+            model.addAttribute(Attribute.PLANE, planeService.getById(id));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
         return "plane/update";
     }
+
+    private Map<String, Integer> getCrew(Plane plane) {
+        Map<String, Integer> team = new HashMap<>();
+        team.put(Position.PILOT.toString(), plane.getPlaneCrew().getNumberOfPilots());
+        team.put(Position.NAVIGATOR.toString(), plane.getPlaneCrew().getNumberOfNavigators());
+        team.put(Position.RADIOOPERATOR.toString(), plane.getPlaneCrew().getNumberOfRadiooperators());
+        team.put(Position.STEWARDESS.toString(), plane.getPlaneCrew().getNumberOfStewardesses());
+        return team;
+    }
+
 }

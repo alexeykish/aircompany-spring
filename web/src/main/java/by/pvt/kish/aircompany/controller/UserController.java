@@ -8,14 +8,11 @@ import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceLoginException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.User;
-import by.pvt.kish.aircompany.services.IService;
 import by.pvt.kish.aircompany.services.IUserService;
-import by.pvt.kish.aircompany.services.impl.UserService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Kish Alexey
@@ -44,8 +40,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/loginUser")
-    public String loginUser(ModelMap model,
-                            HttpSession session,
+    public String loginUser(HttpSession session,
                             HttpServletRequest request,
                             @RequestParam("login") String login,
                             @RequestParam("password") String password) {
@@ -53,16 +48,16 @@ public class UserController {
             User user = userService.getUser(login, password);
             switch (user.getUserType()) {
                 case ADMINISTRATOR:
-                    session.setAttribute(Attribute.USERTYPE_ATTRIBUTE, 2);
+                    session.setAttribute(Attribute.USER_TYPE, 2);
                     break;
                 case DISPATCHER:
-                    session.setAttribute(Attribute.USERTYPE_ATTRIBUTE, 1);
+                    session.setAttribute(Attribute.USER_TYPE, 1);
                     break;
                 default:
-                    session.setAttribute(Attribute.USERTYPE_ATTRIBUTE, 0);
+                    session.setAttribute(Attribute.USER_TYPE, 0);
                     break;
             }
-            session.setAttribute(Attribute.USER_ATTRIBUTE, user);
+            session.setAttribute(Attribute.USER, user);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceLoginException e) {
@@ -77,12 +72,12 @@ public class UserController {
                              HttpServletRequest request) {
         if (session != null) {
             try {
-                User user = (User) session.getAttribute(Attribute.USER_ATTRIBUTE);
+                User user = (User) session.getAttribute(Attribute.USER);
                 userService.setStatus(user.getUid(), UserStatus.OFFLINE);
                 session.invalidate();
                 logger.info(Message.USER_LOGOUT);
             } catch (ServiceException e) {
-                model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.ERROR_REG_LOGOUT);
+                model.addAttribute(Attribute.MESSAGE, Message.ERROR_REG_LOGOUT);
                 return ErrorHandler.returnErrorPage(e.getMessage(), className);
             } catch (ServiceValidateException e) {
                 return ErrorHandler.returnLoginErrorPage(request, e.getMessage(), className);
@@ -100,7 +95,7 @@ public class UserController {
             if (!bindingResult.hasErrors()) {
                 if (user != null) {
                     userService.addUser(user);
-                    model.addAttribute(Attribute.LOGIN_MESSAGE_ATTRIBUTE, Message.SUCCESS_REG);
+                    model.addAttribute(Attribute.LOGIN_MESSAGE, Message.SUCCESS_REG);
                     return "signIn";
                 }
             }
@@ -117,8 +112,7 @@ public class UserController {
     @RequestMapping(value = "/userList")
     public String getAllUsers(ModelMap model) {
         try {
-            List<User> users = userService.getAll();
-            model.addAttribute(Attribute.USERS_ATTRIBUTE, users);
+            model.addAttribute(Attribute.USERS, userService.getAll());
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
@@ -132,8 +126,7 @@ public class UserController {
 
     @RequestMapping(value = "/registrationPage")
     public String showRegistrationPage(ModelMap model) {
-        List<UserType> userTypes = Arrays.asList(UserType.values());
-        model.addAttribute(Attribute.USERTYPES_ATTRIBUTE, userTypes);
+        model.addAttribute(Attribute.USERTYPES, Arrays.asList(UserType.values()));
         return "registration";
     }
 }

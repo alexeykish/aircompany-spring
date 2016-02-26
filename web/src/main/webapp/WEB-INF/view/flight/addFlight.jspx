@@ -14,8 +14,11 @@
                             <label for="flightDate" class="input-label">Date:</label>
                         </td>
                         <td>
-                            <s:input id="flightDate" path="date" name="date" class="inputForm" type="text"
+                            <s:input id="flightDate" path="date" name="date" class="inputForm" type="date"
                                      value=""/>
+                        </td>
+                        <td>
+                            <s:errors path="date" class="reg-hint"/>
                         </td>
                     </tr>
                     <tr>

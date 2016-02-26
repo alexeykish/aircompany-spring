@@ -107,10 +107,12 @@ body {
 }
 
 .success-message {
-    color: green;
-    font-size: 12px;
+    color: limegreen;
+    font-size: 14px;
     height: 25px;
     border: solid 1px green;
     border-radius: 5px;
-    margin: 10px;
+    margin: 5px;
+    text-align: center;
+    padding-top: 5px
 }

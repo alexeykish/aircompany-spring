@@ -22,11 +22,11 @@ public class DispatcherAuthFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpSession session = httpRequest.getSession();
-        Integer accessLevel = (Integer)session.getAttribute(Attribute.USERTYPE_ATTRIBUTE);
+        Integer accessLevel = (Integer)session.getAttribute(Attribute.USER_TYPE);
         if((accessLevel != null) && (accessLevel == 1)){
             filterChain.doFilter(request, response);
         } else {
-            request.setAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.ERR_ACCESS);
+            request.setAttribute(Attribute.MESSAGE, Message.ERR_ACCESS);
             RequestDispatcher dispatcher = request.getRequestDispatcher(Page.INDEX);
             dispatcher.forward(request, response);
         }

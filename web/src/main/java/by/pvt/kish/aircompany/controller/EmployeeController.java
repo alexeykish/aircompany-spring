@@ -11,15 +11,11 @@ import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.services.IEmployeeService;
 import by.pvt.kish.aircompany.services.IFlightService;
 import by.pvt.kish.aircompany.services.IPlaneService;
-import by.pvt.kish.aircompany.services.impl.EmployeeService;
-import by.pvt.kish.aircompany.services.impl.FlightService;
-import by.pvt.kish.aircompany.services.impl.PlaneService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
 import by.pvt.kish.aircompany.utils.TeamCreator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -66,11 +62,11 @@ public class EmployeeController {
             if (!bindingResult.hasErrors()) {
                 if (employee != null) {
                     employeeService.add(employee);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_ADD_EMPLOYEE);
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_ADD_EMPLOYEE);
                     return "redirect:/employeeList";
                 }
             } else {
-                model.addAttribute(Attribute.POSITIONS_ATTRIBUTE, Arrays.asList(Position.values()));
+                model.addAttribute(Attribute.POSITIONS, Arrays.asList(Position.values()));
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
@@ -81,15 +77,15 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "/deleteEmployee/{id}")
-    public String deleteEmployee(ModelMap model,
+    public String deleteEmployee(RedirectAttributes redirectAttributes,
                                  @PathVariable("id") Long id) {
         try {
             employeeService.delete(id);
-            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_DELETE_EMPLOYEE);
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_DELETE_EMPLOYEE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
-        return "main";
+        return "redirect:/employeeList";
     }
 
     @RequestMapping(value = "/employeeReport/{id}")
@@ -99,13 +95,10 @@ public class EmployeeController {
         try {
             Employee employee = employeeService.getById(id);
             List<Flight> flights = employeeService.getEmployeeLastFiveFlights(employee.getEid());
-            boolean permissionChangeDeleteStatus = flights.size() != 0;
-            List<EmployeeStatus> employeeStatuses = Arrays.asList(EmployeeStatus.values());
-
-            model.addAttribute(Attribute.EMPLOYEE_ATTRIBUTE, employee);
-            model.addAttribute(Attribute.FLIGHTS_ATTRIBUTE, flights);
-            model.addAttribute(Attribute.STATUSES_ATTRIBUTE, employeeStatuses);
-            model.addAttribute(Attribute.PERMISSION_CHANGE_DELETE_STATUS_ATTRIBUTE, permissionChangeDeleteStatus);
+            model.addAttribute(Attribute.EMPLOYEE, employee);
+            model.addAttribute(Attribute.FLIGHTS, flights);
+            model.addAttribute(Attribute.STATUSES, Arrays.asList(EmployeeStatus.values()));
+            model.addAttribute(Attribute.PERMISSION_CHANGE_DELETE_STATUS, flights.size() != 0);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
@@ -117,9 +110,7 @@ public class EmployeeController {
     @RequestMapping(value = "/employeeList")
     public String getAllEmployees(ModelMap model) {
         try {
-            List<Employee> employees = employeeService.getAll();
-
-            model.addAttribute(Attribute.EMPLOYEES_ATTRIBUTE, employees);
+            model.addAttribute(Attribute.EMPLOYEES, employeeService.getAll());
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
@@ -127,40 +118,43 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "/changeEmployeeStatus/{id}")
-    public String changeEmployeeStatus(ModelMap model,
-                                       @PathVariable("id") Long id,
+    public String changeEmployeeStatus(@PathVariable("id") Long id,
                                        @RequestParam("status") String status,
+                                       RedirectAttributes redirectAttributes,
                                        HttpServletRequest request) {
         try {
             employeeService.setStatus(id, EmployeeStatus.valueOf(status));
-            model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_SET_STATUS_EMPLOYEE);
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_SET_STATUS_EMPLOYEE);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "main";
+        return "redirect:/employeeList";
     }
 
     @RequestMapping(value = "/updateEmployee")
     public String updateEmployee(ModelMap model,
                                  @Valid @ModelAttribute("employee") Employee employee,
                                  BindingResult bindingResult,
+                                 RedirectAttributes redirectAttributes,
                                  HttpServletRequest request) {
         try {
             if (!bindingResult.hasErrors()) {
                 if (employee != null) {
                     employeeService.update(employee);
-                    model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.SUCCESS_UPDATE_EMPLOYEE);
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_UPDATE_EMPLOYEE);
                     return "redirect:/employeeList";
                 }
+            } else {
+                model.addAttribute(Attribute.POSITIONS, Arrays.asList(Position.values()));
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "employee/add";
+        return "employee/update";
     }
 
     @RequestMapping(value = "/addCrewPage/{id}")
@@ -170,13 +164,11 @@ public class EmployeeController {
         try {
             List<Employee> crew = employeeService.getFlightCrewByFlightId(id);
             Flight flight = flightService.getById(id);
-            List<Employee> employees = employeeService.getAllAvailable(flight.getDate());
-            List<String> positions = TeamCreator.getPlanePositions(planeService.getById(flight.getPlane().getPid()));
-            model.addAttribute(Attribute.FLIGHT_ATTRIBUTE, flight);
-            model.addAttribute(Attribute.EMPLOYEES_ATTRIBUTE, employees);
-            model.addAttribute(Attribute.POSITIONS_ATTRIBUTE, positions);
+            model.addAttribute(Attribute.FLIGHT, flight);
+            model.addAttribute(Attribute.EMPLOYEES, employeeService.getAllAvailable(flight.getDate()));
+            model.addAttribute(Attribute.POSITIONS, TeamCreator.getPlanePositions(planeService.getById(flight.getPlane().getPid())));
             if (crew.size() != 0) {
-                model.addAttribute(Attribute.TEAM_ATTRIBUTE, crew);
+                model.addAttribute(Attribute.TEAM, crew);
                 return "updateCrew";
             }
         } catch (ServiceException e) {
@@ -189,7 +181,7 @@ public class EmployeeController {
 
     @RequestMapping(value = "/addEmployeePage")
     public String showAddEmployeePage(ModelMap model) {
-        model.addAttribute(Attribute.POSITIONS_ATTRIBUTE, Arrays.asList(Position.values()));
+        model.addAttribute(Attribute.POSITIONS, Arrays.asList(Position.values()));
         return "employee/add";
     }
 
@@ -197,9 +189,8 @@ public class EmployeeController {
     public String showUpdateEmployeePage(ModelMap model,
                                          @PathVariable("id") Long id) {
         try {
-            Employee employee = employeeService.getById(id);
-            model.addAttribute(Attribute.EMPLOYEE_ATTRIBUTE, employee);
-            model.addAttribute(Attribute.POSITIONS_ATTRIBUTE, Arrays.asList(Position.values()));
+            model.addAttribute(Attribute.EMPLOYEE, employeeService.getById(id));
+            model.addAttribute(Attribute.POSITIONS, Arrays.asList(Position.values()));
         } catch (ServiceException e) {
             ErrorHandler.returnErrorPage(e.getMessage(), className);
         }

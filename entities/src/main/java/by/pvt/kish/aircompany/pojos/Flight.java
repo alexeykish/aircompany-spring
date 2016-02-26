@@ -39,8 +39,7 @@ public class Flight implements Serializable {
 
     @Temporal(TemporalType.DATE)
     @Column
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    @Future(message = "Flight date must be in the future")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd") //TODO Date validation ??? InitBinder
     public Date getDate() {
         return date;
     }

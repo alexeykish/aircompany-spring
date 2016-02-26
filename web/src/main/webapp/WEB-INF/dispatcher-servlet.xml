@@ -9,16 +9,17 @@
                            http://www.springframework.org/schema/mvc/spring-mvc.xsd
 	   					   http://www.springframework.org/schema/context
 	   					   http://www.springframework.org/schema/context/spring-context.xsd">
-
-    <import resource="classpath*:beans-service.xml"/>
     <import resource="classpath*:beans-dao.xml"/>
+    <import resource="classpath*:beans-service.xml"/>
     <mvc:annotation-driven/>
     <context:component-scan base-package="by.pvt.kish.aircompany"/>
     <mvc:resources mapping="/resources/**" location="/assests/"/>
     <mvc:default-servlet-handler/>
 
     <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
-        <property name="definitions" value="/WEB-INF/tiles.xml"/>
+        <property name="definitions">
+            <value>/WEB-INF/tiles.xml</value>
+        </property>
     </bean>
 
     <bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">

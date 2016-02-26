@@ -36,9 +36,9 @@ public class UserDAOTest {
     @Before
     public void setUp() throws Exception {
         testUser = new User();
-        testUser.setFirstName("testFirstName");
-        testUser.setLastName("testLastName");
-        testUser.setLogin("testLogin" + Math.random());
+        testUser.setFirstName("Test");
+        testUser.setLastName("Test");
+        testUser.setLogin("login" + (int) (Math.random() * 100));
         testUser.setPassword("testPassword");
         testUser.setEmail("test@test.com");
         testUser.setUserType(UserType.DISPATCHER);
