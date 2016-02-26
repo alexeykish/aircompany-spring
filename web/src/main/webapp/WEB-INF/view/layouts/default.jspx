@@ -8,7 +8,7 @@
             doctype-root-element="html" omit-xml-declaration="false"/>
 <jsp:directive.page pageEncoding="UTF-8" contentType="text/html; UTF-8"/>
 <head>
-    <link rel="stylesheet" href="../assests/css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="../../../assests/css/style.css" type="text/css"/>
     <title><tiles:insertAttribute name="title"/></title>
 </head>
 <body>
@@ -27,6 +27,7 @@
             </div>
         </td>
         <td id="right-content" style="border: solid 1px grey; width: 100%; vertical-align: top;">
+            <tiles:insertAttribute name="message"/>
             <tiles:insertAttribute name="right-content"/>
         </td>
     </tr>

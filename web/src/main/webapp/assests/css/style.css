@@ -105,3 +105,12 @@ body {
     font-size: 12px;
     vertical-align: center;
 }
+
+.success-message {
+    color: green;
+    font-size: 12px;
+    height: 25px;
+    border: solid 1px green;
+    border-radius: 5px;
+    margin: 10px;
+}

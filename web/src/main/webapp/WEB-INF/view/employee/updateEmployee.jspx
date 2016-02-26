@@ -21,6 +21,9 @@
                             <s:input id="employeeFirstName" path="firstName" class="inputForm" type="text"
                                      value="${requestScope.employee.firstName}"/>
                         </td>
+                        <td>
+                            <s:errors path="firstName" class="reg-hint"/>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -29,6 +32,9 @@
                         <td>
                             <s:input id="employeeLastName" path="lastName" class="inputForm" type="text"
                                      value="${requestScope.employee.lastName}"/>
+                        </td>
+                        <td>
+                            <s:errors path="lastName" class="reg-hint"/>
                         </td>
                     </tr>
                     <tr>

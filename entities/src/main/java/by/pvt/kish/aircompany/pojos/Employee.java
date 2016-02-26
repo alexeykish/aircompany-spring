@@ -4,6 +4,7 @@ import by.pvt.kish.aircompany.enums.EmployeeStatus;
 import by.pvt.kish.aircompany.enums.Position;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -33,6 +34,7 @@ public class Employee implements Serializable {
     private Long eid;
 
     @Column(nullable = false)
+    @NotEmpty(message = "Please enter employee firstname")
     public String getFirstName() {
         return firstName;
     }
@@ -42,6 +44,7 @@ public class Employee implements Serializable {
     private String firstName;
 
     @Column(nullable = false)
+    @NotEmpty(message = "Please enter employee lastname")
     public String getLastName() {
         return lastName;
     }

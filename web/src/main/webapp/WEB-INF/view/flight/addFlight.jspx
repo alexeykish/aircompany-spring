@@ -6,7 +6,6 @@
           version="2.0">
     <div style="margin:5px;">
         <h2>Add Flight</h2>
-        <!--<c:set var="now" value="%=new java.util.Date()%"/>-->
         <s:form action="/addFlight" method="post" modelAttribute="flight">
             <fieldset>
                 <table>
@@ -15,7 +14,6 @@
                             <label for="flightDate" class="input-label">Date:</label>
                         </td>
                         <td>
-                            <!--<fmt:formatDate value="${now}" type="date" pattern="yyyy-MM-dd" var="theFormattedDate"/>-->
                             <s:input id="flightDate" path="date" name="date" class="inputForm" type="text"
                                      value=""/>
                         </td>

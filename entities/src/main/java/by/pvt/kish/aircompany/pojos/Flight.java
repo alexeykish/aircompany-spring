@@ -4,8 +4,10 @@
 package by.pvt.kish.aircompany.pojos;
 
 import by.pvt.kish.aircompany.enums.FlightStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -37,6 +39,8 @@ public class Flight implements Serializable {
 
     @Temporal(TemporalType.DATE)
     @Column
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @Future(message = "Flight date must be in the future")
     public Date getDate() {
         return date;
     }

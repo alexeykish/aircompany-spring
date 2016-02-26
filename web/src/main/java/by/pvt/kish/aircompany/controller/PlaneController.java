@@ -63,8 +63,6 @@ public class PlaneController {
                     return "main";
                 }
             }
-        } catch (IllegalArgumentException e) {
-            return ErrorHandler.returnErrorPage(Message.ERROR_IAE, className);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {

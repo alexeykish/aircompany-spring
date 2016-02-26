@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,16 +58,15 @@ public class FlightController {
 
     @RequestMapping(value = "/addFlight")
     public String addFlight(ModelMap model,
-                            @ModelAttribute("flight") Flight flight,
+                            @Valid @ModelAttribute("flight") Flight flight,
                             BindingResult result,
                             HttpServletRequest request) {
         try {
             if(!result.hasErrors()) {
-                logger.info("There are errors");
                 if (flight != null) {
-                    logger.info("There are flight is null");
                     flight = new Flight();
                     model.addAttribute("flight", flight);
+                    return "main";
                 }
             }
             flightService.add(flight);
@@ -78,7 +78,7 @@ public class FlightController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "main";
+        return "flight/add";
     }
 
     @RequestMapping(value = "/deleteFlight/{id}")

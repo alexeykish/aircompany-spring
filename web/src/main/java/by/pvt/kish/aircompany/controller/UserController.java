@@ -82,7 +82,7 @@ public class UserController {
                 session.invalidate();
                 logger.info(Message.USER_LOGOUT);
             } catch (ServiceException e) {
-                model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.ERROR_REG_LOGOUT); //LOGIN_MESSAGE
+                model.addAttribute(Attribute.MESSAGE_ATTRIBUTE, Message.ERROR_REG_LOGOUT);
                 return ErrorHandler.returnErrorPage(e.getMessage(), className);
             } catch (ServiceValidateException e) {
                 return ErrorHandler.returnLoginErrorPage(request, e.getMessage(), className);
