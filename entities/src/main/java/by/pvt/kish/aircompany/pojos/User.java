@@ -3,7 +3,6 @@
  */
 package by.pvt.kish.aircompany.pojos;
 
-import by.pvt.kish.aircompany.enums.UserStatus;
 import by.pvt.kish.aircompany.enums.UserType;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -103,15 +102,14 @@ public class User implements Serializable {
     }
     private UserType userType;
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "enum('ONLINE','OFFLINE')")
-    public UserStatus getStatus() {
-        return status;
+    @Column(nullable = false)
+    public boolean getEnabled() {
+        return enabled;
     }
-    public void setStatus(UserStatus status) {
-        this.status = status;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
-    private UserStatus status = UserStatus.OFFLINE;
+    private boolean enabled = true;
 
     public User() {
     }
@@ -123,9 +121,9 @@ public class User implements Serializable {
      * @param login     - user login
      * @param password  - user password
      * @param userType  - user type (Administrator or dispatcher)
-     * @param status    - user status (Online or offline)
+     * @param enabled    - Specify whether the user's account is active or not
      */
-    public User(Long uid, String firstName, String lastName, String login, String password, UserType userType, UserStatus status) {
+    public User(Long uid, String firstName, String lastName, String login, String password, UserType userType, boolean enabled) {
         super();
         this.uid = uid;
         this.firstName = firstName;
@@ -133,7 +131,7 @@ public class User implements Serializable {
         this.login = login;
         this.password = password;
         this.userType = userType;
-        this.status = status;
+        this.enabled = enabled;
     }
 
     @Override
@@ -143,14 +141,14 @@ public class User implements Serializable {
 
         User user = (User) o;
 
+        if (enabled != user.enabled) return false;
         if (uid != null ? !uid.equals(user.uid) : user.uid != null) return false;
         if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
         if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
         if (login != null ? !login.equals(user.login) : user.login != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (userType != user.userType) return false;
-        return status == user.status;
+        return userType == user.userType;
 
     }
 
@@ -163,7 +161,7 @@ public class User implements Serializable {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (userType != null ? userType.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (enabled ? 1 : 0);
         return result;
     }
 
@@ -177,7 +175,7 @@ public class User implements Serializable {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", userType=" + userType +
-                ", status=" + status +
+                ", enabled=" + enabled +
                 '}';
     }
 }

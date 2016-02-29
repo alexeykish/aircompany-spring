@@ -1,19 +1,22 @@
 <jsp:root xmlns="http://www.w3.org/1999/xhtml"
           xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
-          version="2.0">
+          xmlns:s="http://www.springframework.org/tags"
+          xmlns:sec="http://www.springframework.org/security/tags"
+          version="2.0" >
 
     <div class="container">
-        <p>Authorization</p>
+        <p><s:message code="page.title.signIn"/></p>
         <c:choose>
-            <c:when test="${empty sessionScope.user}">
-                <form action="/loginUser" method="post">
+            <sec:authorize access="!isAuthenticated()">
+                <s:url value="/j_spring_security_logout" var="loginUrl"/>
+                <form action="${loginUrl}" method="post">
                     <div>
-                        <input class="inputForm" id="loginAuthForm" name="login"
+                        <input class="inputForm" id="loginAuthForm" name="j_username"
                                type="text" placeholder="Enter Username" required="required"/>
                     </div>
                     <div>
-                        <input class="inputForm" id="passAuthForm" name="password"
+                        <input class="inputForm" id="passAuthForm" name="j_password"
                                type="password" placeholder="Enter Password" required="required"/>
                     </div>
                     <div>
@@ -29,14 +32,15 @@
                        style="font-size: 10px; color: #666666; margin: 5px;">back</a>
                 </div>
                 <p style="text-align: center; font-size: 12px; color: red;">${requestScope.login_message}</p>
-            </c:when>
+            </sec:authorize>
             <c:otherwise>
                 <div class="user-container" style="text-align: left;">
                     <p style="font-size: 12px">Current user:
-                        ${sessionScope.user.login}</p>
+                        $${pageContext.request.userPrincipal.name}</p>
                     <p style="font-size: 12px">User type:
                         ${sessionScope.user.userType}</p>
-                    <form action="/logoutUser" method="post" autocomplete="off">
+                    <c:url value="/j_spring_security_logout" var="logoutUrl" />
+                    <form action="${logoutUrl}" method="post">
                         <input class="button" type="submit" value="logout"/>
                     </form>
                 </div>

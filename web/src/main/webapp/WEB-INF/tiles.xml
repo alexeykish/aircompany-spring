@@ -12,12 +12,12 @@
         <put-attribute name="right-content" value=""/>
     </definition>
 
-    <definition name="signIn" template="/WEB-INF/view/user/authorisation.jspx">
+    <definition name="signIn" template="/WEB-INF/view/user/login.jspx">
         <put-attribute name="title" value="page.title.authorisation"/>
         <put-attribute name="authorisation" value="/WEB-INF/view/user/auth.jspx"/>
     </definition>
 
-    <definition name="registration" template="/WEB-INF/view/user/authorisation.jspx">
+    <definition name="registration" template="/WEB-INF/view/user/login.jspx">
         <put-attribute name="title" value="page.title.registration"/>
         <put-attribute name="authorisation" value="/WEB-INF/view/user/registration.jspx"/>
     </definition>
