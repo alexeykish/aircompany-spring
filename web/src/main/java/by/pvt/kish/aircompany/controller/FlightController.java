@@ -7,15 +7,12 @@ import by.pvt.kish.aircompany.enums.FlightStatus;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Airport;
-import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.pojos.Plane;
-import by.pvt.kish.aircompany.services.IEmployeeService;
 import by.pvt.kish.aircompany.services.IFlightService;
 import by.pvt.kish.aircompany.services.IPlaneService;
 import by.pvt.kish.aircompany.services.IService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
-import by.pvt.kish.aircompany.utils.TeamCreator;
 import by.pvt.kish.aircompany.validators.FlightStatusValidator;
 import by.pvt.kish.aircompany.validators.FlightValidator;
 import org.apache.log4j.Logger;
@@ -32,9 +29,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.beans.PropertyEditor;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * @author Kish Alexey
@@ -181,7 +179,7 @@ public class FlightController {
     @RequestMapping(value = "/updateFlight")
     public String updateFlight(ModelMap model,
                                RedirectAttributes redirectAttributes,
-                               @ModelAttribute Flight flight,
+                               @Valid @ModelAttribute Flight flight,
                                BindingResult bindingResult,
                                Locale locale,
                                HttpServletRequest request) {

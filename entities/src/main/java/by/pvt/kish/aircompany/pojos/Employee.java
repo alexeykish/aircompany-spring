@@ -2,8 +2,9 @@ package by.pvt.kish.aircompany.pojos;
 
 import by.pvt.kish.aircompany.enums.EmployeeStatus;
 import by.pvt.kish.aircompany.enums.Position;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotEmpty;
-
+import org.hibernate.annotations.Cache;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -18,7 +19,7 @@ import java.util.Set;
  * @author Kish Alexey
  */
 @Entity
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Employee implements Serializable {
     @Id
     @GeneratedValue

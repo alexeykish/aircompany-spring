@@ -33,6 +33,7 @@
                                 </c:forEach>
                             </sf:select>
                         </td>
+                        <td><sf:errors path="arrival" class="reg-hint"/></td>
                     </tr>
                     <tr>
                         <td><sf:label path="plane" class="input-label"><s:message code="label.plane"/>:</sf:label></td>

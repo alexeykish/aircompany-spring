@@ -40,16 +40,18 @@
                         <input class="table-button" type="submit" name="submit" value="${update}"/>
                     </form>
                 </c:if>
+            </c:if>
+            <c:if test="${(flight.status == 'READY')}">
                 <c:if test="${(sessionScope.userType == '1')}">
                     <s:url value="/addCrewPage/${flight.fid}" var="addCrewPage"/>
                     <form action="${addCrewPage}" method="post">
                            <c:if test="${(requestScope.flight.crew.size() == 0)}">
                                <s:message code="button.crew.add" var="addCrew"/>
-                               <input class="table-button" style="width: 90px;  color:red;" type="submit" name="submit" value="${addCrew}"/>
+                               <input class="table-button" style="width: 100px;  color:red;" type="submit" name="submit" value="${addCrew}"/>
                            </c:if>
                            <c:if test="${(requestScope.flight.crew.size() != 0)}">
                                <s:message code="button.crew.update" var="updateCrew"/>
-                               <input class="table-button" style="width: 90px;" type="submit" name="submit" value="${updateCrew}"/>
+                               <input class="table-button" style="width: 100px;" type="submit" name="submit" value="${updateCrew}"/>
                            </c:if>
                     </form>
                 </c:if>

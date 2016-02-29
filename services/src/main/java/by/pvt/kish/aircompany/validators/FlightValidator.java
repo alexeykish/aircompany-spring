@@ -3,11 +3,9 @@
  */
 package by.pvt.kish.aircompany.validators;
 
-import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.pojos.Flight;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import java.util.Date;
@@ -30,10 +28,10 @@ public class FlightValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Flight flight = (Flight) o;
         if (checkDate(flight)) {
-            errors.rejectValue("date", "ERROR_FLIGHT_DATE", null, "ERROR_FLIGHT_DATE");
+            errors.rejectValue("date", "message.error.flight.date");
         }
         if (checkEntry(flight)) {
-            errors.rejectValue("arrival", "ERROR_FLIGHT_VALID", null, "ERROR_FLIGHT_VALID");
+            errors.rejectValue("arrival", "message.error.flight.waypoints");
         }
     }
 

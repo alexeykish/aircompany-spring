@@ -10,11 +10,11 @@
                 <form action="/loginUser" method="post">
                     <div>
                         <input class="inputForm" id="loginAuthForm" name="login"
-                               type="text" title="loginAuthForm"/>
+                               type="text" placeholder="Enter Username" required="required"/>
                     </div>
                     <div>
                         <input class="inputForm" id="passAuthForm" name="password"
-                               type="password" title="passAuthForm"/>
+                               type="password" placeholder="Enter Password" required="required"/>
                     </div>
                     <div>
                         <input class="button" type="submit" value="login"/>
