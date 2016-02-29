@@ -10,8 +10,6 @@
 <jsp:directive.page pageEncoding="UTF-8" contentType="text/html; UTF-8"/>
 <head>
     <link rel="stylesheet" href="../assests/css/style.css" type="text/css"/>
-    <!--<set var="title"><tiles:getAsString name="title"/></set>-->
-    <!--<title><spring:message code="${title}"/></title>-->
     <c:set var="title"><tiles:getAsString name="title"/></c:set>
     <title><spring:message code="${title}"/> </title>
 </head>

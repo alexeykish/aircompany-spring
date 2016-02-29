@@ -17,24 +17,4 @@ import java.beans.PropertyEditorSupport;
 @Component
 public class PlaneEditor extends PropertyEditorSupport {
 
-    @Autowired
-    private IPlaneService planeService;
-    /**
-     * Set the property value by parsing a given String.  May raise
-     * java.lang.IllegalArgumentException if either the String is
-     * badly formatted or if this kind of property can't be expressed
-     * as text.
-     *
-     * @param text The string to be parsed.
-     */
-    @Override
-    public void setAsText(String text) throws IllegalArgumentException {
-        try {
-            Plane plane = planeService.getById(Long.parseLong(text));
-            setValue(plane);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
-
-    }
 }

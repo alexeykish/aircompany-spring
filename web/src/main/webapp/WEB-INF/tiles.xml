@@ -52,14 +52,14 @@
         <put-attribute name="right-content" value="/WEB-INF/view/employee/updateEmployee.jspx"/>
     </definition>
 
-    <definition name="addCrew" extends="default">
+    <definition name="crew/add" extends="default">
         <put-attribute name="title" value="page.title.crew.add"/>
-        <put-attribute name="right-content" value="/WEB-INF/view/employee/addCrew.jspx"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/crew/addCrew.jspx"/>
     </definition>
 
-    <definition name="updateCrew" extends="default">
+    <definition name="crew/update" extends="default">
         <put-attribute name="title" value="page.title.crew.update"/>
-        <put-attribute name="right-content" value="/WEB-INF/view/employee/updateCrew.jspx"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/crew/updateCrew.jspx"/>
     </definition>
 
     <definition name="flight/list" extends="default">

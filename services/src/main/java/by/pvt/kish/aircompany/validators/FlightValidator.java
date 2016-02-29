@@ -5,6 +5,10 @@ package by.pvt.kish.aircompany.validators;
 
 import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.pojos.Flight;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
 
 import java.util.Date;
 
@@ -13,41 +17,24 @@ import java.util.Date;
  *
  * @author Kish Alexey, 2015
  */
-public class FlightValidator implements IValidator<Flight> {
+@Component
+public class FlightValidator implements Validator {
 
-    /**
-     * Check the validity of:
-     * <li>the presence of empty fields</li>
-     * <li>correct indication of places of departure and arrival</li>
-     *
-     * @param flight - Flight object being checked
-     * @return - Null, if everything checks out correctly; error page if the data is incorrect
-     */
-    public String validate(Flight flight) {
-        if (checkEmpty(flight)) {
-            return Message.ERROR_EMPTY;
-        }
-        if (checkEntry(flight)) {
-            return Message.ERROR_FLIGHT_VALID;
-        }
-        if (checkDate(flight)) {
-            return Message.ERROR_FLIGHT_DATE;
-        }
-        return null;
+
+    @Override
+    public boolean supports(Class aClass) {
+        return Flight.class.equals(aClass);
     }
 
-    /**
-     * The method checks the object to <code>null</code> completeness of all positions are empty positions are not allowed
-     *
-     * @param flight - Flight object being checked
-     * @return - false, if everything checks out correctly; true - if the data is invalid
-     */
-    private static boolean checkEmpty(Flight flight) {
-        return flight == null ||
-                flight.getDate() == null ||
-                flight.getDeparture() == null ||
-                flight.getArrival() == null ||
-                flight.getPlane() == null;
+    @Override
+    public void validate(Object o, Errors errors) {
+        Flight flight = (Flight) o;
+        if (checkDate(flight)) {
+            errors.rejectValue("date", "ERROR_FLIGHT_DATE", null, "ERROR_FLIGHT_DATE");
+        }
+        if (checkEntry(flight)) {
+            errors.rejectValue("arrival", "ERROR_FLIGHT_VALID", null, "ERROR_FLIGHT_VALID");
+        }
     }
 
     /**
@@ -71,4 +58,6 @@ public class FlightValidator implements IValidator<Flight> {
         Date flightDate = flight.getDate();
         return yesterdayDate.after(flightDate);
     }
+
+
 }

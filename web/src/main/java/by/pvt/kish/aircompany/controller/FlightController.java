@@ -17,6 +17,7 @@ import by.pvt.kish.aircompany.services.IService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
 import by.pvt.kish.aircompany.utils.TeamCreator;
 import by.pvt.kish.aircompany.validators.FlightStatusValidator;
+import by.pvt.kish.aircompany.validators.FlightValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -31,6 +32,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.beans.PropertyEditor;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -55,12 +57,16 @@ public class FlightController {
     @Autowired
     private FlightStatusValidator flightStatusValidator;
 
+    @Autowired
+    private FlightValidator flightValidator;
+
     private MessageSource messageSource;
 
     @Autowired
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
+
 
     @ModelAttribute("flight")
     public Flight createFlight() {
@@ -72,8 +78,27 @@ public class FlightController {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setLenient(false);
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-        binder.registerCustomEditor(Airport.class, new AirportEditor());
-        binder.registerCustomEditor(Plane.class, new PlaneEditor());
+        binder.registerCustomEditor(Airport.class, new AirportEditor()  {
+            public void setAsText(String text) throws IllegalArgumentException {
+                try {
+                    Airport airport = airportService.getById(Long.parseLong(text));
+                    setValue(airport);
+                } catch (ServiceException e) {
+                    e.printStackTrace(); //TODO Exception handling
+                }
+            }
+        });
+        binder.registerCustomEditor(Plane.class, new PlaneEditor() {
+            public void setAsText(String text) throws IllegalArgumentException {
+                try {
+                    Plane plane = planeService.getById(Long.parseLong(text));
+                    setValue(plane);
+                } catch (ServiceException e) {
+                    e.printStackTrace(); //TODO Exception handling
+                }
+            }
+        });
+        binder.setValidator(flightValidator);
     }
 
     @RequestMapping(value = "/addFlight")
@@ -84,11 +109,11 @@ public class FlightController {
                             RedirectAttributes redirectAttributes,
                             HttpServletRequest request) {
         try {
-            if(!bindingResult.hasErrors()) {
+            if (!bindingResult.hasErrors()) {
                 if (flight != null) {
                     flightService.add(flight);
                     redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_ADD_FLIGHT", null, locale));
-                    return "redirect:/flightList";
+                    return "redirect:/flightList?page=1";
                 }
             } else {
                 model.addAttribute(Attribute.AIRPORTS, airportService.getAll());
@@ -114,12 +139,12 @@ public class FlightController {
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
-        return "redirect:/flightList";
+        return "redirect:/flightList?page=1";
     }
 
     @RequestMapping(value = "/flightReport/{id}")
     public String createFlightReport(ModelMap model,
-                                    @PathVariable("id") Long id) {
+                                     @PathVariable("id") Long id) {
         try {
             model.addAttribute(Attribute.FLIGHT, flightService.getById(id));
             model.addAttribute(Attribute.STATUSES, Arrays.asList(FlightStatus.values()));
@@ -135,7 +160,7 @@ public class FlightController {
                                 HttpServletRequest request) {
         int recordsPerPage = 5;
         int currentPage = 1;
-        if(page != null) {
+        if (page != null) {
             currentPage = page;
         }
         try {
@@ -148,7 +173,7 @@ public class FlightController {
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
-            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(),className);
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "flight/list";
     }
@@ -161,11 +186,11 @@ public class FlightController {
                                Locale locale,
                                HttpServletRequest request) {
         try {
-            if(!bindingResult.hasErrors()) {
+            if (!bindingResult.hasErrors()) {
                 if (flight != null) {
                     flightService.update(flight);
                     redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_UPDATE_FLIGHT", null, locale));
-                    return "redirect:/flightList";
+                    return "redirect:/flightList?page=1";
                 }
             } else {
                 model.addAttribute(Attribute.STATUSES, Arrays.asList(FlightStatus.values()));
@@ -177,7 +202,7 @@ public class FlightController {
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
-            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(),className);
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "flight/update";
     }
@@ -193,9 +218,9 @@ public class FlightController {
         return "flight/add";
     }
 
-    @RequestMapping(value = "/updateFlightPage")
+    @RequestMapping(value = "/updateFlightPage/{id}")
     public String showUpdateFlightPage(Model model,
-                                       @RequestParam("fid") Long id) {
+                                       @PathVariable("id") Long id) {
         try {
             model.addAttribute(Attribute.FLIGHT, flightService.getById(id));
             model.addAttribute(Attribute.STATUSES, Arrays.asList(FlightStatus.values()));
@@ -206,4 +231,5 @@ public class FlightController {
         }
         return "flight/update";
     }
+
 }

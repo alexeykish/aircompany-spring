@@ -43,7 +43,6 @@ public class Flight implements Serializable {
     @Temporal(TemporalType.DATE)
     @Column
     @NotNull()
-    //@DateTimeFormat(iso=ISO.DATE) //TODO Date validation ??? InitBinder
     public Date getDate() {
         return date;
     }
@@ -52,7 +51,7 @@ public class Flight implements Serializable {
     }
     private Date date;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "F_DEPARTURE_ID")
     public Airport getDeparture() {
         return departure;
@@ -62,7 +61,7 @@ public class Flight implements Serializable {
     }
     private Airport departure;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "F_ARRIVAL_ID")
     public Airport getArrival() {
         return arrival;
@@ -72,7 +71,7 @@ public class Flight implements Serializable {
     }
     private Airport arrival;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "F_PLANE_ID")
     public Plane getPlane() {
         return plane;

@@ -14,6 +14,7 @@ import by.pvt.kish.aircompany.utils.ErrorHandler;
 import by.pvt.kish.aircompany.utils.TeamCreator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Kish Alexey
@@ -43,6 +45,13 @@ public class CrewController {
     @Autowired
     private IEmployeeService employeeService;
 
+    private MessageSource messageSource;
+
+    @Autowired
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     @RequestMapping(value = "/addCrewPage/{id}")
     public String addCrew(ModelMap model,
                           @PathVariable("id") Long id,
@@ -55,30 +64,31 @@ public class CrewController {
             model.addAttribute(Attribute.POSITIONS, TeamCreator.getPlanePositions(planeService.getById(flight.getPlane().getPid())));
             if (crew.size() != 0) {
                 model.addAttribute(Attribute.TEAM, crew);
-                return "updateCrew";
+                return "crew/update";
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "addCrew";
+        return "crew/add";
     }
 
     @RequestMapping(value = "/saveCrewToFlight/{id}")
     public String saveCrewToFlight(@PathVariable("id") Long id,
                                    @RequestParam("num") Integer num,
+                                   Locale locale,
                                    RedirectAttributes redirectAttributes,
                                    HttpServletRequest request) {
         try {
             flightService.addTeam(id, getTeam(request, num));
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_TEAM_CHANGE");
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_TEAM_CHANGE", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(),className);
         }
-        return "redirect:/flightList";
+        return "redirect:/flightList?page=1";
     }
 
 
