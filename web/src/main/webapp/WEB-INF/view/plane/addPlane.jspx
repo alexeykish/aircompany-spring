@@ -1,94 +1,53 @@
 <jsp:root xmlns="http://www.w3.org/1999/xhtml"
           xmlns:jsp="http://java.sun.com/JSP/Page"
-          xmlns:s="http://www.springframework.org/tags/form"
+          xmlns:s="http://www.springframework.org/tags"
+          xmlns:sf="http://www.springframework.org/tags/form"
           version="2.0">
     <div style="margin:5px;">
-        <h2>Add Plane</h2>
-        <s:form action="/addPlane" method="post" modelAttribute="plane">
+        <h2><s:message code="page.title.plane.add"/></h2>
+        <s:url value="/addPlane" var="addPlane"/>
+        <sf:form action="${addPlane}" method="post" modelAttribute="plane">
             <fieldset>
                 <table>
                     <tr>
-                        <td>
-                            <label for="planeModel" class="input-label">Model:</label>
-                        </td>
-                        <td>
-                            <s:input id="planeModel" path="model" class="inputForm" type="text"/>
-                        </td>
-                        <td>
-                            <s:errors path="model" class="reg-hint"/>
-                        </td>
+                        <td><sf:label path="model" class="input-label"><s:message code="label.model"/>:</sf:label></td>
+                        <td><sf:input id="planeModel" path="model" class="inputForm" type="text" maxlength="30"/></td>
+                        <td><sf:errors path="model" class="reg-hint"/></td>
                     </tr>
                     <tr>
-                        <td>
-                            <label for="planeCapacity" class="input-label">Passenger capacity:</label>
-                        </td>
-                        <td>
-                            <s:input id="planeCapacity" path="capacity" class="inputForm" type="text"/>
-                        </td>
-                        <td>
-                            <s:errors path="capacity" class="reg-hint"/>
-                        </td>
+                        <td><sf:label path="capacity" class="input-label"><s:message code="label.capacity"/>:</sf:label></td>
+                        <td><sf:input id="planeCapacity" path="capacity" class="inputForm" type="text" maxlength="4"/></td>
+                        <td><sf:errors path="capacity" class="reg-hint"/></td>
                     </tr>
                     <tr>
-                        <td>
-                            <label for="planeFlightRange" class="input-label">Flight range:</label>
-                        </td>
-                        <td>
-                            <s:input id="planeFlightRange" path="flightRange" class="inputForm" type="text"/>
-                        </td>
-                        <td>
-                            <s:errors path="flightRange" class="reg-hint"/>
-                        </td>
+                        <td><sf:label path="flightRange" class="input-label"><s:message code="label.range"/>:</sf:label></td>
+                        <td><sf:input id="planeFlightRange" path="flightRange" class="inputForm" type="text" maxlength="6"/></td>
+                        <td><sf:errors path="flightRange" class="reg-hint"/></td>
                     </tr>
                     <tr>
-                        <td>
-                            <label for="planePilots" class="input-label">Number of pilots:</label>
-                        </td>
-                        <td>
-                            <s:input id="planePilots" path="planeCrew.numberOfPilots" class="inputForm" type="text"/>
-                        </td>
-                        <td>
-                            <s:errors path="planeCrew.numberOfPilots" class="reg-hint"/>
-                        </td>
+                        <td><sf:label path="planeCrew.numberOfPilots" class="input-label"><s:message code="label.pilots"/>:</sf:label></td>
+                        <td><sf:input id="planePilots" path="planeCrew.numberOfPilots" class="inputForm" type="text" maxlength="1"/></td>
+                        <td><sf:errors path="planeCrew.numberOfPilots" class="reg-hint"/></td>
                     </tr>
                     <tr>
-                        <td>
-                            <label for="planeNavigators" class="input-label">Number of navigators:</label>
-                        </td>
-                        <td>
-                            <s:input id="planeNavigators" path="planeCrew.numberOfNavigators" class="inputForm"
-                                     type="text"/>
-                        </td>
-                        <td>
-                            <s:errors path="planeCrew.numberOfNavigators" class="reg-hint"/>
-                        </td>
+                        <td><sf:label path="planeCrew.numberOfNavigators" class="input-label"><s:message code="label.navigators"/>:</sf:label></td>
+                        <td><sf:input id="planeNavigators" path="planeCrew.numberOfNavigators" class="inputForm" type="text" maxlength="1"/></td>
+                        <td><sf:errors path="planeCrew.numberOfNavigators" class="reg-hint"/></td>
                     </tr>
                     <tr>
-                        <td>
-                            <label for="planeRadiooperators" class="input-label">Number of radiooperators:</label>
-                        </td>
-                        <td>
-                            <s:input id="planeRadiooperators" path="planeCrew.numberOfRadiooperators" class="inputForm"
-                                     type="text"/>
-                        </td>
-                        <td>
-                            <s:errors path="planeCrew.numberOfRadiooperators" class="reg-hint"/>
-                        </td>
+                        <td><sf:label path="planeCrew.numberOfRadiooperators" class="input-label"><s:message code="label.radiooperators"/>:</sf:label></td>
+                        <td><sf:input id="planeRadiooperators" path="planeCrew.numberOfRadiooperators" class="inputForm" type="text" maxlength="1"/></td>
+                        <td><sf:errors path="planeCrew.numberOfRadiooperators" class="reg-hint"/></td>
                     </tr>
                     <tr>
-                        <td>
-                            <label for="planeStewardesses" class="input-label">Number of stewardess:</label>
-                        </td>
-                        <td>
-                            <s:input id="planeStewardesses" path="planeCrew.numberOfStewardesses" class="inputForm" type="text"/>
-                        </td>
-                        <td>
-                            <s:errors path="planeCrew.numberOfStewardesses" class="reg-hint"/>
-                        </td>
+                        <td><sf:label path="planeCrew.numberOfStewardesses" class="input-label"><s:message code="label.stewardesses"/>:</sf:label></td>
+                        <td><sf:input id="planeStewardesses" path="planeCrew.numberOfStewardesses" class="inputForm" type="text" maxlength="2"/></td>
+                        <td><sf:errors path="planeCrew.numberOfStewardesses" class="reg-hint"/></td>
                     </tr>
                 </table>
-                <input class="button" type="submit" name="submit" value="add plane"/>
+                <s:message code="button.add" var="add"/>
+                <input class="button" type="submit" name="submit" value="${add}"/>
             </fieldset>
-        </s:form>
+        </sf:form>
     </div>
 </jsp:root>

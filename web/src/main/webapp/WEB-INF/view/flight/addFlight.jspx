@@ -1,64 +1,52 @@
 <jsp:root xmlns="http://www.w3.org/1999/xhtml"
           xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
-          xmlns:s="http://www.springframework.org/tags/form"
+          xmlns:s="http://www.springframework.org/tags"
+          xmlns:sf="http://www.springframework.org/tags/form"
           xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
           version="2.0">
     <div style="margin:5px;">
-        <h2>Add Flight</h2>
-        <s:form action="/addFlight" method="post" modelAttribute="flight">
+        <h2><s:message code="page.title.flight.add"/>:</h2>
+        <s:url value="/addFlight" var="addFlight"/>
+        <sf:form action="${addFlight}" method="post" modelAttribute="flight">
             <fieldset>
                 <table>
                     <tr>
-                        <td>
-                            <label for="flightDate" class="input-label">Date:</label>
-                        </td>
-                        <td>
-                            <s:input id="flightDate" path="date" name="date" class="inputForm" type="date"
-                                     value=""/>
-                        </td>
-                        <td>
-                            <s:errors path="date" class="reg-hint"/>
-                        </td>
+                        <td><sf:label path="date" class="input-label"><s:message code="label.date"/>:</sf:label></td>
+                        <td><sf:input id="flightDate" path="date" name="date" class="inputForm" type="text"/></td>
+                        <td><sf:errors path="date" class="reg-hint"/></td>
                     </tr>
                     <tr>
-                        <td>
-                            <label for="flightDeparture" class="input-label">Departure place:</label>
-                        </td>
-                        <td>
-                            <s:select id="flightDeparture" path="departure" name="departure" class="inputForm">
+                        <td><sf:label path="departure" class="input-label"><s:message code="label.departure"/>:</sf:label></td>
+                        <td><sf:select id="flightDeparture" path="departure" name="departure" class="inputForm">
                                 <c:forEach items="${requestScope.airports}" var="airport">
-                                    <option value="${airport}">${airport.name}</option>
+                                    <sf:option value="${airport.aid}">${airport.name}</sf:option>
                                 </c:forEach>
-                            </s:select>
+                            </sf:select>
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <label for="flightArrival" class="input-label">Arrival place:</label>
-                        </td>
-                        <td>
-                            <s:select id="flightArrival" path="arrival" name="arrival" class="inputForm">
+                        <td><sf:label path="arrival" class="input-label"><s:message code="label.arrival"/>:</sf:label></td>
+                        <td><sf:select id="flightArrival" path="arrival" name="arrival" class="inputForm">
                                 <c:forEach items="${requestScope.airports}" var="airport">
-                                    <option value="${airport}">${airport.name}</option>
+                                    <sf:option value="${airport.aid}">${airport.name}</sf:option>
                                 </c:forEach>
-                            </s:select>
+                            </sf:select>
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <label for="flightPlane" class="input-label">Plane:</label>
-                        </td>
-                        <td>
-                            <s:select id="flightPlane" path="plane" name="plane" class="inputForm">
+                        <td><sf:label path="plane" class="input-label"><s:message code="label.plane"/>:</sf:label></td>
+                        <td><sf:select id="flightPlane" path="plane" name="plane" class="inputForm">
                                 <c:forEach items="${requestScope.planes}" var="plane">
-                                    <option value="${plane}">${plane.model}</option>
+                                    <sf:option value="${plane.pid}">${plane.model}</sf:option>
                                 </c:forEach>
-                            </s:select></td>
+                            </sf:select>
+                        </td>
                     </tr>
                 </table>
-                <input class="button" type="submit" name="submit" value="add flight"/>
+                <s:message code="button.add" var="add"/>
+                <input class="button" type="submit" name="submit" value="${add}"/>
             </fieldset>
-        </s:form>
+        </sf:form>
     </div>
 </jsp:root>

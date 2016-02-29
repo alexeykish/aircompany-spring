@@ -7,6 +7,7 @@ import by.pvt.kish.aircompany.pojos.Airport;
 import by.pvt.kish.aircompany.services.IService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Locale;
 
 /**
  * @author Kish Alexey
@@ -30,22 +32,29 @@ public class AirportController {
     @Autowired
     private IService<Airport> airportService;
 
+    private MessageSource messageSource;
+
+    @Autowired
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     @ModelAttribute("airport")
     public Airport createAirport() {
         return new Airport();
     }
 
     @RequestMapping(value = "/addAirport")
-    public String addPlane(ModelMap model,
-                           @Valid @ModelAttribute("airport") Airport airport,
+    public String addPlane(@Valid @ModelAttribute("airport") Airport airport,
                            BindingResult bindingResult,
+                           Locale locale,
                            RedirectAttributes redirectAttributes,
                            HttpServletRequest request) {
         try {
             if (!bindingResult.hasErrors()) {
                 if (airport != null) {
                     airportService.add(airport);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_ADD_AIRPORT");
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_ADD_AIRPORT", null, locale));
                     return "redirect:/airportList";
                 }
             }
@@ -61,10 +70,11 @@ public class AirportController {
 
     @RequestMapping(value = "/deleteAirport/{id}")
     public String deletePlane(RedirectAttributes redirectAttributes,
+                              Locale locale,
                               @PathVariable("id") Long id) {
         try {
             airportService.delete(id);
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_DELETE_AIRPORT");
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_DELETE_AIRPORT", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
@@ -93,16 +103,16 @@ public class AirportController {
     }
 
     @RequestMapping(value = "/updateAirport")
-    public String updatePlane(Model model,
-                              @Valid @ModelAttribute("airport") Airport airport,
+    public String updatePlane(@Valid @ModelAttribute("airport") Airport airport,
                               BindingResult bindingResult,
+                              Locale locale,
                               RedirectAttributes redirectAttributes,
                               HttpServletRequest request) {
         try {
             if (!bindingResult.hasErrors()) {
                 if (airport != null) {
                     airportService.update(airport);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_UPDATE_AIRPORT");
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_UPDATE_AIRPORT", null, locale));
                     return "redirect:/airportList";
                 }
             }

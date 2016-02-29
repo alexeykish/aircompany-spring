@@ -20,7 +20,8 @@
                     <td>${plane.flightRange}</td>
                     <td>${plane.status}</td>
                     <td style="width: 70px;">
-                        <form action="/planeReport/${plane.pid}" method="post">
+                        <s:url value="/planeReport/${plane.pid}" var="planeReport"/>
+                        <form action="${planeReport}" method="get">
                             <s:message code="button.report" var="report"/>
                             <input class="table-button" type="submit" name="submit" value="${report}"/>
                         </form>
@@ -28,9 +29,10 @@
                 </tr>
             </c:forEach>
         </table>
-        <form action="/addPlanePage" method="post">
-            <s:message code="button.addPlane" var="addPlane"/>
-            <input class="button" type="submit" name="submit" value="${addPlane}"/>
+        <s:url value="/addPlanePage" var="addPlanePage"/>
+        <form action="${addPlanePage}" method="post">
+            <s:message code="button.add" var="add"/>
+            <input class="button" type="submit" name="submit" value="${add}"/>
         </form>
     </div>
 </jsp:root>

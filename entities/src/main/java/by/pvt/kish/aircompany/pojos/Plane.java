@@ -38,7 +38,7 @@ public class Plane implements Serializable {
     private Long pid;
 
     @Column(nullable = false)
-    @NotEmpty(message = "Please enter plane model")
+    @NotEmpty()
     public String getModel() {
         return model;
     }
@@ -48,8 +48,8 @@ public class Plane implements Serializable {
     private String model;
 
     @Column(nullable = false)
-    @NotNull(message = "Please enter plane capacity")
-    @Min(value = 0, message = "Capacity must be a greater than 0")
+    @NotNull()
+    @Min(value = 0)
     public Integer getCapacity() {
         return capacity;
     }
@@ -59,8 +59,8 @@ public class Plane implements Serializable {
     private Integer capacity;
 
     @Column(nullable = false)
-    @NotNull(message = "Please enter plane flight range")
-    @Min(value = 0, message = "Flight range must be a greater than 0")
+    @NotNull()
+    @Min(value = 0)
     public Integer getFlightRange() {
         return flightRange;
     }

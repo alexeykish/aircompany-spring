@@ -29,8 +29,8 @@ public class PlaneCrew {
     private Long pid;
 
     @Column(nullable = false)
-    @NotNull(message = "Please enter plane number of pilots")
-    @Min(value = 1, message = "Plane number of pilots range must be a greater than 1")
+    @NotNull()
+    @Min(value = 1)
     public Integer getNumberOfPilots() {
         return numberOfPilots;
     }
@@ -40,8 +40,8 @@ public class PlaneCrew {
     private Integer numberOfPilots;
 
     @Column
-    @NotNull(message = "Please enter plane number of navigators")
-    @Min(value = 0, message = "Plane number of navigators range must be a greater than 0")
+    @NotNull()
+    @Min(value = 0)
     public Integer getNumberOfNavigators() {
         return numberOfNavigators;
     }
@@ -51,8 +51,8 @@ public class PlaneCrew {
     private Integer numberOfNavigators;
 
     @Column
-    @NotNull(message = "Please enter plane number of radiooperators")
-    @Min(value = 0, message = "Plane number of radiooperators range must be a greater than 0")
+    @NotNull()
+    @Min(value = 0)
     public Integer getNumberOfRadiooperators() {
         return numberOfRadiooperators;
     }
@@ -62,8 +62,8 @@ public class PlaneCrew {
     private Integer numberOfRadiooperators;
 
     @Column
-    @NotNull(message = "Please enter plane number of stewardesses")
-    @Min(value = 0, message = "Plane number of stewardesses range must be a greater than 0")
+    @NotNull()
+    @Min(value = 0)
     public Integer getNumberOfStewardesses() {
         return numberOfStewardesses;
     }

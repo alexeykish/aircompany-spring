@@ -121,11 +121,12 @@ public class EmployeeController {
     @RequestMapping(value = "/changeEmployeeStatus/{id}")
     public String changeEmployeeStatus(@PathVariable("id") Long id,
                                        @RequestParam("status") String status,
+                                       Locale locale,
                                        RedirectAttributes redirectAttributes,
                                        HttpServletRequest request) {
         try {
             employeeService.setStatus(id, EmployeeStatus.valueOf(status));
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_SET_STATUS_EMPLOYEE");
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_SET_STATUS_EMPLOYEE", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
@@ -138,13 +139,14 @@ public class EmployeeController {
     public String updateEmployee(ModelMap model,
                                  @Valid @ModelAttribute("employee") Employee employee,
                                  BindingResult bindingResult,
+                                 Locale locale,
                                  RedirectAttributes redirectAttributes,
                                  HttpServletRequest request) {
         try {
             if (!bindingResult.hasErrors()) {
                 if (employee != null) {
                     employeeService.update(employee);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_UPDATE_EMPLOYEE");
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_UPDATE_EMPLOYEE", null, locale));
                     return "redirect:/employeeList";
                 }
             } else {

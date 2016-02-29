@@ -1,94 +1,66 @@
 <jsp:root xmlns="http://www.w3.org/1999/xhtml"
           xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
-          xmlns:s="http://www.springframework.org/tags/form"
+          xmlns:s="http://www.springframework.org/tags"
+          xmlns:sf="http://www.springframework.org/tags/form"
           version="2.0">
     <div style="margin: 5px;">
-        <h2>Update Flight</h2>
-        <s:form action="/updateFlight" method="post" modelAttribute="flight">
+        <h2><s:message code="page.title.flight.update"/></h2>
+        <s:url value="/updateFlight" var="updateFlight"/>
+        <sf:form action="${updateFlight}" method="post" modelAttribute="flight">
             <fieldset>
-                <input type="hidden" name="fid" value="${requestScope.flight.fid}"/>
                 <table>
                     <tr>
-                        <td>
-                            <label for="flightID" class="input-label">ID:</label>
-                        </td>
-                        <td><s:input id="flightID" path="fid" class="inputForm" type="text"
-                                     value="${requestScope.flight.fid}" readonly="true"/>
+                        <td><sf:label path="fid" class="input-label">ID:</sf:label></td>
+                        <td><sf:input id="planeId" path="fid" class="inputForm" type="text"
+                                      value="${flight.fid}" readonly="true"/></td>
+                    </tr>
+                    <tr>
+                        <td><sf:label path="date" class="input-label"><s:message code="label.date"/>:</sf:label></td>
+                        <td><sf:input id="flightDate" path="date" name="date" class="inputForm" value="${flight.date}" type="text"/></td>
+                        <td><sf:errors path="date" class="reg-hint"/></td>
+                    </tr>
+                    <tr>
+                        <td><sf:label path="departure" class="input-label"><s:message code="label.departure"/>:</sf:label></td>
+                        <td><sf:select id="flightDeparture" path="departure" name="departure" class="inputForm">
+                            <option value="${flight.departure.aid}">${flight.departure.name}</option>
+                            <c:forEach items="${requestScope.airports}" var="airport">
+                                <c:if test="${flight.departure.aid != airport.aid}">
+                                    <option value="${airport.aid}">${airport.name}</option>
+                                </c:if>
+                            </c:forEach>
+                        </sf:select>
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <label for="flightDate" class="input-label">Date:</label>
-                        </td>
-                        <td>
-                            <s:input id="flightDate" path="date" class="inputForm" type="text"
-                                     value="${requestScope.flight.date}"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="flightDeparture" class="input-label">From:</label>
-                        </td>
-                        <td>
-                            <s:select id="flightDeparture" path="departure" class="inputForm">
-                                <option value="${requestScope.flight.departure.aid}">${requestScope.flight.departure.name}</option>
-                                <c:forEach items="${requestScope.airports}" var="airport">
-                                    <c:if test="${requestScope.flight.departure.aid != airport.aid}">
-                                        <option value="${airport.aid}">${airport.name}</option>
-                                    </c:if>
-                                </c:forEach>
-                            </s:select>
+                        <td><sf:label path="arrival" class="input-label"><s:message code="label.arrival"/>:</sf:label></td>
+                        <td><sf:select id="flightArrival" path="arrival" name="arrival" class="inputForm">
+                            <option value="${flight.departure.aid}">${flight.departure.name}</option>
+                            <c:forEach items="${requestScope.airports}" var="airport">
+                                <c:if test="${flight.departure.aid != airport.aid}">
+                                    <option value="${airport.aid}">${airport.name}</option>
+                                </c:if>
+                            </c:forEach>
+                        </sf:select>
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <label for="flightArrival" class="input-label">To:</label>
+                        <td><sf:label path="plane" class="input-label"><s:message code="label.plane"/>:</sf:label></td>
+                        <td><sf:select id="flightPlane" path="plane" name="plane" class="inputForm">
+                            <option value="${flight.plane.pid}">${flight.plane.model}</option>
+                            <c:forEach items="${requestScope.planes}" var="plane">
+                                <c:if test="${flight.plane.pid != plane.pid}">
+                                    <option value="${plane.pid}">${plane.model}</option>
+                                </c:if>
+                            </c:forEach>
+                        </sf:select>
                         </td>
-                        <td>
-                            <s:select id="flightArrival" path="arrival" class="inputForm">
-                                <option value="${requestScope.flight.arrival.aid}">${requestScope.flight.arrival.name}</option>
-                                <c:forEach items="${requestScope.airports}" var="airport">
-                                    <c:if test="${requestScope.flight.arrival.aid != airport.aid}">
-                                        <option value="${airport.aid}">${airport.name}</option>
-                                    </c:if>
-                                </c:forEach>
-                            </s:select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="flightPlane" class="input-label">Plane:</label>
-                        </td>
-                        <td>
-                            <s:select id="flightPlane" path="plane" class="inputForm">
-                                <option value="${requestScope.flight.plane.pid}">${requestScope.flight.plane.model}</option>
-                                <c:forEach items="${requestScope.planes}" var="plane">
-                                    <c:if test="${requestScope.flight.plane.pid != plane.pid}">
-                                        <option value="${plane.pid}">${plane.model}</option>
-                                    </c:if>
-                                </c:forEach>
-                            </s:select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="flightStatus" class="input-label">Status:</label>
-                        </td>
-                        <td>
-                            <s:select id="flightStatus" path="status" class="inputForm">
-                                <option value="${requestScope.flight.status}">${requestScope.flight.status}</option>
-                                <c:forEach items="${requestScope.statuses}" var="status">
-                                    <c:if test="${requestScope.flight.status != status}">
-                                        <option value="${status}">${status}</option>
-                                    </c:if>
-                                </c:forEach>
-                            </s:select></td>
                     </tr>
                 </table>
-                <input class="button" type="submit" name="submit" value="update flight"/>
+                <s:message code="button.update" var="update"/>
+                <input class="button" type="submit" name="submit" value="${update}"/>
             </fieldset>
-        </s:form>
+        </sf:form>
     </div>
 
 </jsp:root>

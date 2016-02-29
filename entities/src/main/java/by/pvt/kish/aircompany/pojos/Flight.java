@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -41,7 +42,8 @@ public class Flight implements Serializable {
 
     @Temporal(TemporalType.DATE)
     @Column
-//    @DateTimeFormat(pattern = "yyyy-MM-dd") //TODO Date validation ??? InitBinder
+    @NotNull()
+    //@DateTimeFormat(iso=ISO.DATE) //TODO Date validation ??? InitBinder
     public Date getDate() {
         return date;
     }
@@ -90,7 +92,7 @@ public class Flight implements Serializable {
     }
     private FlightStatus status = FlightStatus.CREATED;
 
-    @ManyToMany(cascade = CascadeType.ALL/*, fetch = FetchType.EAGER*/)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "t_flights_employees",
             joinColumns = @JoinColumn(name = "f_fid"),

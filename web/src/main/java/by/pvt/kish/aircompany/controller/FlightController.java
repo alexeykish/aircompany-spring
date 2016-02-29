@@ -1,12 +1,15 @@
 package by.pvt.kish.aircompany.controller;
 
 import by.pvt.kish.aircompany.constants.Attribute;
+import by.pvt.kish.aircompany.editors.AirportEditor;
+import by.pvt.kish.aircompany.editors.PlaneEditor;
 import by.pvt.kish.aircompany.enums.FlightStatus;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Airport;
 import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Flight;
+import by.pvt.kish.aircompany.pojos.Plane;
 import by.pvt.kish.aircompany.services.IEmployeeService;
 import by.pvt.kish.aircompany.services.IFlightService;
 import by.pvt.kish.aircompany.services.IPlaneService;
@@ -16,21 +19,20 @@ import by.pvt.kish.aircompany.utils.TeamCreator;
 import by.pvt.kish.aircompany.validators.FlightStatusValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author Kish Alexey
@@ -51,27 +53,41 @@ public class FlightController {
     private IService<Airport> airportService;
 
     @Autowired
-    private IEmployeeService employeeService;
+    private FlightStatusValidator flightStatusValidator;
+
+    private MessageSource messageSource;
 
     @Autowired
-    private FlightStatusValidator flightStatusValidator;
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @ModelAttribute("flight")
     public Flight createFlight() {
         return new Flight();
     }
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+        binder.registerCustomEditor(Airport.class, new AirportEditor());
+        binder.registerCustomEditor(Plane.class, new PlaneEditor());
+    }
+
     @RequestMapping(value = "/addFlight")
     public String addFlight(ModelMap model,
                             @Valid @ModelAttribute("flight") Flight flight,
                             BindingResult bindingResult,
+                            Locale locale,
                             RedirectAttributes redirectAttributes,
                             HttpServletRequest request) {
         try {
             if(!bindingResult.hasErrors()) {
                 if (flight != null) {
                     flightService.add(flight);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_ADD_FLIGHT");
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_ADD_FLIGHT", null, locale));
                     return "redirect:/flightList";
                 }
             } else {
@@ -90,10 +106,11 @@ public class FlightController {
 
     @RequestMapping(value = "/deleteFlight/{id}")
     public String deleteFlight(RedirectAttributes redirectAttributes,
+                               Locale locale,
                                @PathVariable("id") Long id) {
         try {
             flightService.delete(id);
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_DELETE_FLIGHT");
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_DELETE_FLIGHT", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
@@ -141,12 +158,13 @@ public class FlightController {
                                RedirectAttributes redirectAttributes,
                                @ModelAttribute Flight flight,
                                BindingResult bindingResult,
+                               Locale locale,
                                HttpServletRequest request) {
         try {
             if(!bindingResult.hasErrors()) {
                 if (flight != null) {
                     flightService.update(flight);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_UPDATE_FLIGHT");
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_UPDATE_FLIGHT", null, locale));
                     return "redirect:/flightList";
                 }
             } else {
@@ -162,45 +180,6 @@ public class FlightController {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(),className);
         }
         return "flight/update";
-    }
-
-    @RequestMapping(value = "/addCrewPage/{id}")
-    public String addCrew(ModelMap model,
-                          @PathVariable("id") Long id,
-                          HttpServletRequest request) {
-        try {
-            List<Employee> crew = employeeService.getFlightCrewByFlightId(id);
-            Flight flight = flightService.getById(id);
-            model.addAttribute(Attribute.FLIGHT, flight);
-            model.addAttribute(Attribute.EMPLOYEES, employeeService.getAllAvailable(flight.getDate()));
-            model.addAttribute(Attribute.POSITIONS, TeamCreator.getPlanePositions(planeService.getById(flight.getPlane().getPid())));
-            if (crew.size() != 0) {
-                model.addAttribute(Attribute.TEAM, crew);
-                return "updateCrew";
-            }
-        } catch (ServiceException e) {
-            return ErrorHandler.returnErrorPage(e.getMessage(), className);
-        } catch (ServiceValidateException e) {
-            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
-        }
-        return "addCrew";
-    }
-
-    @RequestMapping(value = "/saveCrewToFlight/{id}")
-    public String saveCrewToFlight(ModelMap model,
-                                   @PathVariable("id") Long id,
-                                   @RequestParam("num") Integer num,
-                                   RedirectAttributes redirectAttributes,
-                                   HttpServletRequest request) {
-        try {
-            flightService.addTeam(id, getTeam(request, num));
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_TEAM_CHANGE");
-        } catch (ServiceException e) {
-            return ErrorHandler.returnErrorPage(e.getMessage(), className);
-        } catch (ServiceValidateException e) {
-            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(),className);
-        }
-        return "redirect:/flightList";
     }
 
     @RequestMapping(value = "/addFlightPage")
@@ -226,13 +205,5 @@ public class FlightController {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
         return "flight/update";
-    }
-
-    public static List<Long> getTeam(HttpServletRequest request, int count) {
-        List<Long> team = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            team.add(Long.parseLong(request.getParameter(String.valueOf(i))));
-        }
-        return team;
     }
 }

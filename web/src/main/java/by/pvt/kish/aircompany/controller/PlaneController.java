@@ -12,6 +12,8 @@ import by.pvt.kish.aircompany.services.IPlaneService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -23,10 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Kish Alexey
@@ -40,15 +39,22 @@ public class PlaneController {
     @Autowired
     private IPlaneService planeService;
 
+    private MessageSource messageSource;
+
+    @Autowired
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     @ModelAttribute("plane")
     public Plane createPlane() {
         return new Plane();
     }
 
     @RequestMapping(value = "/addPlane")
-    public String addPlane(ModelMap model,
-                           @Valid @ModelAttribute("plane") Plane plane,
+    public String addPlane(@Valid @ModelAttribute("plane") Plane plane,
                            BindingResult bindingResult,
+                           Locale locale,
                            RedirectAttributes redirectAttributes,
                            HttpServletRequest request) {
         try {
@@ -57,7 +63,7 @@ public class PlaneController {
                     PlaneCrew planeCrew = plane.getPlaneCrew();
                     planeCrew.setPlane(plane);
                     planeService.add(plane);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_ADD_PLANE");
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_ADD_PLANE", null, locale));
                     return "redirect:/planeList";
                 }
             }
@@ -71,10 +77,11 @@ public class PlaneController {
 
     @RequestMapping(value = "/deletePlane/{id}")
     public String deletePlane(RedirectAttributes redirectAttributes,
+                              Locale locale,
                               @PathVariable("id") Long id) {
         try {
             planeService.delete(id);
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_DELETE_PLANE");
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_DELETE_PLANE", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
@@ -115,10 +122,11 @@ public class PlaneController {
     public String changePlaneStatus(RedirectAttributes redirectAttributes,
                                     @PathVariable("id") Long id,
                                     @RequestParam("status") String status,
+                                    Locale locale,
                                     HttpServletRequest request) {
         try {
             planeService.setStatus(id, PlaneStatus.valueOf(status));
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_SET_STATUS_PLANE");
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_SET_STATUS_PLANE", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
@@ -130,13 +138,14 @@ public class PlaneController {
     @RequestMapping(value = "/updatePlane")
     public String updatePlane(@Valid @ModelAttribute("plane") Plane plane,
                               BindingResult bindingResult,
+                              Locale locale,
                               RedirectAttributes redirectAttributes,
                               HttpServletRequest request) {
         try {
             if (!bindingResult.hasErrors()) {
                 if (plane != null) {
                     planeService.update(plane);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_UPDATE_PLANE");
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_UPDATE_PLANE", null, locale));
                     return "redirect:/planeList";
                 }
             }
