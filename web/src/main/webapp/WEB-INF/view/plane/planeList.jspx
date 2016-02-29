@@ -1,15 +1,16 @@
 <jsp:root xmlns="http://www.w3.org/1999/xhtml"
           xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:s="http://www.springframework.org/tags"
           version="2.0">
     <div>
         <table class="list">
             <tr>
                 <th>ID</th>
-                <th>MODEL</th>
-                <th>PASSENGER CAPACITY</th>
-                <th>FLIGHT RANGE, KM</th>
-                <th>STATUS</th>
+                <th><s:message code="label.model"/></th>
+                <th><s:message code="label.capacity"/></th>
+                <th><s:message code="label.range"/></th>
+                <th><s:message code="label.status"/></th>
             </tr>
             <c:forEach items="${requestScope.planes}" var="plane">
                 <tr>
@@ -20,14 +21,16 @@
                     <td>${plane.status}</td>
                     <td style="width: 70px;">
                         <form action="/planeReport/${plane.pid}" method="post">
-                            <input class="table-button" type="submit" name="submit" value="details"/>
+                            <s:message code="button.report" var="report"/>
+                            <input class="table-button" type="submit" name="submit" value="${report}"/>
                         </form>
                     </td>
                 </tr>
             </c:forEach>
         </table>
         <form action="/addPlanePage" method="post">
-            <input class="button" type="submit" name="submit" value="add plane"/>
+            <s:message code="button.addPlane" var="addPlane"/>
+            <input class="button" type="submit" name="submit" value="${addPlane}"/>
         </form>
     </div>
 </jsp:root>

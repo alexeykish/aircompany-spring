@@ -4,27 +4,6 @@ package by.pvt.kish.aircompany.constants;
  * @author Kish Alexey
  */
 public class Message {
-    public static final String SUCCESS_ADD_FLIGHT = "The flight was successfully added";
-    public static final String SUCCESS_DELETE_FLIGHT = "The flight was successfully deleted";
-    public static final String SUCCESS_UPDATE_FLIGHT = "The flight was successfully updated";
-
-    public static final String SUCCESS_TEAM_CHANGE = "The flight team was successfully changed";
-
-    public static final String SUCCESS_ADD_EMPLOYEE = "The employee was successfully added";
-    public static final String SUCCESS_DELETE_EMPLOYEE = "The employee was successfully deleted";
-    public static final String SUCCESS_UPDATE_EMPLOYEE = "The employee was successfully updated";
-    public static final String SUCCESS_SET_STATUS_EMPLOYEE = "The employee status was successfully changed";
-
-    public static final String SUCCESS_ADD_PLANE = "The plane was successfully added";
-    public static final String SUCCESS_DELETE_PLANE = "The plane was successfully deleted";
-    public static final String SUCCESS_UPDATE_PLANE = "The plane was successfully updated";
-    public static final String SUCCESS_SET_STATUS_PLANE = "The plane status was successfully changed";
-
-    public static final String SUCCESS_ADD_AIRPORT = "The airport was successfully added";
-    public static final String SUCCESS_DELETE_AIRPORT = "The airport was successfully deleted";
-    public static final String SUCCESS_UPDATE_AIRPORT = "The airport was successfully updated";
-
-    public static final String SUCCESS_REG = "You have successfully registered";
 
     public static final String MALFORMED_FIRSTNAME = "Incorrectly filled 'Firstname' field";
     public static final String MALFORMED_LASTNAME = "Incorrectly filled 'Lastname' field";

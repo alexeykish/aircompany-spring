@@ -1,7 +1,6 @@
 package by.pvt.kish.aircompany.controller;
 
 import by.pvt.kish.aircompany.constants.Attribute;
-import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.enums.UserStatus;
 import by.pvt.kish.aircompany.enums.UserType;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
@@ -15,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -75,9 +76,8 @@ public class UserController {
                 User user = (User) session.getAttribute(Attribute.USER);
                 userService.setStatus(user.getUid(), UserStatus.OFFLINE);
                 session.invalidate();
-                logger.info(Message.USER_LOGOUT);
             } catch (ServiceException e) {
-                model.addAttribute(Attribute.MESSAGE, Message.ERROR_REG_LOGOUT);
+                model.addAttribute(Attribute.MESSAGE, "ERROR_REG_LOGOUT");
                 return ErrorHandler.returnErrorPage(e.getMessage(), className);
             } catch (ServiceValidateException e) {
                 return ErrorHandler.returnLoginErrorPage(request, e.getMessage(), className);
@@ -95,9 +95,11 @@ public class UserController {
             if (!bindingResult.hasErrors()) {
                 if (user != null) {
                     userService.addUser(user);
-                    model.addAttribute(Attribute.LOGIN_MESSAGE, Message.SUCCESS_REG);
+                    model.addAttribute(Attribute.LOGIN_MESSAGE, "SUCCESS_REG");
                     return "signIn";
                 }
+            } else {
+                model.addAttribute(Attribute.USERTYPES, Arrays.asList(UserType.values()));
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);

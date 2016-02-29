@@ -3,11 +3,8 @@
  */
 package by.pvt.kish.aircompany.validators;
 
-import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.pojos.User;
 import org.springframework.stereotype.Component;
-
-import static by.pvt.kish.aircompany.validators.FormDataValidator.*;
 
 /**
  * Describes the utility class to test the User object before adding or changing it in the DB
@@ -27,24 +24,24 @@ public class UserValidator implements IValidator<User> {
      */
     public String validate(User user) {
 
-        if (checkEmpty(user)) {
-            return Message.ERROR_EMPTY;
-        }
-        if (!namePattern.matcher(user.getFirstName()).matches()) {
-            return Message.MALFORMED_FIRSTNAME;
-        }
-        if (!namePattern.matcher(user.getLastName()).matches()) {
-            return Message.MALFORMED_LASTNAME;
-        }
-        if (!loginPattern.matcher(user.getLogin()).matches()) {
-            return Message.MALFORMED_LOGIN;
-        }
-        if (!passwordPattern.matcher(user.getPassword()).matches()) {
-            return Message.MALFORMED_PASSWORD;
-        }
-        if (!emailPattern.matcher(user.getEmail()).matches()) {
-            return Message.MALFORMED_EMAIL;
-        }
+//        if (checkEmpty(user)) {
+//            return Message.ERROR_EMPTY;
+//        }
+//        if (!namePattern.matcher(user.getFirstName()).matches()) {
+//            return Message.MALFORMED_FIRSTNAME;
+//        }
+//        if (!namePattern.matcher(user.getLastName()).matches()) {
+//            return Message.MALFORMED_LASTNAME;
+//        }
+//        if (!loginPattern.matcher(user.getLogin()).matches()) {
+//            return Message.MALFORMED_LOGIN;
+//        }
+//        if (!passwordPattern.matcher(user.getPassword()).matches()) {
+//            return Message.MALFORMED_PASSWORD;
+//        }
+//        if (!emailPattern.matcher(user.getEmail()).matches()) {
+//            return Message.MALFORMED_EMAIL;
+//        }
         return null;
     }
 

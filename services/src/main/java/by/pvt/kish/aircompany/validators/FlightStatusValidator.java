@@ -1,14 +1,12 @@
 package by.pvt.kish.aircompany.validators;
 
-import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
-import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.enums.FlightStatus;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
+import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
+import by.pvt.kish.aircompany.pojos.Flight;
 import by.pvt.kish.aircompany.services.IFlightService;
-import by.pvt.kish.aircompany.services.impl.FlightService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -80,7 +78,7 @@ public class FlightStatusValidator {
     }
 
     private static String checkTeam(Flight flight) {
-        if (flight.getCrew().size() > 0) {
+        if (!flight.getCrew().isEmpty()) {
             return MATCHED;
         } else {
             return EMPTY;

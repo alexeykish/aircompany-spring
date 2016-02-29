@@ -1,6 +1,5 @@
 package by.pvt.kish.aircompany.services.impl;
 
-import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.dao.IFlightDAO;
 import by.pvt.kish.aircompany.enums.FlightStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
@@ -48,7 +47,7 @@ public class FlightService extends BaseService<Flight> implements IFlightService
     @Override
     public void setStatus(Long id, FlightStatus status) throws ServiceException, ServiceValidateException {
         if (id < 0) {
-            throw new ServiceValidateException(Message.ERROR_ID_MISSING);
+            throw new ServiceValidateException("ERROR_ID_MISSING");
         }
         try {
             flightDAO.setFlightStatus(id, status);
@@ -69,7 +68,7 @@ public class FlightService extends BaseService<Flight> implements IFlightService
     @Override
     public void addTeam(Long id, List<Long> team) throws ServiceException, ServiceValidateException {
         if (id < 0) {
-            throw new ServiceValidateException(Message.ERROR_ID_MISSING);
+            throw new ServiceValidateException("ERROR_ID_MISSING");
         }
         Set<Employee> crew = teamCreator.getEmployeeListById(team);
         try {

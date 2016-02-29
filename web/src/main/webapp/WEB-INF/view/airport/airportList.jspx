@@ -1,14 +1,15 @@
 <jsp:root xmlns="http://www.w3.org/1999/xhtml"
           xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:s="http://www.springframework.org/tags"
           version="2.0">
     <div>
         <table class="list">
             <tr>
                 <th>ID</th>
-                <th>NAME</th>
-                <th>CITY</th>
-                <th>COUNTRY</th>
+                <th><s:message code="label.name"/></th>
+                <th><s:message code="label.country"/></th>
+                <th><s:message code="label.city"/></th>
             </tr>
             <c:forEach items="${requestScope.airports}" var="airport">
                 <tr>
@@ -17,15 +18,19 @@
                     <td>${airport.address.city}</td>
                     <td>${airport.address.country}</td>
                     <td style="width: 70px;">
-                        <form action="/airportReport/${airport.aid}" method="post">
-                            <input class="table-button" type="submit" name="submit" value="details"/>
+                        <s:url value="/airportReport/${airport.aid}" var="airportReport"/>
+                        <form action="${airportReport}" method="get">
+                            <s:message code="button.report" var="report"/>
+                            <input class="table-button" type="submit" name="submit" value="${report}"/>
                         </form>
                     </td>
                 </tr>
             </c:forEach>
         </table>
-        <form action="/addAirportPage" method="post">
-            <input class="button" type="submit" name="submit" value="add airport"/>
+        <s:url value="/addAirportPage" var="addAirportPage"/>
+        <form action="${addAirportPage}" method="post">
+            <s:message code="button.add" var="add"/>
+            <input class="button" type="submit" name="submit" value="${add}"/>
         </form>
     </div>
 </jsp:root>

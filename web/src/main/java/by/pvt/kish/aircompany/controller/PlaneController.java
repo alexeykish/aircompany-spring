@@ -1,7 +1,6 @@
 package by.pvt.kish.aircompany.controller;
 
 import by.pvt.kish.aircompany.constants.Attribute;
-import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.enums.PlaneStatus;
 import by.pvt.kish.aircompany.enums.Position;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
@@ -58,7 +57,7 @@ public class PlaneController {
                     PlaneCrew planeCrew = plane.getPlaneCrew();
                     planeCrew.setPlane(plane);
                     planeService.add(plane);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_ADD_PLANE);
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_ADD_PLANE");
                     return "redirect:/planeList";
                 }
             }
@@ -75,7 +74,7 @@ public class PlaneController {
                               @PathVariable("id") Long id) {
         try {
             planeService.delete(id);
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_DELETE_PLANE);
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_DELETE_PLANE");
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
@@ -119,7 +118,7 @@ public class PlaneController {
                                     HttpServletRequest request) {
         try {
             planeService.setStatus(id, PlaneStatus.valueOf(status));
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_SET_STATUS_PLANE);
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_SET_STATUS_PLANE");
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
@@ -137,7 +136,7 @@ public class PlaneController {
             if (!bindingResult.hasErrors()) {
                 if (plane != null) {
                     planeService.update(plane);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_UPDATE_PLANE);
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_UPDATE_PLANE");
                     return "redirect:/planeList";
                 }
             }

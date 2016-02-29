@@ -1,7 +1,6 @@
 package by.pvt.kish.aircompany.filters;
 
 import by.pvt.kish.aircompany.constants.Attribute;
-import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.constants.Page;
 import org.apache.log4j.Logger;
 
@@ -26,7 +25,7 @@ public class DispatcherAuthFilter implements Filter {
         if((accessLevel != null) && (accessLevel == 1)){
             filterChain.doFilter(request, response);
         } else {
-            request.setAttribute(Attribute.MESSAGE, Message.ERR_ACCESS);
+            request.setAttribute(Attribute.MESSAGE, "ERR_ACCESS");
             RequestDispatcher dispatcher = request.getRequestDispatcher(Page.INDEX);
             dispatcher.forward(request, response);
         }

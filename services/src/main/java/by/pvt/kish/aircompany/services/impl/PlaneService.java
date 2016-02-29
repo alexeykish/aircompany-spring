@@ -1,6 +1,5 @@
 package by.pvt.kish.aircompany.services.impl;
 
-import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.dao.IPlaneDAO;
 import by.pvt.kish.aircompany.enums.PlaneStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
@@ -43,7 +42,7 @@ public class PlaneService extends BaseService<Plane> implements IPlaneService{
     @Override
     public void setStatus(Long id, PlaneStatus status) throws ServiceException, ServiceValidateException {
         if (id == null) {
-            throw new ServiceValidateException(Message.ERROR_ID_MISSING);
+            throw new ServiceValidateException("ERROR_ID_MISSING");
         }
         try {
             planeDAO.setPlaneStatus(id, status);
@@ -66,7 +65,7 @@ public class PlaneService extends BaseService<Plane> implements IPlaneService{
     public List<Flight> getPlaneLastFiveFlights(Long id) throws ServiceException, ServiceValidateException {
         List<Flight> results;
         if (id < 0) {
-            throw new ServiceValidateException(Message.ERROR_ID_MISSING);
+            throw new ServiceValidateException("ERROR_ID_MISSING");
         }
         try {
             results =  planeDAO.getPlaneLastFiveFlights(id);

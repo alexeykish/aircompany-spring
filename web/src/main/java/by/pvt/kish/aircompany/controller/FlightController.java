@@ -1,16 +1,18 @@
 package by.pvt.kish.aircompany.controller;
 
 import by.pvt.kish.aircompany.constants.Attribute;
-import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.enums.FlightStatus;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Airport;
+import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Flight;
+import by.pvt.kish.aircompany.services.IEmployeeService;
 import by.pvt.kish.aircompany.services.IFlightService;
 import by.pvt.kish.aircompany.services.IPlaneService;
 import by.pvt.kish.aircompany.services.IService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
+import by.pvt.kish.aircompany.utils.TeamCreator;
 import by.pvt.kish.aircompany.validators.FlightStatusValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,9 @@ public class FlightController {
     private IService<Airport> airportService;
 
     @Autowired
+    private IEmployeeService employeeService;
+
+    @Autowired
     private FlightStatusValidator flightStatusValidator;
 
     @ModelAttribute("flight")
@@ -66,7 +71,7 @@ public class FlightController {
             if(!bindingResult.hasErrors()) {
                 if (flight != null) {
                     flightService.add(flight);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_ADD_FLIGHT);
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_ADD_FLIGHT");
                     return "redirect:/flightList";
                 }
             } else {
@@ -74,7 +79,7 @@ public class FlightController {
                 model.addAttribute(Attribute.PLANES, planeService.getAll());
             }
         } catch (IllegalArgumentException e) {
-            return ErrorHandler.returnErrorPage(Message.ERROR_IAE, className);
+            return ErrorHandler.returnErrorPage("ERROR_IAE", className);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
@@ -88,7 +93,7 @@ public class FlightController {
                                @PathVariable("id") Long id) {
         try {
             flightService.delete(id);
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_DELETE_FLIGHT);
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_DELETE_FLIGHT");
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
@@ -111,7 +116,7 @@ public class FlightController {
     public String getAllFlights(ModelMap model,
                                 @RequestParam("page") Integer page,
                                 HttpServletRequest request) {
-        int recordsPerPage = 10;
+        int recordsPerPage = 5;
         int currentPage = 1;
         if(page != null) {
             currentPage = page;
@@ -141,7 +146,7 @@ public class FlightController {
             if(!bindingResult.hasErrors()) {
                 if (flight != null) {
                     flightService.update(flight);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_UPDATE_FLIGHT);
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_UPDATE_FLIGHT");
                     return "redirect:/flightList";
                 }
             } else {
@@ -150,13 +155,35 @@ public class FlightController {
                 model.addAttribute(Attribute.PLANES, planeService.getAll());
             }
         } catch (IllegalArgumentException e) {
-            return ErrorHandler.returnErrorPage(Message.ERROR_IAE, className);
+            return ErrorHandler.returnErrorPage("ERROR_IAE", className);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(),className);
         }
         return "flight/update";
+    }
+
+    @RequestMapping(value = "/addCrewPage/{id}")
+    public String addCrew(ModelMap model,
+                          @PathVariable("id") Long id,
+                          HttpServletRequest request) {
+        try {
+            List<Employee> crew = employeeService.getFlightCrewByFlightId(id);
+            Flight flight = flightService.getById(id);
+            model.addAttribute(Attribute.FLIGHT, flight);
+            model.addAttribute(Attribute.EMPLOYEES, employeeService.getAllAvailable(flight.getDate()));
+            model.addAttribute(Attribute.POSITIONS, TeamCreator.getPlanePositions(planeService.getById(flight.getPlane().getPid())));
+            if (crew.size() != 0) {
+                model.addAttribute(Attribute.TEAM, crew);
+                return "updateCrew";
+            }
+        } catch (ServiceException e) {
+            return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
+        }
+        return "addCrew";
     }
 
     @RequestMapping(value = "/saveCrewToFlight/{id}")
@@ -167,7 +194,7 @@ public class FlightController {
                                    HttpServletRequest request) {
         try {
             flightService.addTeam(id, getTeam(request, num));
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_TEAM_CHANGE);
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_TEAM_CHANGE");
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {

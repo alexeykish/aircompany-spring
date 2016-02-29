@@ -1,7 +1,6 @@
 package by.pvt.kish.aircompany.controller;
 
 import by.pvt.kish.aircompany.constants.Attribute;
-import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Airport;
@@ -46,12 +45,12 @@ public class AirportController {
             if (!bindingResult.hasErrors()) {
                 if (airport != null) {
                     airportService.add(airport);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_ADD_AIRPORT);
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_ADD_AIRPORT");
                     return "redirect:/airportList";
                 }
             }
         } catch (IllegalArgumentException e) {
-            return ErrorHandler.returnErrorPage(Message.ERROR_IAE, className);
+            return ErrorHandler.returnErrorPage("ERROR_IAE", className);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
@@ -65,7 +64,7 @@ public class AirportController {
                               @PathVariable("id") Long id) {
         try {
             airportService.delete(id);
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_DELETE_AIRPORT);
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_DELETE_AIRPORT");
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
@@ -103,7 +102,7 @@ public class AirportController {
             if (!bindingResult.hasErrors()) {
                 if (airport != null) {
                     airportService.update(airport);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, Message.SUCCESS_UPDATE_AIRPORT);
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, "SUCCESS_UPDATE_AIRPORT");
                     return "redirect:/airportList";
                 }
             }

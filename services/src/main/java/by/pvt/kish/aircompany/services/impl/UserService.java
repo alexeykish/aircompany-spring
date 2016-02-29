@@ -1,6 +1,5 @@
 package by.pvt.kish.aircompany.services.impl;
 
-import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.dao.IUserDAO;
 import by.pvt.kish.aircompany.enums.UserStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
@@ -44,16 +43,16 @@ public class UserService extends BaseService<User> implements IUserService {
     @Override
     public User addUser(User user) throws ServiceException, ServiceLoginException, ServiceValidateException {
         try {
-            String validateResult = userValidator.validate(user);
-            if (validateResult != null) {
-                throw new ServiceValidateException(validateResult);
-            }
-            if (!userDAO.checkLogin(user.getLogin())) {
-                throw new ServiceLoginException(Message.ERROR_REG_USER_EXISTS);
-            } else {
+//            String validateResult = userValidator.validate(user);
+//            if (validateResult != null) {
+//                throw new ServiceValidateException(validateResult);
+//            }
+//            if (!userDAO.checkLogin(user.getLogin())) {
+//                throw new ServiceLoginException("ERROR_REG_USER_EXISTS");
+//            } else {
                 user =  userDAO.add(user);
-                logger.debug(SUCCESSFUL_TRANSACTION);
-            }
+//                logger.debug(SUCCESSFUL_TRANSACTION);
+//            }
         } catch (DaoException e) {
             logger.debug(TRANSACTION_FAILED);
             throw new ServiceException(e);
@@ -94,9 +93,9 @@ public class UserService extends BaseService<User> implements IUserService {
         try {
             user = userDAO.getUser(login, password);
             if (user == null) {
-                throw new ServiceLoginException(Message.ERROR_REG_LOGIN);
+                throw new ServiceLoginException("ERROR_REG_LOGIN");
             } else if (user.getStatus().equals(UserStatus.ONLINE)) {
-                throw new ServiceLoginException(Message.ERROR_REG_USER_EXISTS);
+                throw new ServiceLoginException("ERROR_REG_USER_EXISTS");
             } else {
                 userDAO.setStatus(user.getUid(), UserStatus.ONLINE);
                 user.setStatus(UserStatus.ONLINE); //TODO возможно лишнее
@@ -120,7 +119,7 @@ public class UserService extends BaseService<User> implements IUserService {
     public void setStatus(Long id, UserStatus status) throws ServiceException, ServiceValidateException {
         try {
             if (id == null) {
-                throw new ServiceException(Message.ERROR_ID_MISSING);
+                throw new ServiceException("ERROR_ID_MISSING");
             }
             userDAO.setStatus(id, status);
             logger.info(SUCCESSFUL_TRANSACTION);

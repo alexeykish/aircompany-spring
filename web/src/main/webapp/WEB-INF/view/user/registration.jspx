@@ -3,73 +3,73 @@
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:s="http://www.springframework.org/tags/form"
           version="2.0">
-<div class="container">
-    <s:form action="/addUser" method="post" modelAttribute="user">
-        <h2 style="text-align: center;">Registration</h2>
-        <table class="add_user_table">
-            <tr>
-                <td>
-                    <label for="userFirstname" class="input-label">Firstname:</label>
-                </td>
-                <td>
-                    <s:input id="userFirstname" path="firstName" class="inputForm" type="text"/>
-                    <s:errors path="firstName" class="reg-hint" maxlength="15"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="userLastname" class="input-label">Lastname:</label>
-                </td>
-                <td>
-                    <s:input id="userLastname" path="lastName" class="inputForm" type="text"/>
-                    <s:errors path="lastName" class="reg-hint" maxlength="15"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="userLogin" class="input-label">Login:</label>
-                </td>
-                <td>
-                    <s:input id="userLogin" path="login" class="inputForm" type="text"/>
-                    <s:errors path="login" class="reg-hint" maxlength="10"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="userPassword" class="input-label">Password:</label>
-                </td>
-                <td>
-                    <s:input id="userPassword" path="password" class="inputForm" type="password"/>
-                    <s:errors path="password" class="reg-hint" maxlength="15"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="userEmail" class="input-label">E-mail:</label>
-                </td>
-                <td>
-                    <s:input id="userEmail" path="email" class="inputForm" type="text"/>
-                    <s:errors path="email" class="reg-hint" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="userType" class="input-label">User type:</label>
-                </td>
-                <td>
-                    <s:select id="userType" path="userType" class="inputForm">
-                        <c:forEach items="${requestScope.types}" var="type">
-                            <option value="${type}">${type}</option>
-                        </c:forEach>
-                    </s:select>
-                </td>
-            </tr>
-        </table>
-        <input class="button" type="submit" name="submit" value="Register"/>
-    </s:form>
-    <form action="signIn" method="get">
-        <input class="button" type="submit" name="submit" value="Back"/>
-    </form>
-</div>
+    <div class="container">
+        <s:form action="/addUser" method="post" modelAttribute="user">
+            <h2 style="text-align: center;">Registration</h2>
+            <table class="add_user_table">
+                <tr>
+                    <td>
+                        <label for="userFirstname" class="input-label">Firstname:</label>
+                    </td>
+                    <td>
+                        <s:input id="userFirstname" path="firstName" class="inputForm" type="text"/>
+                        <s:errors path="firstName" class="reg-hint" maxlength="15"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="userLastname" class="input-label">Lastname:</label>
+                    </td>
+                    <td>
+                        <s:input id="userLastname" path="lastName" class="inputForm" type="text"/>
+                        <s:errors path="lastName" class="reg-hint" maxlength="15"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="userLogin" class="input-label">Login:</label>
+                    </td>
+                    <td>
+                        <s:input id="userLogin" path="login" class="inputForm" type="text"/>
+                        <s:errors path="login" class="reg-hint" maxlength="10"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="userPassword" class="input-label">Password:</label>
+                    </td>
+                    <td>
+                        <s:input id="userPassword" path="password" class="inputForm" type="password"/>
+                        <s:errors path="password" class="reg-hint" maxlength="15"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="userEmail" class="input-label">E-mail:</label>
+                    </td>
+                    <td>
+                        <s:input id="userEmail" path="email" class="inputForm" type="text"/>
+                        <s:errors path="email" class="reg-hint"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="userType" class="input-label">User type:</label>
+                    </td>
+                    <td>
+                        <s:select id="userType" path="userType" class="inputForm">
+                            <c:forEach items="${requestScope.types}" var="type">
+                                <option value="${type}">${type}</option>
+                            </c:forEach>
+                        </s:select>
+                    </td>
+                </tr>
+            </table>
+            <input class="button" type="submit" name="submit" value="Register"/>
+        </s:form>
+        <form action="signIn" method="get">
+            <input class="button" type="submit" name="submit" value="Back"/>
+        </form>
+    </div>
 
 </jsp:root>

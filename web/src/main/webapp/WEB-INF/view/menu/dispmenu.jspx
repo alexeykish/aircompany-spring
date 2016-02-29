@@ -1,23 +1,25 @@
 <jsp:root xmlns="http://www.w3.org/1999/xhtml"
           xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:s="http://www.springframework.org/tags"
           version="2.0">
     <div>
         <table>
             <tr>
                 <td>
-                    <form action="/flightList" method="get">
+                    <s:url value="/flightList" var="flightList"/>
+                    <form action="${flightList}" method="get">
                         <input type="hidden" name="page" value="1"/>
-                        <input class="button"
-                               type="submit"
-                               name="submit"
-                               value="Flights"/>
+                        <s:message code="button.flights" var="flights"/>
+                        <input class="button" type="submit" name="submit" value="${flights}"/>
                     </form>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <form action="/employeeList" method="get">
-                        <input class="button" type="submit" name="submit" value="Employees"/>
+                    <s:url value="/employeeList" var="employeeList"/>
+                    <form action="${employeeList}" method="get">
+                        <s:message code="button.employees" var="employees"/>
+                        <input class="button" type="submit" name="submit" value="${employees}"/>
                     </form>
                 </td>
             </tr>

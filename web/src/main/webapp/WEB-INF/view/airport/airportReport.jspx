@@ -1,20 +1,20 @@
 <jsp:root xmlns="http://www.w3.org/1999/xhtml"
           xmlns:jsp="http://java.sun.com/JSP/Page"
-          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:s="http://www.springframework.org/tags"
           version="2.0">
     <div style="margin:5px;">
-        <h2>Airport report: #${airport.aid}</h2>
+        <h2><s:message code="page.title.airport.report"/>: #${airport.aid}</h2>
         <table class="input-label">
             <tr>
-                <td>Name:</td>
+                <td><s:message code="label.name"/>:</td>
                 <td>${airport.name}</td>
             </tr>
             <tr>
-                <td>Country:</td>
+                <td><s:message code="label.country"/>:</td>
                 <td>${airport.address.country}</td>
             </tr>
             <tr>
-                <td>City:</td>
+                <td><s:message code="label.city"/>:</td>
                 <td>${airport.address.city}</td>
             </tr>
         </table>
@@ -32,11 +32,15 @@
         <div>
             <!--<c:choose>-->
                 <!--<c:when test="${requestScope.permissionChangeDeleteStatus =='false'}">-->
-                    <form action="/deleteAirport/${airport.aid}" method="post">
-                        <input class="button" type="submit" name="submit" value="delete"/>
+                    <s:url value="/deleteAirport/${airport.aid}" var="deleteAirport"/>
+                    <form action="${deleteAirport}" method="post">
+                        <s:message code="button.delete" var="delete"/>
+                        <input class="button" type="submit" name="submit" value="${delete}"/>
                     </form>
-                    <form action="/updateAirportPage/${airport.aid}" method="post">
-                        <input class="button" type="submit" name="submit" value="edit"/>
+                    <s:url value="/updateAirportPage/${airport.aid}" var="updateAirport"/>
+                    <form action="${updateAirport}" method="post">
+                        <s:message code="button.update" var="update"/>
+                        <input class="button" type="submit" name="submit" value="${update}"/>
                     </form>
                 <!--</c:when>-->
                 <!--<c:otherwise>-->

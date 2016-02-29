@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <html xmlns:jsp="http://java.sun.com/JSP/Page"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:spring="http://www.springframework.org/tags"
       xmlns:tiles="http://tiles.apache.org/tags-tiles">
 
 <jsp:output doctype-public="-//W3C//DTD XHTML 1.1//EN"
@@ -8,9 +10,15 @@
 <jsp:directive.page pageEncoding="UTF-8" contentType="text/html; UTF-8"/>
 <head>
     <link rel="stylesheet" href="../assests/css/style.css" type="text/css"/>
-    <title><tiles:insertAttribute name="title"/></title>
+    <c:set var="title"><tiles:getAsString name="title"/></c:set>
+    <title><spring:message code="${title}"/> </title>
 </head>
 <body>
+<span style="float: right">
+    <a href="?locale=en">en</a>
+    |
+    <a href="?locale=ru">ru</a>
+</span>
 <tiles:insertAttribute name="authorisation"/>
 </body>
 </html>

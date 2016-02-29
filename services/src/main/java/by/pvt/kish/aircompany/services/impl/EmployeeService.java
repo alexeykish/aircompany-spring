@@ -1,6 +1,5 @@
 package by.pvt.kish.aircompany.services.impl;
 
-import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.dao.IEmployeeDAO;
 import by.pvt.kish.aircompany.enums.EmployeeStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
@@ -44,7 +43,7 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public void setStatus(Long id, EmployeeStatus status) throws ServiceException, ServiceValidateException {
         if (id == null) {
-            throw new ServiceValidateException(Message.ERROR_ID_MISSING);
+            throw new ServiceValidateException("ERROR_ID_MISSING");
         }
         try {
             employeeDao.setEmployeeStatus(id, status);
@@ -85,7 +84,7 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
     public boolean checkEmployeeAvailability(Long id, Date flightDate) throws ServiceException, ServiceValidateException {
         boolean result;
         if (id == null) {
-            throw new ServiceValidateException(Message.ERROR_ID_MISSING);
+            throw new ServiceValidateException("ERROR_ID_MISSING");
         }
         try {
             result =  employeeDao.checkEmployeeAvailability(id, flightDate);
@@ -106,7 +105,7 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
     public List<Flight> getEmployeeLastFiveFlights(Long id) throws ServiceException, ServiceValidateException {
         List<Flight> results;
         if (id == null) {
-            throw new ServiceValidateException(Message.ERROR_ID_MISSING);
+            throw new ServiceValidateException("ERROR_ID_MISSING");
         }
         try {
             results =  employeeDao.getEmployeeLastFiveFlights(id);
@@ -127,7 +126,7 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
     public List<Employee> getFlightCrewByFlightId(Long id) throws ServiceException, ServiceValidateException {
         List<Employee> results;
         if (id == null) {
-            throw new ServiceValidateException(Message.ERROR_ID_MISSING);
+            throw new ServiceValidateException("ERROR_ID_MISSING");
         }
         try {
             results =  employeeDao.getFlightCrewByFlightId(id);

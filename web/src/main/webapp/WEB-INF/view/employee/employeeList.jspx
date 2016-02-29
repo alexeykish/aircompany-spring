@@ -1,15 +1,16 @@
 <jsp:root xmlns="http://www.w3.org/1999/xhtml"
           xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:s="http://www.springframework.org/tags"
           version="2.0">
     <div>
         <table class="list">
             <tr>
                 <th>ID</th>
-                <th>LASTNAME</th>
-                <th>FIRSTNAME</th>
-                <th>POSITION</th>
-                <th>STATUS</th>
+                <th><s:message code="label.firstname"/></th>
+                <th><s:message code="label.lastname"/></th>
+                <th><s:message code="label.position"/></th>
+                <th><s:message code="label.status"/></th>
             </tr>
             <c:forEach items="${requestScope.employees}" var="employee">
                 <tr>
@@ -19,15 +20,19 @@
                     <td>${employee.position}</td>
                     <td>${employee.status}</td>
                     <td style="width: 70px;">
-                        <form action="/employeeReport/${employee.eid}" method="post">
-                            <input class="table-button" type="submit" name="submit" value="details"/>
+                        <s:url value="/employeeReport/${employee.eid}" var="employeeReport"/>
+                        <form action="${employeeReport}" method="get">
+                            <s:message code="button.report" var="report"/>
+                            <input class="table-button" type="submit" name="submit" value="${report}"/>
                         </form>
                     </td>
                 </tr>
             </c:forEach>
         </table>
-        <form action="/addEmployeePage" method="post">
-            <input class="button" type="submit" name="submit" value="add employee"/>
+        <s:url value="/addEmployeePage" var="addEmployeePage"/>
+        <form action="${addEmployeePage}" method="post">
+            <s:message code="button.add" var="add"/>
+            <input class="button" type="submit" name="submit" value="${add}"/>
         </form>
     </div>
 </jsp:root>

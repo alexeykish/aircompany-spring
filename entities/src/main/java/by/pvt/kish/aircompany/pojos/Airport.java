@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -31,7 +30,7 @@ public class Airport implements Serializable {
     private Long aid;
 
     @Column(nullable = false)
-    @NotEmpty(message = "Please enter airport name")
+    @NotEmpty()
     public String getName() {
         return name;
     }

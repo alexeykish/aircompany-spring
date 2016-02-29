@@ -3,7 +3,6 @@
  */
 package by.pvt.kish.aircompany.services;
 
-import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.dao.IDAO;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
@@ -107,6 +106,9 @@ public abstract class BaseService<T> implements IService<T> {
      */
     public void delete(Long id) throws ServiceException {
         try {
+            if (id == null) {
+                throw new ServiceException("ERROR_ID_MISSING");
+            }
             dao.delete(id);
             logger.debug(SUCCESSFUL_TRANSACTION);
         } catch (DaoException e) {
@@ -127,7 +129,7 @@ public abstract class BaseService<T> implements IService<T> {
         T t;
         try {
             if (id == null) {
-                throw new ServiceException(Message.ERROR_ID_MISSING);
+                throw new ServiceException("ERROR_ID_MISSING");
             }
             t = dao.getById(id);
         } catch (DaoException e) {

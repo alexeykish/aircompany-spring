@@ -1,46 +1,43 @@
 <jsp:root xmlns="http://www.w3.org/1999/xhtml"
           xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:s="http://www.springframework.org/tags"
           version="2.0">
     <div>
         <table>
             <tr>
                 <td>
-                    <form action="/flightList" method="get">
+                    <s:url value="/flightList" var="flightList"/>
+                    <form action="${flightList}" method="get">
                         <input type="hidden" name="page" value="1"/>
-                        <input class="button"
-                               type="submit"
-                               name="submit"
-                               value="Flights"/>
+                        <s:message code="button.flights" var="flights"/>
+                        <input class="button" type="submit" name="submit" value="${flights}"/>
                     </form>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <form action="/planeList" method="get">
-                        <input class="button"
-                               type="submit"
-                               name="submit"
-                               value="Planes"/>
+                    <s:url value="/planeList" var="planeList"/>
+                    <form action="${planeList}" method="get">
+                        <s:message code="button.planes" var="planes"/>
+                        <input class="button" type="submit" name="submit" value="${planes}"/>
                     </form>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <form action="/airportList" method="get">
-                        <input class="button"
-                               type="submit"
-                               name="submit"
-                               value="Airports"/>
+                    <s:url value="/airportList" var="airportList"/>
+                    <form action="${airportList}" method="get">
+                        <s:message code="button.airports" var="airports"/>
+                        <input class="button" type="submit" name="submit" value="${airports}"/>
                     </form>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <form action="/userList" method="post">
-                        <input class="button"
-                               type="submit"
-                               name="submit"
-                               value="Users"/>
+                    <s:url value="/userList" var="userList"/>
+                    <form action="${userList}" method="post">
+                        <s:message code="button.users" var="users"/>
+                        <input class="button" type="submit" name="submit" value="${users}"/>
                     </form>
                 </td>
             </tr>

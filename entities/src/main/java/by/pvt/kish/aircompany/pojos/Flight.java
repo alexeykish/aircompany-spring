@@ -4,6 +4,8 @@
 package by.pvt.kish.aircompany.pojos;
 
 import by.pvt.kish.aircompany.enums.FlightStatus;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -88,7 +90,7 @@ public class Flight implements Serializable {
     }
     private FlightStatus status = FlightStatus.CREATED;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL/*, fetch = FetchType.EAGER*/)
     @JoinTable(
             name = "t_flights_employees",
             joinColumns = @JoinColumn(name = "f_fid"),

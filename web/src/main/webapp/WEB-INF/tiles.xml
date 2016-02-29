@@ -13,112 +13,112 @@
     </definition>
 
     <definition name="signIn" template="/WEB-INF/view/user/authorisation.jspx">
-        <put-attribute name="title" value="Authorisation"/>
+        <put-attribute name="title" value="page.title.authorisation"/>
         <put-attribute name="authorisation" value="/WEB-INF/view/user/auth.jspx"/>
     </definition>
 
     <definition name="registration" template="/WEB-INF/view/user/authorisation.jspx">
-        <put-attribute name="title" value="Authorisation"/>
+        <put-attribute name="title" value="page.title.registration"/>
         <put-attribute name="authorisation" value="/WEB-INF/view/user/registration.jspx"/>
     </definition>
 
     <definition name="main" extends="default">
-        <put-attribute name="title" value="Main page"/>
+        <put-attribute name="title" value="page.title.main"/>
         <put-attribute name="right-content" value="/WEB-INF/view/main/message.jspx"/>
     </definition>
 
     <definition name="user/list" extends="default">
-        <put-attribute name="title" value="Users info"/>
+        <put-attribute name="title" value="page.title.users"/>
         <put-attribute name="right-content" value="/WEB-INF/view/user/userList.jspx"/>
     </definition>
 
     <definition name="employee/list" extends="default">
-        <put-attribute name="title" value="Employees info"/>
+        <put-attribute name="title" value="page.title.employees"/>
         <put-attribute name="right-content" value="/WEB-INF/view/employee/employeeList.jspx"/>
     </definition>
 
     <definition name="employee/add" extends="default">
-        <put-attribute name="title" value="Add employee"/>
+        <put-attribute name="title" value="page.title.employee.add"/>
         <put-attribute name="right-content" value="/WEB-INF/view/employee/addEmployee.jspx"/>
     </definition>
 
     <definition name="employee/report" extends="default">
-        <put-attribute name="title" value="Employee report"/>
+        <put-attribute name="title" value="page.title.employee.report"/>
         <put-attribute name="right-content" value="/WEB-INF/view/employee/employeeReport.jspx"/>
     </definition>
 
     <definition name="employee/update" extends="default">
-        <put-attribute name="title" value="Update employee"/>
+        <put-attribute name="title" value="page.title.employee.update"/>
         <put-attribute name="right-content" value="/WEB-INF/view/employee/updateEmployee.jspx"/>
     </definition>
 
     <definition name="addCrew" extends="default">
-        <put-attribute name="title" value="Add flight crew"/>
+        <put-attribute name="title" value="page.title.crew.add"/>
         <put-attribute name="right-content" value="/WEB-INF/view/employee/addCrew.jspx"/>
     </definition>
 
     <definition name="updateCrew" extends="default">
-        <put-attribute name="title" value="Update flight crew"/>
+        <put-attribute name="title" value="page.title.crew.update"/>
         <put-attribute name="right-content" value="/WEB-INF/view/employee/updateCrew.jspx"/>
     </definition>
 
     <definition name="flight/list" extends="default">
-        <put-attribute name="title" value="Flights info"/>
+        <put-attribute name="title" value="page.title.flights"/>
         <put-attribute name="right-content" value="/WEB-INF/view/flight/flightList.jspx"/>
     </definition>
 
     <definition name="flight/add" extends="default">
-        <put-attribute name="title" value="Add flight"/>
+        <put-attribute name="title" value="page.title.flight.add"/>
         <put-attribute name="right-content" value="/WEB-INF/view/flight/addFlight.jspx"/>
     </definition>
 
     <definition name="flight/report" extends="default">
-        <put-attribute name="title" value="Flight report"/>
+        <put-attribute name="title" value="page.title.flight.report"/>
         <put-attribute name="right-content" value="/WEB-INF/view/flight/flightReport.jspx"/>
     </definition>
 
     <definition name="flight/update" extends="default">
-        <put-attribute name="title" value="Update flight"/>
+        <put-attribute name="title" value="page.title.flight.update"/>
         <put-attribute name="right-content" value="/WEB-INF/view/flight/updateFlight.jspx"/>
     </definition>
 
     <definition name="plane/list" extends="default">
-        <put-attribute name="title" value="Planes info"/>
+        <put-attribute name="title" value="page.title.planes"/>
         <put-attribute name="right-content" value="/WEB-INF/view/plane/planeList.jspx"/>
     </definition>
 
     <definition name="plane/report" extends="default">
-        <put-attribute name="title" value="Plane report"/>
+        <put-attribute name="title" value="page.title.plane.report"/>
         <put-attribute name="right-content" value="/WEB-INF/view/plane/planeReport.jspx"/>
     </definition>
 
     <definition name="plane/add" extends="default">
-        <put-attribute name="title" value="Add plane"/>
+        <put-attribute name="title" value="page.title.plane.add"/>
         <put-attribute name="right-content" value="/WEB-INF/view/plane/addPlane.jspx"/>
     </definition>
 
     <definition name="plane/update" extends="default">
-        <put-attribute name="title" value="Update plane"/>
+        <put-attribute name="title" value="page.title.plane.update"/>
         <put-attribute name="right-content" value="/WEB-INF/view/plane/updatePlane.jspx"/>
     </definition>
 
     <definition name="airport/list" extends="default">
-        <put-attribute name="title" value="Airports info"/>
+        <put-attribute name="title" value="page.title.airports"/>
         <put-attribute name="right-content" value="/WEB-INF/view/airport/airportList.jspx"/>
     </definition>
 
     <definition name="airport/add" extends="default">
-        <put-attribute name="title" value="Add airports"/>
+        <put-attribute name="title" value="page.title.airport.add"/>
         <put-attribute name="right-content" value="/WEB-INF/view/airport/addAirport.jspx"/>
     </definition>
 
     <definition name="airport/report" extends="default">
-        <put-attribute name="title" value="Airport report"/>
+        <put-attribute name="title" value="page.title.airport.report"/>
         <put-attribute name="right-content" value="/WEB-INF/view/airport/airportReport.jspx"/>
     </definition>
 
     <definition name="airport/update" extends="default">
-        <put-attribute name="title" value="Update airport"/>
+        <put-attribute name="title" value="page.title.airport.update"/>
         <put-attribute name="right-content" value="/WEB-INF/view/airport/updateAirport.jspx"/>
     </definition>
 

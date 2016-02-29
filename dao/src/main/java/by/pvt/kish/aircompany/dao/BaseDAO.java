@@ -4,12 +4,8 @@
 package by.pvt.kish.aircompany.dao;
 
 import by.pvt.kish.aircompany.exceptions.DaoException;
-import by.pvt.kish.aircompany.utils.HibernateUtil;
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -107,6 +103,7 @@ public abstract class BaseDAO<T> implements IDAO<T> {
         List<T> results;
         try {
             Criteria criteria = getSession().createCriteria(className);
+            criteria.setFetchMode("lazily_fetched_member", FetchMode.JOIN);
             results = criteria.list();
         } catch (HibernateException e) {
             throw new DaoException(GET_ALL_ENTITIES_FAIL, e);
