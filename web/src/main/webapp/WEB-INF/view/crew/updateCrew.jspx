@@ -6,7 +6,7 @@
     <div style="margin: 5px;">
         <c:set var="totalRecords" value="0"/>
         <h2><s:message code="page.title.crew.update"/>:</h2>
-        <s:url value="/saveCrewToFlight/${flight.fid}" var="updateCrew"/>
+        <s:url value="/crew/save/${flight.fid}" var="updateCrew"/>
         <form action="${updateCrew}" method="post">
             <table>
                 <tr>

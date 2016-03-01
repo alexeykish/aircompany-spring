@@ -30,6 +30,7 @@ import java.util.Locale;
  * @author Kish Alexey
  */
 @Controller
+@RequestMapping(value = "/crew")
 public class CrewController {
 
     private static String className = CrewController.class.getName();
@@ -54,7 +55,7 @@ public class CrewController {
         this.messageSource = messageSource;
     }
 
-    @RequestMapping(value = "/addCrewPage/{id}")
+    @RequestMapping(value = "/addPage/{id}")
     public String addCrew(ModelMap model,
                           @PathVariable("id") Long id,
                           HttpServletRequest request) {
@@ -76,7 +77,7 @@ public class CrewController {
         return "crew/add";
     }
 
-    @RequestMapping(value = "/saveCrewToFlight/{id}")
+    @RequestMapping(value = "/save/{id}")
     public String saveCrewToFlight(@PathVariable("id") Long id,
                                    @RequestParam("num") Integer num,
                                    Locale locale,
@@ -92,7 +93,7 @@ public class CrewController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(),className);
         }
-        return "redirect:/flightList?page=1";
+        return "redirect:/flight/main?page=1";
     }
 
 

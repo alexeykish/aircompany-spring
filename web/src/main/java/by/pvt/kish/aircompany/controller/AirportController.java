@@ -9,7 +9,6 @@ import by.pvt.kish.aircompany.utils.ErrorHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -96,7 +95,7 @@ public class AirportController {
         return "airport/report";
     }
 
-    @RequestMapping(value = "/airport/main")
+    @RequestMapping(value = "/main")
     public String getAllPlanes(ModelMap model) {
         try {
             model.addAttribute(Attribute.AIRPORTS, airportService.getAll());

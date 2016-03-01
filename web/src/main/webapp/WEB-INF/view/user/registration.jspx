@@ -6,7 +6,7 @@
           version="2.0">
     <div class="container">
         <h2 style="text-align: center;"><s:message code="page.title.registration"/></h2>
-        <s:url value="/addUser" var="addUser"/>
+        <s:url value="/user/add" var="addUser"/>
         <sf:form action="${addUser}" method="post" modelAttribute="user">
             <fieldset>
                 <table class="add_user_table">

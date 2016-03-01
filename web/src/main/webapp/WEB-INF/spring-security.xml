@@ -9,14 +9,16 @@
     <http auto-config="true">
         <!--<intercept-url pattern="**/css/style.css" access="permitAll"/>-->
         <intercept-url pattern="/" access="permitAll"/>
-        <intercept-url pattern="/main" access="hasRole('ROLE_DISPATCHER') and hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/employee/**" access="hasRole('ROLE_DISPATCHER')"/>
-        <intercept-url pattern="/flight/**" access="hasRole('ROLE_DISPATCHER') and hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/flight/add**" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/flight/update**" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/flight/delete**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/flight/main" access="permitAll"/>
+        <intercept-url pattern="/flight/addPage/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/flight/updatePage/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/flight/update/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/flight/delete/**" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/plane/**" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/airport/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/user/main" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/crew/addPage/**" access="hasRole('ROLE_DISPATCHER')"/>
         <form-login
                 login-page="/signIn"
                 username-parameter="userName"

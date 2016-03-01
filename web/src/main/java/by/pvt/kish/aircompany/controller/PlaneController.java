@@ -13,7 +13,6 @@ import by.pvt.kish.aircompany.utils.ErrorHandler;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -89,7 +88,7 @@ public class PlaneController {
         return "redirect:/plane/main";
     }
 
-    @RequestMapping(value = "/plane/main")
+    @RequestMapping(value = "/main")
     public String getAllPlanes(ModelMap model) {
         try {
             model.addAttribute(Attribute.PLANES, planeService.getAll());

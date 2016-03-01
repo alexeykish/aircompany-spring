@@ -10,16 +10,18 @@
         <sec:authorize access="!isAuthenticated()">
             <s:url value="/login" var="loginUrl"/>
             <form action="${loginUrl}" method="post">
-                <div>
-                    <label for="username" class="input-label"><s:message code="label.username"/>:</label>
-                    <input class="inputForm" id="username" name="userName"
-                           type="text" placeholder="Enter Username" required="required"/>
-                </div>
-                <div>
-                    <label for="password" class="input-label"><s:message code="label.password"/>:</label>
-                    <input class="inputForm" id="password" name="password"
-                           type="password" placeholder="Enter Password" required="required"/>
-                </div>
+                <table>
+                <tr>
+                    <td style="text-align: right"><label for="username" class="input-label"><s:message code="label.username"/>:</label></td>
+                    <td><input class="inputForm" id="username" name="userName"
+                           type="text" placeholder="Enter Username" required="required"/></td>
+                </tr>
+                    <tr>
+                    <td style="text-align: right"><label for="password" class="input-label"><s:message code="label.password"/>:</label></td>
+                    <td><input class="inputForm" id="password" name="password"
+                           type="password" placeholder="Enter Password" required="required"/></td>
+                </tr>
+                </table>
                 <div>
                     <s:message code="button.login" var="login"/>
                     <input class="button" type="submit" value="${login}"/>
