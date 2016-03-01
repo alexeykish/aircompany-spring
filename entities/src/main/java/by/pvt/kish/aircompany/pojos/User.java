@@ -3,7 +3,7 @@
  */
 package by.pvt.kish.aircompany.pojos;
 
-import by.pvt.kish.aircompany.enums.UserType;
+import by.pvt.kish.aircompany.enums.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -93,20 +93,20 @@ public class User implements Serializable {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "enum('ADMINISTRATOR','DISPATCHER')")
-    public UserType getUserType() {
-        return userType;
+    @Column(columnDefinition = "enum('ROLE_ADMIN','ROLE_DISPATCHER','ROLE_ANONYMOUS')")
+    public UserRole getRole() {
+        return role;
     }
-    public void setUserType(UserType userType) {
-        this.userType = userType;
+    public void setRole(UserRole userType) {
+        this.role = userType;
     }
-    private UserType userType;
+    private UserRole role;
 
     @Column(nullable = false)
-    public boolean getEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
-    public void setEnabled(Boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
     private boolean enabled = true;
@@ -120,17 +120,17 @@ public class User implements Serializable {
      * @param lastName  - user lastname
      * @param login     - user login
      * @param password  - user password
-     * @param userType  - user type (Administrator or dispatcher)
+     * @param role  - user type (Administrator or dispatcher)
      * @param enabled    - Specify whether the user's account is active or not
      */
-    public User(Long uid, String firstName, String lastName, String login, String password, UserType userType, boolean enabled) {
+    public User(Long uid, String firstName, String lastName, String login, String password, UserRole role, boolean enabled) {
         super();
         this.uid = uid;
         this.firstName = firstName;
         this.lastName = lastName;
         this.login = login;
         this.password = password;
-        this.userType = userType;
+        this.role = role;
         this.enabled = enabled;
     }
 
@@ -148,7 +148,7 @@ public class User implements Serializable {
         if (login != null ? !login.equals(user.login) : user.login != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        return userType == user.userType;
+        return role == user.role;
 
     }
 
@@ -160,7 +160,7 @@ public class User implements Serializable {
         result = 31 * result + (login != null ? login.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (userType != null ? userType.hashCode() : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (enabled ? 1 : 0);
         return result;
     }
@@ -174,7 +174,7 @@ public class User implements Serializable {
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", userType=" + userType +
+                ", userType=" + role +
                 ", enabled=" + enabled +
                 '}';
     }

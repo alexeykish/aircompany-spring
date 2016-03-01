@@ -1,14 +1,9 @@
 package by.pvt.kish.aircompany.dao;
 
-import by.pvt.kish.aircompany.dao.impl.PlaneDAO;
 import by.pvt.kish.aircompany.dao.impl.UserDAO;
+import by.pvt.kish.aircompany.enums.UserRole;
 import by.pvt.kish.aircompany.enums.UserStatus;
-import by.pvt.kish.aircompany.enums.UserType;
 import by.pvt.kish.aircompany.pojos.User;
-import by.pvt.kish.aircompany.utils.Coder;
-import by.pvt.kish.aircompany.utils.HibernateUtil;
-import org.hibernate.Transaction;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +36,7 @@ public class UserDAOTest {
         testUser.setLogin("login" + (int) (Math.random() * 100));
         testUser.setPassword("testPassword");
         testUser.setEmail("test@test.com");
-        testUser.setUserType(UserType.DISPATCHER);
+        testUser.setRole(UserRole.ROLE_DISPATCHER);
 
         testUser = userDao.add(testUser);
         id = testUser.getUid();
@@ -80,13 +75,5 @@ public class UserDAOTest {
     public void testDelete() throws Exception {
         userDao.delete(id);
         assertNull("Delete user: failed", userDao.getById(id));
-    }
-
-    @Test
-    public void testSetStatus() throws Exception {
-        User prepareToUpdateStatusUser = userDao.getById(id);
-        userDao.setStatus(id, UserStatus.ONLINE);
-        User updatedStatusUser = userDao.getById(id);
-        assertEquals("Set user status method failed", prepareToUpdateStatusUser.getStatus(), updatedStatusUser.getStatus());
     }
 }

@@ -5,7 +5,7 @@
           version="2.0">
     <div style="margin:5px;">
         <h2><s:message code="page.title.airport.add"/></h2>
-        <s:url value="/addAirport" var="addAirport"/>
+        <s:url value="/airport/add" var="addAirport"/>
         <sf:form action="${addAirport}" method="post" modelAttribute="airport">
             <fieldset>
                 <table>

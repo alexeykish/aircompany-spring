@@ -39,7 +39,7 @@
             </tr>
         </table>
         <div>
-            <s:url value="/changePlaneStatus/${plane.pid}" var="changePlaneStatus"/>
+            <s:url value="/plane/changeStatus/${plane.pid}" var="changePlaneStatus"/>
             <form action="${changePlaneStatus}" method="post">
                 <h4><s:message code="label.plane.status"/>: ${plane.status}</h4>
                 <select class="inputForm" name="status" title="Status">
@@ -54,12 +54,12 @@
         <div>
             <c:choose>
                 <c:when test="${requestScope.permissionChangeDeleteStatus =='false'}">
-                    <s:url value="/deletePlane/${plane.pid}" var="deletePlane"/>
+                    <s:url value="/plane/delete/${plane.pid}" var="deletePlane"/>
                     <form action="${deletePlane}" method="post">
                         <s:message code="button.delete" var="delete"/>
                         <input class="button" type="submit" name="submit" value="${delete}"/>
                     </form>
-                    <form action="/updatePlanePage/${requestScope.plane.pid}" method="post">
+                    <form action="/plane/updatePage/${requestScope.plane.pid}" method="post">
                         <s:message code="button.update" var="update"/>
                         <input class="button" type="submit" name="submit" value="${update}"/>
                     </form>

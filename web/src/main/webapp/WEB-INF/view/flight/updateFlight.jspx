@@ -6,7 +6,7 @@
           version="2.0">
     <div style="margin: 5px;">
         <h2><s:message code="page.title.flight.update"/></h2>
-        <s:url value="/updateFlight" var="updateFlight"/>
+        <s:url value="/flight/update" var="updateFlight"/>
         <sf:form action="${updateFlight}" method="post" modelAttribute="flight">
             <fieldset>
                 <table>
@@ -35,9 +35,9 @@
                     <tr>
                         <td><sf:label path="arrival" class="input-label"><s:message code="label.arrival"/>:</sf:label></td>
                         <td><sf:select id="flightArrival" path="arrival" name="arrival" class="inputForm">
-                            <option value="${flight.departure.aid}">${flight.departure.name}</option>
+                            <option value="${flight.arrival.aid}">${flight.arrival.name}</option>
                             <c:forEach items="${requestScope.airports}" var="airport">
-                                <c:if test="${flight.departure.aid != airport.aid}">
+                                <c:if test="${flight.arrival.aid != airport.aid}">
                                     <option value="${airport.aid}">${airport.name}</option>
                                 </c:if>
                             </c:forEach>

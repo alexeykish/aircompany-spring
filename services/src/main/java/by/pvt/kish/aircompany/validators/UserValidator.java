@@ -58,7 +58,7 @@ public class UserValidator implements IValidator<User> {
                 (user.getLogin() == null) || (user.getLogin().equals("")) ||
                 (user.getPassword() == null) || (user.getPassword().equals("")) ||
                 (user.getEmail() == null) || (user.getEmail().equals("")) ||
-                (user.getUserType() == null) ||
-                (user.getStatus() == null);
+                (user.getRole() == null) ||
+                (user.isEnabled());
     }
 }

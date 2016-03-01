@@ -20,7 +20,7 @@
                     <td>${employee.position}</td>
                     <td>${employee.status}</td>
                     <td style="width: 70px;">
-                        <s:url value="/employeeReport/${employee.eid}" var="employeeReport"/>
+                        <s:url value="/employee/${employee.eid}" var="employeeReport"/>
                         <form action="${employeeReport}" method="get">
                             <s:message code="button.report" var="report"/>
                             <input class="table-button" type="submit" name="submit" value="${report}"/>
@@ -29,7 +29,7 @@
                 </tr>
             </c:forEach>
         </table>
-        <s:url value="/addEmployeePage" var="addEmployeePage"/>
+        <s:url value="/employee/addPage" var="addEmployeePage"/>
         <form action="${addEmployeePage}" method="post">
             <s:message code="button.add" var="add"/>
             <input class="button" type="submit" name="submit" value="${add}"/>

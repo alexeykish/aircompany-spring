@@ -1,0 +1,60 @@
+<jsp:root xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:s="http://www.springframework.org/tags"
+          xmlns:sec="http://www.springframework.org/security/tags"
+          version="2.0">
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <s:url value="/flight/main" var="flightList"/>
+                    <form action="${flightList}" method="get">
+                        <input type="hidden" name="page" value="1"/>
+                        <s:message code="button.flights" var="flights"/>
+                        <input class="button" type="submit" name="submit" value="${flights}"/>
+                    </form>
+                </td>
+            </tr>
+            <sec:authorize access="hasRole('ROLE_ADMIN')">
+                <tr>
+                    <td>
+                        <s:url value="/plane/main" var="planeList"/>
+                        <form action="${planeList}" method="get">
+                            <s:message code="button.planes" var="planes"/>
+                            <input class="button" type="submit" name="submit" value="${planes}"/>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <s:url value="/airport/main" var="airportList"/>
+                        <form action="${airportList}" method="get">
+                            <s:message code="button.airports" var="airports"/>
+                            <input class="button" type="submit" name="submit" value="${airports}"/>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <s:url value="/user/main" var="userList"/>
+                        <form action="${userList}" method="post">
+                            <s:message code="button.users" var="users"/>
+                            <input class="button" type="submit" name="submit" value="${users}"/>
+                        </form>
+                    </td>
+                </tr>
+            </sec:authorize>
+            <sec:authorize access="hasRole('ROLE_DISPATCHER')">
+                <tr>
+                    <td>
+                        <s:url value="/employee/main" var="employeeList"/>
+                        <form action="${employeeList}" method="get">
+                            <s:message code="button.employees" var="employees"/>
+                            <input class="button" type="submit" name="submit" value="${employees}"/>
+                        </form>
+                    </td>
+                </tr>
+            </sec:authorize>
+        </table>
+    </div>
+</jsp:root>

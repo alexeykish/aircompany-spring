@@ -25,6 +25,7 @@ import java.util.Locale;
  * @author Kish Alexey
  */
 @Controller
+@RequestMapping(value = "/airport")
 public class AirportController {
 
     private static String className = PlaneController.class.getName();
@@ -44,55 +45,58 @@ public class AirportController {
         return new Airport();
     }
 
-    @RequestMapping(value = "/addAirport")
+    @RequestMapping(value = "/add")
     public String addPlane(@Valid @ModelAttribute("airport") Airport airport,
                            BindingResult bindingResult,
                            Locale locale,
-                           RedirectAttributes redirectAttributes,
-                           HttpServletRequest request) {
+                           RedirectAttributes redirectAttributes) {
         try {
             if (!bindingResult.hasErrors()) {
                 if (airport != null) {
                     airportService.add(airport);
                     redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_ADD_AIRPORT", null, locale));
-                    return "redirect:/airportList";
+                    return "redirect:/airport/main";
                 }
             }
         } catch (IllegalArgumentException e) {
             return ErrorHandler.returnErrorPage("ERROR_IAE", className);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
-        } catch (ServiceValidateException e) {
-            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "airport/add";
     }
 
-    @RequestMapping(value = "/deleteAirport/{id}")
+    @RequestMapping(value = "/delete/{id}")
     public String deletePlane(RedirectAttributes redirectAttributes,
                               Locale locale,
-                              @PathVariable("id") Long id) {
+                              @PathVariable("id") Long id,
+                              HttpServletRequest request) {
         try {
             airportService.delete(id);
             redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_DELETE_AIRPORT", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "redirect:/airportList";
+        return "redirect:/airport/main";
     }
 
-    @RequestMapping(value = "/airportReport/{id}")
+    @RequestMapping(value = "/{id}")
     public String createAirportReport(ModelMap model,
-                                      @PathVariable("id") Long id) {
+                                      @PathVariable("id") Long id,
+                                      HttpServletRequest request) {
         try {
             model.addAttribute(Attribute.AIRPORT, airportService.getById(id));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "airport/report";
     }
 
-    @RequestMapping(value = "/airportList")
+    @RequestMapping(value = "/airport/main")
     public String getAllPlanes(ModelMap model) {
         try {
             model.addAttribute(Attribute.AIRPORTS, airportService.getAll());
@@ -102,40 +106,40 @@ public class AirportController {
         return "airport/list";
     }
 
-    @RequestMapping(value = "/updateAirport")
+    @RequestMapping(value = "/update")
     public String updatePlane(@Valid @ModelAttribute("airport") Airport airport,
                               BindingResult bindingResult,
                               Locale locale,
-                              RedirectAttributes redirectAttributes,
-                              HttpServletRequest request) {
+                              RedirectAttributes redirectAttributes) {
         try {
             if (!bindingResult.hasErrors()) {
                 if (airport != null) {
                     airportService.update(airport);
                     redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_UPDATE_AIRPORT", null, locale));
-                    return "redirect:/airportList";
+                    return "redirect:/airport/main";
                 }
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
-        } catch (ServiceValidateException e) {
-            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "airport/update";
     }
 
-    @RequestMapping(value = "/addAirportPage")
+    @RequestMapping(value = "/addPage")
     public String showAddAirportPage() {
         return "airport/add";
     }
 
-    @RequestMapping(value = "/updateAirportPage/{id}")
+    @RequestMapping(value = "/updatePage/{id}")
     public String showUpdateAirportPage(ModelMap model,
-                                        @PathVariable("id") Long id) {
+                                        @PathVariable("id") Long id,
+                                        HttpServletRequest request) {
         try {
             model.addAttribute(Attribute.AIRPORT, airportService.getById(id));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "airport/update";
     }

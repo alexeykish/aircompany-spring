@@ -23,7 +23,7 @@
                             <select id="flightCrew" class="inputForm" name="${loop.index}">
                                 <option value="${team_member.eid}">${team_member.firstName} ${team_member.lastName}/${team_member.position}</option>
                                 <c:forEach items="${requestScope.employees}" var="employee">
-                                    <c:if test="${(employee.position == team_member.position)&&(employee.eid != team_member.eid)}">
+                                    <c:if test="${(employee.position == team_member.position)and(employee.eid != team_member.eid)}">
                                         <option value="${employee.eid}">${employee.firstName} ${employee.lastName}/${employee.position}</option>
                                     </c:if>
                                 </c:forEach>

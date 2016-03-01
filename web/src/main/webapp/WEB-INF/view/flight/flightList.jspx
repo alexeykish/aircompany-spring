@@ -5,7 +5,7 @@
           version="2.0">
     <div>
         <c:if test="${(sessionScope.userType == '2')}">
-            <s:url value="/addFlightPage" var="addFlightPage"/>
+            <s:url value="/flight/addPage" var="addFlightPage"/>
             <form action="${addFlightPage}" method="post">
                 <s:message code="button.add" var="add"/>
                 <input class="button" type="submit" name="submit" value="${add}"/>
@@ -29,7 +29,7 @@
                     <td>${flight.plane.model}</td>
                     <td>${flight.status}</td>
                     <td style="width: 70px;">
-                        <s:url value="flightReport/${flight.fid}" var="flightReport"/>
+                        <s:url value="/flight/${flight.fid}" var="flightReport"/>
                         <form action="${flightReport}" method="post">
                             <s:message code="button.report" var="report"/>
                             <c:if test="${(flight.crew.size() == 0)}">
@@ -48,7 +48,7 @@
                 <tr>
                     <c:if test="${requestScope.currentPage != 1}">
                         <td>
-                            <s:url value="/flightList?page=${requestScope.currentPage - 1}" var="previous"/>
+                            <s:url value="/flight/main?page=${requestScope.currentPage - 1}" var="previous"/>
                             <a href="${previous}"><s:message code="link.previous"/></a>
                         </td>
                     </c:if>
@@ -59,7 +59,7 @@
                             </c:when>
                             <c:otherwise>
                                 <td>
-                                    <s:url value="/flightList?page=${i}" var="current"/>
+                                    <s:url value="/flight/main?page=${i}" var="current"/>
                                     <a href="${current}">${i}</a>
                                 </td>
                             </c:otherwise>
@@ -67,7 +67,7 @@
                     </c:forEach>
                     <c:if test="${requestScope.currentPage lt requestScope.noOfPages}">
                         <td>
-                            <s:url value="/flightList?page=${requestScope.currentPage + 1}" var="next"/>
+                            <s:url value="/flight/main?page=${requestScope.currentPage + 1}" var="next"/>
                             <a href="${next}"><s:message code="link.next"/></a>
                         </td>
                     </c:if>

@@ -7,7 +7,7 @@
           version="2.0">
     <div style="margin:5px;">
         <h2><s:message code="page.title.flight.add"/>:</h2>
-        <s:url value="/addFlight" var="addFlight"/>
+        <s:url value="/flight/add" var="addFlight"/>
         <sf:form action="${addFlight}" method="post" modelAttribute="flight">
             <fieldset>
                 <table>

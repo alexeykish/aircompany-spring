@@ -6,7 +6,7 @@
           version="2.0">
     <div style="margin:5px;">
         <h2><s:message code="page.title.employee.add"/></h2>
-        <s:url value="/addEmployee" var="addEmployee"/>
+        <s:url value="/employee/add" var="addEmployee"/>
         <sf:form action="${addEmployee}" method="post" modelAttribute="employee">
             <fieldset>
                 <table>

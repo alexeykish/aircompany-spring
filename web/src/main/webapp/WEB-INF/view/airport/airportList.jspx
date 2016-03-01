@@ -18,7 +18,7 @@
                     <td>${airport.address.city}</td>
                     <td>${airport.address.country}</td>
                     <td style="width: 70px;">
-                        <s:url value="/airportReport/${airport.aid}" var="airportReport"/>
+                        <s:url value="/airport/${airport.aid}" var="airportReport"/>
                         <form action="${airportReport}" method="get">
                             <s:message code="button.report" var="report"/>
                             <input class="table-button" type="submit" name="submit" value="${report}"/>
@@ -27,7 +27,7 @@
                 </tr>
             </c:forEach>
         </table>
-        <s:url value="/addAirportPage" var="addAirportPage"/>
+        <s:url value="/airport/addPage" var="addAirportPage"/>
         <form action="${addAirportPage}" method="post">
             <s:message code="button.add" var="add"/>
             <input class="button" type="submit" name="submit" value="${add}"/>

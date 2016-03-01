@@ -5,6 +5,6 @@ package by.pvt.kish.aircompany.enums;
  *
  * @author Kish Alexey
  */
-public enum UserType {
-    ADMINISTRATOR, DISPATCHER
+public enum UserRole {
+    ROLE_ADMIN, ROLE_DISPATCHER, ROLE_ANONYMOUS
 }

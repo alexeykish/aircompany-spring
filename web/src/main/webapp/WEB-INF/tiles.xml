@@ -6,8 +6,7 @@
     <definition name="default" template="/WEB-INF/view/layouts/default.jspx">
         <put-attribute name="title" value=""/>
         <put-attribute name="header" value="/WEB-INF/view/common/header.jspx"/>
-        <put-attribute name="admin-menu" value="/WEB-INF/view/menu/adminmenu.jspx"/>
-        <put-attribute name="disp-menu" value="/WEB-INF/view/menu/dispmenu.jspx"/>
+        <put-attribute name="menu" value="/WEB-INF/view/common/menu.jspx"/>
         <put-attribute name="message" value="/WEB-INF/view/main/message.jspx"/>
         <put-attribute name="right-content" value=""/>
     </definition>

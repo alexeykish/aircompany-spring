@@ -19,7 +19,7 @@ public class Attribute {
     public static final String AIRPORT = "airport";
     public static final String AIRPORTS = "airports";
     public static final String POSITIONS = "positions";
-    public static final String USERTYPES = "types";
+    public static final String USERROLES = "roles";
     public static final String STATUSES = "statuses";
     public static final String PERMISSION_CHANGE_DELETE_STATUS = "permissionChangeDeleteStatus";
 }

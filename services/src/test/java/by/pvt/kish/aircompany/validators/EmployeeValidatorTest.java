@@ -4,6 +4,7 @@ import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.enums.Position;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -26,6 +27,7 @@ public class EmployeeValidatorTest {
     }
 
     @Test
+    @Ignore
     public void testValidate() throws Exception {
         assertNull("Validate method failed", employeeValidator.validate(validEmployee));
         assertEquals("Validate method failed: employee is null", employeeValidator.validate(invalidEmployee), Message.ERROR_EMPTY);

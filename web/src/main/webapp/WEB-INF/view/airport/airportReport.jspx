@@ -32,12 +32,12 @@
         <div>
             <!--<c:choose>-->
                 <!--<c:when test="${requestScope.permissionChangeDeleteStatus =='false'}">-->
-                    <s:url value="/deleteAirport/${airport.aid}" var="deleteAirport"/>
+                    <s:url value="/airport/delete/${airport.aid}" var="deleteAirport"/>
                     <form action="${deleteAirport}" method="post">
                         <s:message code="button.delete" var="delete"/>
                         <input class="button" type="submit" name="submit" value="${delete}"/>
                     </form>
-                    <s:url value="/updateAirportPage/${airport.aid}" var="updateAirport"/>
+                    <s:url value="/airport/updatePage/${airport.aid}" var="updateAirport"/>
                     <form action="${updateAirport}" method="post">
                         <s:message code="button.update" var="update"/>
                         <input class="button" type="submit" name="submit" value="${update}"/>

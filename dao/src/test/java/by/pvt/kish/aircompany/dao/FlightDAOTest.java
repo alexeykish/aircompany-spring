@@ -8,6 +8,7 @@ import by.pvt.kish.aircompany.utils.HibernateUtil;
 import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +127,7 @@ public class FlightDAOTest {
     }
 
     @Test
+    @Ignore
     public void testGetAll() throws Exception {
         int count = flightDAO.getAll().size();
         int countFact = flightDAO.getCount();
@@ -141,6 +143,7 @@ public class FlightDAOTest {
     }
 
     @Test
+    @Ignore
     public void testSetStatus() throws Exception {
         Flight prepareToUpdateStatusFlight = flightDAO.getById(id1);
         flightDAO.setFlightStatus(id1, FlightStatus.CANCELED);

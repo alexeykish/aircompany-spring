@@ -2,6 +2,7 @@
           xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:s="http://www.springframework.org/tags"
+          xmlns:sec="http://www.springframework.org/security/tags"
           version="2.0">
     <div style="margin:5px;">
         <h2><s:message code="page.title.flight.report"/>: #${flight.fid}</h2>
@@ -28,22 +29,22 @@
         </div>
         <div>
             <c:if test="${(flight.status == 'CREATED')}">
-                <c:if test="${(sessionScope.userType == '2')}">
-                    <s:url value="/deleteFlight/${flight.fid}" var="deleteFlight"/>
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                    <s:url value="/flight/delete/${flight.fid}" var="deleteFlight"/>
                     <form action="${deleteFlight}" method="post">
                         <s:message code="button.delete" var="delete"/>
                         <input class="table-button" type="submit" name="submit" value="${delete}"/>
                     </form>
-                    <s:url value="/updateFlightPage/${flight.fid}" var="updateFlight"/>
+                    <s:url value="/flight/updatePage/${flight.fid}" var="updateFlight"/>
                     <form action="${updateFlight}" method="post">
                         <s:message code="button.update" var="update"/>
                         <input class="table-button" type="submit" name="submit" value="${update}"/>
                     </form>
-                </c:if>
+                </sec:authorize>
             </c:if>
-            <c:if test="${(flight.status == 'READY')}">
-                <c:if test="${(sessionScope.userType == '1')}">
-                    <s:url value="/addCrewPage/${flight.fid}" var="addCrewPage"/>
+            <!--<c:if test="${((flight.status == 'READY')and(flight.status == 'CREATED'))}">-->
+                <sec:authorize access="hasRole('ROLE_DISPATCHER')">
+                    <s:url value="/crew/addPage/${flight.fid}" var="addCrewPage"/>
                     <form action="${addCrewPage}" method="post">
                            <c:if test="${(requestScope.flight.crew.size() == 0)}">
                                <s:message code="button.crew.add" var="addCrew"/>
@@ -53,9 +54,10 @@
                                <s:message code="button.crew.update" var="updateCrew"/>
                                <input class="table-button" style="width: 100px;" type="submit" name="submit" value="${updateCrew}"/>
                            </c:if>
+
                     </form>
-                </c:if>
-            </c:if>
+                </sec:authorize>
+            <!--</c:if>-->
             <div>
                 <h4><s:message code="label.crew"/>:</h4>
                 <table class="list">

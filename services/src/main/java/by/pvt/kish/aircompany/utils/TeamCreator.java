@@ -2,6 +2,7 @@ package by.pvt.kish.aircompany.utils;
 
 import by.pvt.kish.aircompany.enums.Position;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
+import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Plane;
 import by.pvt.kish.aircompany.pojos.PlaneCrew;
@@ -49,7 +50,7 @@ public class TeamCreator {
         return positions;
     }
 
-    public Set<Employee> getEmployeeListById(List<Long> team) throws ServiceException {
+    public Set<Employee> getEmployeeListById(List<Long> team) throws ServiceException, ServiceValidateException {
         Set<Employee> employees = new HashSet<>();
         for (Long l: team) {
             employees.add(employeeService.getById(l));

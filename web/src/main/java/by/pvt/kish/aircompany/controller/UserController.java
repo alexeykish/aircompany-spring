@@ -1,8 +1,7 @@
 package by.pvt.kish.aircompany.controller;
 
 import by.pvt.kish.aircompany.constants.Attribute;
-import by.pvt.kish.aircompany.enums.UserStatus;
-import by.pvt.kish.aircompany.enums.UserType;
+import by.pvt.kish.aircompany.enums.UserRole;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceLoginException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
@@ -11,17 +10,24 @@ import by.pvt.kish.aircompany.services.IUserService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * @author Kish Alexey
@@ -35,58 +41,34 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
+    private MessageSource messageSource;
+
+    @Autowired
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     @ModelAttribute("user")
     public User createUser() {
         return new User();
     }
 
-    @RequestMapping(value = "/loginUser")
-    public String loginUser(HttpSession session,
-                            HttpServletRequest request,
-                            @RequestParam("login") String login,
-                            @RequestParam("password") String password) {
-        try {
-            User user = userService.getUser(login, password);
-            switch (user.getUserType()) {
-                case ADMINISTRATOR:
-                    session.setAttribute(Attribute.USER_TYPE, 2);
-                    break;
-                case DISPATCHER:
-                    session.setAttribute(Attribute.USER_TYPE, 1);
-                    break;
-                default:
-                    session.setAttribute(Attribute.USER_TYPE, 0);
-                    break;
-            }
-            session.setAttribute(Attribute.USER, user);
-        } catch (ServiceException e) {
-            return ErrorHandler.returnErrorPage(e.getMessage(), className);
-        } catch (ServiceLoginException e) {
-            return ErrorHandler.returnLoginErrorPage(request, e.getMessage(), className);
-        }
+    @RequestMapping(value = "/login")
+    public String loginUser() {
         return "main";
     }
 
-    @RequestMapping(value = "/logoutUser")
-    public String logoutUser(ModelMap model,
-                             HttpSession session,
-                             HttpServletRequest request) {
-        if (session != null) {
-            try {
-                User user = (User) session.getAttribute(Attribute.USER);
-                userService.setStatus(user.getUid(), UserStatus.OFFLINE);
-                session.invalidate();
-            } catch (ServiceException e) {
-                model.addAttribute(Attribute.MESSAGE, "ERROR_REG_LOGOUT");
-                return ErrorHandler.returnErrorPage(e.getMessage(), className);
-            } catch (ServiceValidateException e) {
-                return ErrorHandler.returnLoginErrorPage(request, e.getMessage(), className);
-            }
+    @RequestMapping(value = "/logout")
+    public String logoutUser(HttpServletRequest request,
+                             HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "signIn";
+        return "redirect:/signIn";
     }
 
-    @RequestMapping(value = "/addUser")
+    @RequestMapping(value = "/user/add")
     public String addUser(ModelMap model,
                           @Valid @ModelAttribute User user,
                           BindingResult bindingResult,
@@ -99,19 +81,17 @@ public class UserController {
                     return "signIn";
                 }
             } else {
-                model.addAttribute(Attribute.USERTYPES, Arrays.asList(UserType.values()));
+                model.addAttribute(Attribute.USERROLES, Arrays.asList(UserRole.values()));
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceLoginException e) {
             return ErrorHandler.returnLoginErrorPage(request, e.getMessage(), className);
-        } catch (ServiceValidateException e) {
-            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "registration";
     }
 
-    @RequestMapping(value = "/userList")
+    @RequestMapping(value = "/user/main")
     public String getAllUsers(ModelMap model) {
         try {
             model.addAttribute(Attribute.USERS, userService.getAll());
@@ -128,7 +108,14 @@ public class UserController {
 
     @RequestMapping(value = "/registrationPage")
     public String showRegistrationPage(ModelMap model) {
-        model.addAttribute(Attribute.USERTYPES, Arrays.asList(UserType.values()));
+        model.addAttribute(Attribute.USERROLES, Arrays.asList(UserRole.values()));
         return "registration";
+    }
+
+    @RequestMapping(value = "/access_denied", method = RequestMethod.GET)
+    public String accessDeniedPage(ModelMap model,
+                                   Locale locale) {
+        model.addAttribute(Attribute.LOGIN_MESSAGE, messageSource.getMessage("message.access.denied", null, locale));
+        return "redirect:/signIn";
     }
 }

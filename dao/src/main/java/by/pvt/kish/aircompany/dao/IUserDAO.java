@@ -35,9 +35,8 @@ public interface IUserDAO extends IDAO<User>{
     /**
      * Set user status to DB
      *
-     * @param id     - The ID of the user to be set
-     * @param status - The status to be set
+     * @param login  - The login of the user
      * @throws DaoException If something fails at DB level
      */
-    void setStatus(Long id, UserStatus status) throws DaoException;
+    User getByLogin(String login) throws DaoException;
 }

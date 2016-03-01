@@ -68,7 +68,7 @@ public class TeamValidator {
      * @param team - The flight team being checked
      * @return false if it corresponds to the position correctly, true if found at least one to inadequate
      */
-    private boolean checkPositions(Long fid, List<Long> team) throws ServiceException {
+    private boolean checkPositions(Long fid, List<Long> team) throws ServiceException, ServiceValidateException {
         List<Employee> list = new ArrayList<>();
         for (Long i : team) {
             list.add(employeeService.getById(i));

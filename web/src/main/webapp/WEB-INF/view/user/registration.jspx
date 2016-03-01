@@ -1,75 +1,68 @@
 <jsp:root xmlns="http://www.w3.org/1999/xhtml"
           xmlns:jsp="http://java.sun.com/JSP/Page"
           xmlns:c="http://java.sun.com/jsp/jstl/core"
-          xmlns:s="http://www.springframework.org/tags/form"
+          xmlns:s="http://www.springframework.org/tags"
+          xmlns:sf="http://www.springframework.org/tags/form"
           version="2.0">
     <div class="container">
-        <s:form action="/addUser" method="post" modelAttribute="user">
-            <h2 style="text-align: center;">Registration</h2>
-            <table class="add_user_table">
-                <tr>
-                    <td>
-                        <label for="userFirstname" class="input-label">Firstname:</label>
-                    </td>
-                    <td>
-                        <s:input id="userFirstname" path="firstName" class="inputForm" type="text"/>
-                        <s:errors path="firstName" class="reg-hint" maxlength="15"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="userLastname" class="input-label">Lastname:</label>
-                    </td>
-                    <td>
-                        <s:input id="userLastname" path="lastName" class="inputForm" type="text"/>
-                        <s:errors path="lastName" class="reg-hint" maxlength="15"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="userLogin" class="input-label">Login:</label>
-                    </td>
-                    <td>
-                        <s:input id="userLogin" path="login" class="inputForm" type="text"/>
-                        <s:errors path="login" class="reg-hint" maxlength="10"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="userPassword" class="input-label">Password:</label>
-                    </td>
-                    <td>
-                        <s:input id="userPassword" path="password" class="inputForm" type="password"/>
-                        <s:errors path="password" class="reg-hint" maxlength="15"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="userEmail" class="input-label">E-mail:</label>
-                    </td>
-                    <td>
-                        <s:input id="userEmail" path="email" class="inputForm" type="text"/>
-                        <s:errors path="email" class="reg-hint"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="userType" class="input-label">User type:</label>
-                    </td>
-                    <td>
-                        <s:select id="userType" path="userType" class="inputForm">
-                            <c:forEach items="${requestScope.types}" var="type">
-                                <option value="${type}">${type}</option>
-                            </c:forEach>
-                        </s:select>
-                    </td>
-                </tr>
-            </table>
-            <input class="button" type="submit" name="submit" value="Register"/>
-        </s:form>
+        <h2 style="text-align: center;"><s:message code="page.title.registration"/></h2>
+        <s:url value="/addUser" var="addUser"/>
+        <sf:form action="${addUser}" method="post" modelAttribute="user">
+            <fieldset>
+                <table class="add_user_table">
+                    <tr>
+                        <td><sf:label path="firstName" class="input-label"><s:message code="label.firstname"/>:</sf:label></td>
+                        <td>
+                            <sf:input id="userFirstname" path="firstName" class="inputForm" type="text"/>
+                            <sf:errors path="firstName" class="reg-hint" maxlength="15"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><sf:label path="lastName" class="input-label"><s:message code="label.lastname"/>:</sf:label></td>
+                        <td>
+                            <sf:input id="userLastname" path="lastName" class="inputForm" type="text"/>
+                            <sf:errors path="lastName" class="reg-hint" maxlength="15"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><sf:label path="login" class="input-label"><s:message code="label.username"/>:</sf:label></td>
+                        <td>
+                            <sf:input id="userLogin" path="login" class="inputForm" type="text"/>
+                            <sf:errors path="login" class="reg-hint" maxlength="10"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><sf:label path="password" class="input-label"><s:message code="label.password"/>:</sf:label></td>
+                        <td>
+                            <sf:input id="userPassword" path="password" class="inputForm" type="password"/>
+                            <sf:errors path="password" class="reg-hint" maxlength="15"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><sf:label path="email" class="input-label"><s:message code="label.email"/>:</sf:label></td>
+                        <td>
+                            <sf:input id="userEmail" path="email" class="inputForm" type="text"/>
+                            <sf:errors path="email" class="reg-hint"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><sf:label path="role" class="input-label"><s:message code="label.user.role"/>:</sf:label></td>
+                        <td>
+                            <sf:select id="userRole" path="role" class="inputForm">
+                                <c:forEach items="${requestScope.roles}" var="role">
+                                    <option value="${role}">${role}</option>
+                                </c:forEach>
+                            </sf:select>
+                        </td>
+                    </tr>
+                </table>
+                <s:message code="button.register" var="register"/>
+                <input class="button" type="submit" name="submit" value="${register}"/>
+            </fieldset>
+        </sf:form>
         <form action="signIn" method="get">
-            <input class="button" type="submit" name="submit" value="Back"/>
+            <s:message code="link.back" var="back"/>
+            <input class="button" type="submit" name="submit" value="${back}"/>
         </form>
     </div>
-
 </jsp:root>

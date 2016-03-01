@@ -11,7 +11,7 @@
 <head>
     <link rel="stylesheet" href="../assests/css/style.css" type="text/css"/>
     <c:set var="title"><tiles:getAsString name="title"/></c:set>
-    <title><spring:message code="${title}"/> </title>
+    <title><spring:message code="${title}"/></title>
 </head>
 <body>
 <div style="float: right">
@@ -24,14 +24,7 @@
     <tbody>
     <tr>
         <td id="left-content" class="left-content">
-            <div>
-                <c:if test="${(not empty sessionScope.userType) and (sessionScope.userType == '2')}">
-                    <tiles:insertAttribute name="admin-menu"/>
-                </c:if>
-                <c:if test="${(not empty sessionScope.userType) and (sessionScope.userType == '1')}">
-                    <tiles:insertAttribute name="disp-menu"/>
-                </c:if>
-            </div>
+            <tiles:insertAttribute name="menu"/>
         </td>
         <td id="right-content" style="border: solid 1px grey; width: 100%; vertical-align: top;">
             <tiles:insertAttribute name="message"/>

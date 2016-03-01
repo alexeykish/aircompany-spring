@@ -7,22 +7,32 @@
              http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
     <http auto-config="true">
+        <!--<intercept-url pattern="**/css/style.css" access="permitAll"/>-->
         <intercept-url pattern="/" access="permitAll"/>
+        <intercept-url pattern="/main" access="hasRole('ROLE_DISPATCHER') and hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/employee/**" access="hasRole('ROLE_DISPATCHER')"/>
+        <intercept-url pattern="/flight/**" access="hasRole('ROLE_DISPATCHER') and hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/flight/add**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/flight/update**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/flight/delete**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/plane/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/airport/**" access="hasRole('ROLE_ADMIN')"/>
         <form-login
-                login-page="/login"
+                login-page="/signIn"
+                username-parameter="userName"
+                password-parameter="password"
+                default-target-url="/login"
                 authentication-failure-url="/access_denied"/>
-
-        <csrf/>
+        <csrf disabled="true"/>
+        <logout invalidate-session="true"
+                logout-success-url="/signIn"
+                logout-url="/logout"
+                delete-cookies="JSESSIONID"/>
     </http>
 
     <authentication-manager>
-        <authentication-provider>
-            <jdbc-user-service data-source-ref="dataSource"
-                               users-by-username-query=
-                                       "select f_login, f_password, enabled from users where username=?"
-                               authorities-by-username-query=
-                                       "select f_login, role from user_roles where username =?  " />
-        </authentication-provider>
+        <authentication-provider user-service-ref='authenticationService'/>
     </authentication-manager>
 
+    <beans:bean id="authenticationService" class="by.pvt.kish.aircompany.authentication.AuthenticationService"/>
 </beans:beans>

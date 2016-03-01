@@ -31,6 +31,7 @@ import java.util.Locale;
  * @author Kish Alexey
  */
 @Controller
+@RequestMapping(value = "/employee")
 public class EmployeeController {
 
     private static String className = EmployeeController.class.getName();
@@ -51,45 +52,45 @@ public class EmployeeController {
         return new Employee();
     }
 
-    @RequestMapping(value = "/addEmployee")
+    @RequestMapping(value = "/add")
     public String addEmployee(ModelMap model,
                               Locale locale,
                               @Valid @ModelAttribute("employee") Employee employee,
                               BindingResult bindingResult,
-                              RedirectAttributes redirectAttributes,
-                              HttpServletRequest request) {
+                              RedirectAttributes redirectAttributes) {
         try {
             if (!bindingResult.hasErrors()) {
                 if (employee != null) {
                     employeeService.add(employee);
                     redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_ADD_EMPLOYEE", null, locale));
-                    return "redirect:/employeeList";
+                    return "redirect:/employee/main";
                 }
             } else {
                 model.addAttribute(Attribute.POSITIONS, Arrays.asList(Position.values()));
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
-        } catch (ServiceValidateException e) {
-            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "employee/add";
     }
 
-    @RequestMapping(value = "/deleteEmployee/{id}")
+    @RequestMapping(value = "/delete/{id}")
     public String deleteEmployee(RedirectAttributes redirectAttributes,
                                  Locale locale,
-                                 @PathVariable("id") Long id) {
+                                 @PathVariable("id") Long id,
+                                 HttpServletRequest request) {
         try {
             employeeService.delete(id);
             redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_DELETE_EMPLOYEE", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "redirect:/employeeList";
+        return "redirect:/employee/main";
     }
 
-    @RequestMapping(value = "/employeeReport/{id}")
+    @RequestMapping(value = "/{id}")
     public String createEmployeeReport(ModelMap model,
                                        @PathVariable("id") Long id,
                                        HttpServletRequest request) {
@@ -108,7 +109,7 @@ public class EmployeeController {
         return "employee/report";
     }
 
-    @RequestMapping(value = "/employeeList")
+    @RequestMapping(value = "/main")
     public String getAllEmployees(ModelMap model) {
         try {
             model.addAttribute(Attribute.EMPLOYEES, employeeService.getAll());
@@ -118,7 +119,7 @@ public class EmployeeController {
         return "employee/list";
     }
 
-    @RequestMapping(value = "/changeEmployeeStatus/{id}")
+    @RequestMapping(value = "/changeStatus/{id}")
     public String changeEmployeeStatus(@PathVariable("id") Long id,
                                        @RequestParam("status") String status,
                                        Locale locale,
@@ -132,48 +133,48 @@ public class EmployeeController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "redirect:/employeeList";
+        return "redirect:/employee/main";
     }
 
-    @RequestMapping(value = "/updateEmployee")
+    @RequestMapping(value = "/update")
     public String updateEmployee(ModelMap model,
                                  @Valid @ModelAttribute("employee") Employee employee,
                                  BindingResult bindingResult,
                                  Locale locale,
-                                 RedirectAttributes redirectAttributes,
-                                 HttpServletRequest request) {
+                                 RedirectAttributes redirectAttributes) {
         try {
             if (!bindingResult.hasErrors()) {
                 if (employee != null) {
                     employeeService.update(employee);
                     redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_UPDATE_EMPLOYEE", null, locale));
-                    return "redirect:/employeeList";
+                    return "redirect:/employee/main";
                 }
             } else {
                 model.addAttribute(Attribute.POSITIONS, Arrays.asList(Position.values()));
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
-        } catch (ServiceValidateException e) {
-            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "employee/update";
     }
 
-    @RequestMapping(value = "/addEmployeePage")
+    @RequestMapping(value = "/addPage")
     public String showAddEmployeePage(ModelMap model) {
         model.addAttribute(Attribute.POSITIONS, Arrays.asList(Position.values()));
         return "employee/add";
     }
 
-    @RequestMapping(value = "/updateEmployeePage/{id}")
+    @RequestMapping(value = "/updatePage/{id}")
     public String showUpdateEmployeePage(ModelMap model,
-                                         @PathVariable("id") Long id) {
+                                         @PathVariable("id") Long id,
+                                         HttpServletRequest request) {
         try {
             model.addAttribute(Attribute.EMPLOYEE, employeeService.getById(id));
             model.addAttribute(Attribute.POSITIONS, Arrays.asList(Position.values()));
         } catch (ServiceException e) {
             ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "employee/update";
     }

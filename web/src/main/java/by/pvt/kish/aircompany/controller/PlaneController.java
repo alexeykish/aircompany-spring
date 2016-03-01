@@ -31,6 +31,7 @@ import java.util.*;
  * @author Kish Alexey
  */
 @Controller
+@RequestMapping(value = "/plane")
 public class PlaneController {
 
     private static String className = PlaneController.class.getName();
@@ -51,12 +52,11 @@ public class PlaneController {
         return new Plane();
     }
 
-    @RequestMapping(value = "/addPlane")
+    @RequestMapping(value = "/add")
     public String addPlane(@Valid @ModelAttribute("plane") Plane plane,
                            BindingResult bindingResult,
                            Locale locale,
-                           RedirectAttributes redirectAttributes,
-                           HttpServletRequest request) {
+                           RedirectAttributes redirectAttributes) {
         try {
             if (!bindingResult.hasErrors()) {
                 if (plane != null) {
@@ -64,31 +64,32 @@ public class PlaneController {
                     planeCrew.setPlane(plane);
                     planeService.add(plane);
                     redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_ADD_PLANE", null, locale));
-                    return "redirect:/planeList";
+                    return "redirect:/plane/main";
                 }
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
-        } catch (ServiceValidateException e) {
-            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "plane/add";
     }
 
-    @RequestMapping(value = "/deletePlane/{id}")
+    @RequestMapping(value = "/delete/{id}")
     public String deletePlane(RedirectAttributes redirectAttributes,
                               Locale locale,
-                              @PathVariable("id") Long id) {
+                              @PathVariable("id") Long id,
+                              HttpServletRequest request) {
         try {
             planeService.delete(id);
             redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_DELETE_PLANE", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "redirect:/planeList";
+        return "redirect:/plane/main";
     }
 
-    @RequestMapping(value = "/planeList")
+    @RequestMapping(value = "/plane/main")
     public String getAllPlanes(ModelMap model) {
         try {
             model.addAttribute(Attribute.PLANES, planeService.getAll());
@@ -98,7 +99,7 @@ public class PlaneController {
         return "plane/list";
     }
 
-    @RequestMapping(value = "/planeReport/{id}")
+    @RequestMapping(value = "/{id}")
     public String createPlaneReport(ModelMap model,
                                     @PathVariable("id") Long id,
                                     HttpServletRequest request) {
@@ -118,7 +119,7 @@ public class PlaneController {
         return "plane/report";
     }
 
-    @RequestMapping(value = "/changePlaneStatus/{id}")
+    @RequestMapping(value = "/changeStatus/{id}")
     public String changePlaneStatus(RedirectAttributes redirectAttributes,
                                     @PathVariable("id") Long id,
                                     @RequestParam("status") String status,
@@ -132,15 +133,14 @@ public class PlaneController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "redirect:/planeList";
+        return "redirect:/plane/main";
     }
 
-    @RequestMapping(value = "/updatePlane")
+    @RequestMapping(value = "/update")
     public String updatePlane(@Valid @ModelAttribute("plane") Plane plane,
                               BindingResult bindingResult,
                               Locale locale,
-                              RedirectAttributes redirectAttributes,
-                              HttpServletRequest request) {
+                              RedirectAttributes redirectAttributes) {
         try {
             if (!bindingResult.hasErrors()) {
                 if (plane != null) {
@@ -151,24 +151,25 @@ public class PlaneController {
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
-        } catch (ServiceValidateException e) {
-            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "plane/update";
     }
 
-    @RequestMapping(value = "/addPlanePage")
+    @RequestMapping(value = "/addPage")
     public String showAddPlanePage() {
         return "plane/add";
     }
 
-    @RequestMapping(value = "/updatePlanePage/{id}")
+    @RequestMapping(value = "/updatePage/{id}")
     public String showUpdatePlanePage(ModelMap model,
-                                      @PathVariable("id") Long id) {
+                                      @PathVariable("id") Long id,
+                                      HttpServletRequest request) {
         try {
             model.addAttribute(Attribute.PLANE, planeService.getById(id));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
         return "plane/update";
     }
