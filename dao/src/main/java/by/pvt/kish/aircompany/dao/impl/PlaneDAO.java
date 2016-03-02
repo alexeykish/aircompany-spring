@@ -24,12 +24,16 @@ import java.util.List;
 public class PlaneDAO extends BaseDAO<Plane> implements IPlaneDAO{
 
     private static final String HQL_UPDATE_PLANE_STATUS = "update FROM Plane P set P.status =:planestatus where P.pid =:id";
-    private static final String HQL_GET_PLANES_LAST_FIVE_FLIGHTS = "select F from Flight F where F.plane.pid =:pid ORDER BY F.date DESC";
+    private static final String HQL_GET_PLANES_LAST_FIVE_FLIGHTS = "select F from Flight F where F.plane.pid =:id ORDER BY F.date DESC";
     private static final String HQL_GET_ALL_AVAILABLE_PLANES = "select P from Plane P where not P.status=:planestatus and P.pid not in (select F.plane from Flight F where F.date=:date)";
 
-    private static final String UPDATE_PLANE_STATUS_FAIL = "Updating plane status failed";
-    private static final String GET_PLANE_FLIGHTS_FAIL = "Getting planes flights failed";
-    private static final String GET_ALL_AVAILABLE_PLANES_FAIL = "Getting all available planes failed";
+    private static final String MESSAGE_UPDATE_PLANE_STATUS_FAIL = "Updating plane status failed";
+    private static final String MESSAGE_GET_PLANE_FLIGHTS_FAIL = "Getting planes flights failed";
+    private static final String MESSAGE_GET_ALL_AVAILABLE_PLANES_FAIL = "Getting all available planes failed";
+
+    private static final String QUERY_PARAMETER_PLANE_STATUS = "planestatus";
+    private static final String QUERY_PARAMETER_ID = "id";
+    private static final String QUERY_PARAMETER_DATE = "date";
 
     @Autowired
     private PlaneDAO(SessionFactory sessionFactory) {
@@ -46,11 +50,11 @@ public class PlaneDAO extends BaseDAO<Plane> implements IPlaneDAO{
     public void setPlaneStatus(Long id, PlaneStatus status) throws DaoException {
         try {
             Query query = getSession().createQuery(HQL_UPDATE_PLANE_STATUS);
-            query.setParameter("planestatus",status);
-            query.setParameter("id",id);
+            query.setParameter(QUERY_PARAMETER_PLANE_STATUS,status);
+            query.setParameter(QUERY_PARAMETER_ID,id);
             query.executeUpdate();
         } catch (HibernateException e) {
-            throw new DaoException(UPDATE_PLANE_STATUS_FAIL);
+            throw new DaoException(MESSAGE_UPDATE_PLANE_STATUS_FAIL);
         }
     }
 
@@ -65,11 +69,11 @@ public class PlaneDAO extends BaseDAO<Plane> implements IPlaneDAO{
         List<Flight> flights;
         try {
             Query query = getSession().createQuery(HQL_GET_PLANES_LAST_FIVE_FLIGHTS);
-            query.setParameter("pid",id);
+            query.setParameter(QUERY_PARAMETER_ID,id);
             query.setMaxResults(5);
             flights = query.list();
         } catch (HibernateException e) {
-            throw new DaoException(GET_PLANE_FLIGHTS_FAIL);
+            throw new DaoException(MESSAGE_GET_PLANE_FLIGHTS_FAIL);
         }
         return flights;
     }
@@ -85,11 +89,11 @@ public class PlaneDAO extends BaseDAO<Plane> implements IPlaneDAO{
         List<Plane> planes;
         try {
             Query query = getSession().createQuery(HQL_GET_ALL_AVAILABLE_PLANES);
-            query.setParameter("date", date);
-            query.setParameter("planestatus", PlaneStatus.AVAILABLE);
+            query.setParameter(QUERY_PARAMETER_DATE, date);
+            query.setParameter(QUERY_PARAMETER_PLANE_STATUS, PlaneStatus.AVAILABLE);
             planes = query.list();
         } catch (HibernateException e) {
-            throw new DaoException(GET_ALL_AVAILABLE_PLANES_FAIL);
+            throw new DaoException(MESSAGE_GET_ALL_AVAILABLE_PLANES_FAIL);
         }
         return planes;
     }

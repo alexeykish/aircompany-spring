@@ -26,13 +26,14 @@ public class UserDAO extends BaseDAO<User> implements IUserDAO {
 
     private static final String HQL_CHECK_LOGIN = "SELECT U.uid FROM User U WHERE U.login=:login ";
     private static final String HQL_GET_USER = "SELECT U FROM User U WHERE U.login=:login AND U.password=:password";
-    private static final String HQL_UPDATE_USER_STATUS = "update From User U set U.status =:userstatus where U.uid =:uid";
     private static final String HQL_GET_BY_LOGIN = "from User where login = :login";
 
-    private static final String CHECK_LOGIN_USER_FAILED = "Check user login failed";
-    private static final String GET_USER_FAILED = "Get user by login and password failed";
-    private static final String GET_BY_LOGIN_FAILED = "Get user by login failed";
-    private static final String UPDATE_USER_STATUS_FAILED = "Set user status failed";
+    private static final String MESSAGE_CHECK_LOGIN_USER_FAILED = "Check user login failed";
+    private static final String MESSAGE_GET_USER_FAILED = "Get user by login and password failed";
+    private static final String MESSAGE_GET_BY_LOGIN_FAILED = "Get user by login failed";
+
+    private static final String QUERY_PARAMETER_LOGIN = "login";
+    private static final String QUERY_PARAMETER_PASSWORD = "password";
 
     @Autowired
     private UserDAO(SessionFactory sessionFactory) {
@@ -51,13 +52,13 @@ public class UserDAO extends BaseDAO<User> implements IUserDAO {
         List results;
         try {
             Query query = getSession().createQuery(HQL_CHECK_LOGIN);
-            query.setParameter("login", login);
+            query.setParameter(QUERY_PARAMETER_LOGIN, login);
             results = query.list();
             if (!results.isEmpty()) {
                 return false;
             }
         } catch (HibernateException e) {
-            throw new DaoException(CHECK_LOGIN_USER_FAILED, e);
+            throw new DaoException(MESSAGE_CHECK_LOGIN_USER_FAILED, e);
         }
         return true;
     }
@@ -75,11 +76,11 @@ public class UserDAO extends BaseDAO<User> implements IUserDAO {
         User user;
         try {
             Query query = getSession().createQuery(HQL_GET_USER);
-            query.setParameter("login", login);
-            query.setParameter("password", password);
+            query.setParameter(QUERY_PARAMETER_LOGIN, login);
+            query.setParameter(QUERY_PARAMETER_PASSWORD, password);
             user = (User) query.uniqueResult();
         } catch (HibernateException e) {
-            throw new DaoException(GET_USER_FAILED, e);
+            throw new DaoException(MESSAGE_GET_USER_FAILED, e);
         }
         return user;
     }
@@ -96,11 +97,11 @@ public class UserDAO extends BaseDAO<User> implements IUserDAO {
         try {
             Session session = getSession();
             Query query = session.createQuery(HQL_GET_BY_LOGIN);
-            query.setParameter("login", login);
+            query.setParameter(QUERY_PARAMETER_LOGIN, login);
             user = (User) query.uniqueResult();
         }
         catch(HibernateException e){
-            throw new DaoException(GET_BY_LOGIN_FAILED, e);
+            throw new DaoException(MESSAGE_GET_BY_LOGIN_FAILED, e);
         }
         return user;
     }

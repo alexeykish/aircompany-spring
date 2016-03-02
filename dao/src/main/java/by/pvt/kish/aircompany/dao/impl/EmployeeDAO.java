@@ -31,14 +31,18 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 	private static final String HQL_UPDATE_EMPLOYEE_STATUS = "update FROM Employee E set E.status=:employeestatus where E.eid=:id";
 	private static final String HQL_GET_ALL_AVAILABLE_EMPLOYEES = "select E from Employee E where E not in (select E from Employee E join E.flights f where f.date=:date) and E.status=:employeestatus";
 	private static final String HQL_GET_EMPLOYEE_AVAILABILITY = "select E from Employee E join E.flights f where f.date=:date and E.eid=:id";
-	private static final String HQL_GET_EMPLOYEES_LAST_FIVE_FLIGHTS = "select E.flights from Employee E where E.eid =:eid";
+	private static final String HQL_GET_EMPLOYEES_LAST_FIVE_FLIGHTS = "select E.flights from Employee E where E.eid =:id";
 	private static final String HQL_GET_EMPLOYEES_BY_FLIGHTID = "select E from Employee E join E.flights F where F.fid =:id";
 
-	private static final String UPDATE_EMPLOYEE_STATUS_FAIL = "Updating employee status failed";
-	private static final String GET_ALL_AVAILABLE_EMPLOYEE_FAIL = "Getting all available employee failed";
-	private static final String GET_USER_AVAILABILITY_FAIL = "Getting user availability failed";
-	private static final String GET_EMPLOYEES_FLIGHTS_FAIL = "Getting employees flights failed";
-	private static final String GET_EMPLOYEE_BY_FLIGHTID_FAIL = "Getting employees by flight id failed";
+	private static final String MESSAGE_UPDATE_EMPLOYEE_STATUS_FAIL = "Updating employee status failed";
+	private static final String MESSAGE_GET_ALL_AVAILABLE_EMPLOYEE_FAIL = "Getting all available employee failed";
+	private static final String MESSAGE_GET_USER_AVAILABILITY_FAIL = "Getting user availability failed";
+	private static final String MESSAGE_GET_EMPLOYEES_FLIGHTS_FAIL = "Getting employees flights failed";
+	private static final String MESSAGE_GET_EMPLOYEE_BY_FLIGHTID_FAIL = "Getting employees by flight id failed";
+
+	private static final String QUERY_PARAMETER_DATE= "date";
+	private static final String QUERY_PARAMETER_EMPLOYEE_STATUS = "employeestatus";
+	private static final String QUERY_PARAMETER_ID = "id";
 
 	@Autowired
 	private EmployeeDAO(SessionFactory sessionFactory) {
@@ -56,11 +60,11 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 		List<Employee> employees = new ArrayList<>();
 		try {
 			Query query = getSession().createQuery(HQL_GET_ALL_AVAILABLE_EMPLOYEES);
-			query.setParameter("date", date);
-			query.setParameter("employeestatus", EmployeeStatus.AVAILABLE);
+			query.setParameter(QUERY_PARAMETER_DATE, date);
+			query.setParameter(QUERY_PARAMETER_EMPLOYEE_STATUS, EmployeeStatus.AVAILABLE);
 			employees = query.list();
 		} catch (HibernateException e) {
-			throw new DaoException(GET_ALL_AVAILABLE_EMPLOYEE_FAIL);
+			throw new DaoException(MESSAGE_GET_ALL_AVAILABLE_EMPLOYEE_FAIL);
 		}
 		return employees;
 	}
@@ -75,11 +79,11 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 	public void setEmployeeStatus(Long id, EmployeeStatus status) throws DaoException {
 		try {
 			Query query = getSession().createQuery(HQL_UPDATE_EMPLOYEE_STATUS);
-			query.setParameter("employeestatus",status);
-			query.setParameter("id",id);
+			query.setParameter(QUERY_PARAMETER_EMPLOYEE_STATUS,status);
+			query.setParameter(QUERY_PARAMETER_ID,id);
 			query.executeUpdate();
 		} catch (HibernateException e) {
-			throw new DaoException(UPDATE_EMPLOYEE_STATUS_FAIL);
+			throw new DaoException(MESSAGE_UPDATE_EMPLOYEE_STATUS_FAIL);
 		}
 	}
 
@@ -96,14 +100,14 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 		List results;
 		try {
 			Query query = getSession().createQuery(HQL_GET_EMPLOYEE_AVAILABILITY);
-			query.setParameter("date", flightDate);
-			query.setParameter("id", id);
+			query.setParameter(QUERY_PARAMETER_DATE, flightDate);
+			query.setParameter(QUERY_PARAMETER_ID, id);
 			results = query.list();
 			if (!results.isEmpty()) {
 				return false;
 			}
 		} catch (HibernateException e) {
-			throw new DaoException(GET_USER_AVAILABILITY_FAIL, e);
+			throw new DaoException(MESSAGE_GET_USER_AVAILABILITY_FAIL, e);
 		}
 		return true;
 	}
@@ -120,11 +124,11 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 		List<Flight> flights = new ArrayList<>();
 		try {
 			Query query = getSession().createQuery(HQL_GET_EMPLOYEES_LAST_FIVE_FLIGHTS);
-			query.setParameter("eid",id);
+			query.setParameter(QUERY_PARAMETER_ID,id);
 			query.setMaxResults(5);
 			flights = query.list();
 		} catch (HibernateException e) {
-			throw new DaoException(GET_EMPLOYEES_FLIGHTS_FAIL, e);
+			throw new DaoException(MESSAGE_GET_EMPLOYEES_FLIGHTS_FAIL, e);
 		}
 		return flights;
 	}
@@ -141,10 +145,10 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 		List<Employee> employees = new ArrayList<>();
 		try {
 			Query query = getSession().createQuery(HQL_GET_EMPLOYEES_BY_FLIGHTID);
-			query.setParameter("id", id);
+			query.setParameter(QUERY_PARAMETER_ID, id);
 			employees = query.list();
 		} catch (HibernateException e) {
-			throw new DaoException(GET_EMPLOYEE_BY_FLIGHTID_FAIL);
+			throw new DaoException(MESSAGE_GET_EMPLOYEE_BY_FLIGHTID_FAIL);
 		}
 		return employees;
 	}

@@ -27,12 +27,12 @@ public abstract class BaseDAO<T> implements IDAO<T> {
     @Autowired
     private SessionFactory sessionFactory;
 
-    private static final String ADD_ENTITY_FAIL = "Add operation failed";
-    private static final String UPDATE_ENTITY_FAIL = "Update operation failed";
-    private static final String GET_BY_ENTITY_ID_FAIL = "Get by ID operation failed";
-    private static final String GET_ALL_ENTITIES_FAIL = "Get all operation failed";
-    private static final String DELETE_ENTITY_FAIL = "Delete operation failed";
-    private static final String GET_COUNT_ENTITY_FAIL = "Get count operation failed";
+    private static final String MESSAGE_ADD_ENTITY_FAIL = "Add operation failed";
+    private static final String MESSAGE_UPDATE_ENTITY_FAIL = "Update operation failed";
+    private static final String MESSAGE_GET_BY_ENTITY_ID_FAIL = "Get by ID operation failed";
+    private static final String MESSAGE_GET_ALL_ENTITIES_FAIL = "Get all operation failed";
+    private static final String MESSAGE_DELETE_ENTITY_FAIL = "Delete operation failed";
+    private static final String MESSAGE_GET_COUNT_ENTITY_FAIL = "Get count operation failed";
 
     protected BaseDAO(Class<T> className, SessionFactory sessionFactory) {
         this.className = className;
@@ -55,7 +55,7 @@ public abstract class BaseDAO<T> implements IDAO<T> {
             getSession().saveOrUpdate(t);
             logger.debug("Saved object: " + t);
         } catch (HibernateException e) {
-            throw new DaoException(ADD_ENTITY_FAIL, e);
+            throw new DaoException(MESSAGE_ADD_ENTITY_FAIL, e);
         }
         return t;
     }
@@ -71,7 +71,7 @@ public abstract class BaseDAO<T> implements IDAO<T> {
             getSession().merge(t);
             logger.debug("Updated object: " + t);
         } catch (HibernateException e) {
-            throw new DaoException(UPDATE_ENTITY_FAIL, e);
+            throw new DaoException(MESSAGE_UPDATE_ENTITY_FAIL, e);
         }
     }
 
@@ -88,7 +88,7 @@ public abstract class BaseDAO<T> implements IDAO<T> {
             t = (T) getSession().get(className, id);
             logger.debug("Get object: " + t);
         } catch (HibernateException e) {
-            throw new DaoException(GET_BY_ENTITY_ID_FAIL, e);
+            throw new DaoException(MESSAGE_GET_BY_ENTITY_ID_FAIL, e);
         }
         return t;
     }
@@ -106,7 +106,7 @@ public abstract class BaseDAO<T> implements IDAO<T> {
             criteria.setFetchMode("lazily_fetched_member", FetchMode.JOIN);
             results = criteria.list();
         } catch (HibernateException e) {
-            throw new DaoException(GET_ALL_ENTITIES_FAIL, e);
+            throw new DaoException(MESSAGE_GET_ALL_ENTITIES_FAIL, e);
         }
         return results;
     }
@@ -124,7 +124,7 @@ public abstract class BaseDAO<T> implements IDAO<T> {
             getSession().delete(t);
             logger.debug("Deleted object: " + t);
         } catch (HibernateException e) {
-            throw new DaoException(DELETE_ENTITY_FAIL, e);
+            throw new DaoException(MESSAGE_DELETE_ENTITY_FAIL, e);
         }
     }
 
@@ -140,7 +140,7 @@ public abstract class BaseDAO<T> implements IDAO<T> {
             criteria.setProjection(Projections.rowCount());
             count = ((Long) criteria.uniqueResult()).intValue();
         } catch (HibernateException e) {
-            throw new DaoException(GET_COUNT_ENTITY_FAIL,e);
+            throw new DaoException(MESSAGE_GET_COUNT_ENTITY_FAIL,e);
         }
         return count;
     }

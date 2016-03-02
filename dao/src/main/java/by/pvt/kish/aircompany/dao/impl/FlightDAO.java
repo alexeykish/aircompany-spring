@@ -23,7 +23,11 @@ public class FlightDAO extends BaseDAO<Flight> implements IFlightDAO{
 
     private static final String HQL_UPDATE_FLIGHT_STATUS = "UPDATE FROM Flight f SET f.status =:flightstatus WHERE f.fid =:id";
 
-    private static final String UPDATE_FLIGHT_STATUS_FAIL = "Updating flight status failed";
+    private static final String MESSAGE_UPDATE_FLIGHT_STATUS_FAIL = "Updating flight status failed";
+
+    private static final String QUERY_PARAMETER_FLIGHT_STATUS = "flightstatus";
+    private static final String QUERY_PARAMETER_ID = "id";
+    private static final String QUERY_ORDER_PARAMETER_DATE = "date";
 
     @Autowired
     private FlightDAO(SessionFactory sessionFactory) {
@@ -39,11 +43,11 @@ public class FlightDAO extends BaseDAO<Flight> implements IFlightDAO{
     public void setFlightStatus(Long id, FlightStatus status) throws DaoException {
         try {
             Query query = getSession().createQuery(HQL_UPDATE_FLIGHT_STATUS);
-            query.setParameter("flightstatus",status);
-            query.setParameter("id",id);
+            query.setParameter(QUERY_PARAMETER_FLIGHT_STATUS,status);
+            query.setParameter(QUERY_PARAMETER_ID,id);
             query.executeUpdate();
         } catch (HibernateException e) {
-            throw new DaoException(UPDATE_FLIGHT_STATUS_FAIL);
+            throw new DaoException(MESSAGE_UPDATE_FLIGHT_STATUS_FAIL);
         }
     }
 
@@ -59,7 +63,7 @@ public class FlightDAO extends BaseDAO<Flight> implements IFlightDAO{
         List<Flight> results = new ArrayList<>();
         try {
             Criteria criteria = getSession().createCriteria(Flight.class);
-            criteria.addOrder(Order.desc("date"));
+            criteria.addOrder(Order.desc(QUERY_ORDER_PARAMETER_DATE));
             criteria.setFirstResult((pageNumber - 1) * pageSize);
             criteria.setMaxResults(pageSize);
             results = criteria.list();
