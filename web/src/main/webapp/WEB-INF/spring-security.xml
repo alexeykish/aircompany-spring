@@ -19,6 +19,7 @@
         <intercept-url pattern="/airport/**" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/user/main" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/crew/addPage/**" access="hasRole('ROLE_DISPATCHER')"/>
+        <access-denied-handler error-page="/access_denied"/>
         <form-login
                 login-page="/signIn"
                 username-parameter="userName"

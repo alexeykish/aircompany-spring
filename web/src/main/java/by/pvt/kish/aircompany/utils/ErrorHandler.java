@@ -15,7 +15,7 @@ public class ErrorHandler {
     public static String returnValidateErrorPage(HttpServletRequest request, String validateResult, String className) {
         request.setAttribute(Attribute.MESSAGE, validateResult);
         logger.error(className + ": " + validateResult);
-        return "main";
+        return "error";
     }
 
     public static String returnLoginErrorPage(HttpServletRequest request, String error, String className) {
@@ -26,6 +26,6 @@ public class ErrorHandler {
 
     public static String returnErrorPage(String error, String className) {
         logger.error(className + ": " + error);
-        return "main";
+        return "error";
     }
 }

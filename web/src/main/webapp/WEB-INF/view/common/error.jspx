@@ -1,0 +1,9 @@
+<jsp:root xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:s="http://www.springframework.org/tags"
+          version="2.0">
+
+    <div class="error-message">
+        <s:message code="message.error"/>
+    </div>
+</jsp:root>

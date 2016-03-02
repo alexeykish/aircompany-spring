@@ -4,7 +4,6 @@ import by.pvt.kish.aircompany.constants.Attribute;
 import by.pvt.kish.aircompany.enums.UserRole;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceLoginException;
-import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.User;
 import by.pvt.kish.aircompany.services.IUserService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
@@ -20,11 +19,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Locale;
@@ -77,7 +75,7 @@ public class UserController {
             if (!bindingResult.hasErrors()) {
                 if (user != null) {
                     userService.addUser(user);
-                    model.addAttribute(Attribute.LOGIN_MESSAGE, "SUCCESS_REG");
+                    model.addAttribute(Attribute.LOGIN_MESSAGE, "message.success.registration");
                     return "signIn";
                 }
             } else {
@@ -113,9 +111,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/access_denied", method = RequestMethod.GET)
-    public String accessDeniedPage(ModelMap model,
-                                   Locale locale) {
-        model.addAttribute(Attribute.LOGIN_MESSAGE, messageSource.getMessage("message.access.denied", null, locale));
+    public String accessDeniedPage(Locale locale,
+                                   RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute(Attribute.LOGIN_MESSAGE, messageSource.getMessage("message.access.denied", null, locale));
         return "redirect:/signIn";
     }
 }

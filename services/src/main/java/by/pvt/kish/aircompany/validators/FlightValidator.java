@@ -6,6 +6,7 @@ package by.pvt.kish.aircompany.validators;
 import by.pvt.kish.aircompany.pojos.Flight;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import java.util.Date;
@@ -27,6 +28,7 @@ public class FlightValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Flight flight = (Flight) o;
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "date", "NotEmpty.flight.date");
         if (checkDate(flight)) {
             errors.rejectValue("date", "message.error.flight.date");
         }
@@ -52,9 +54,13 @@ public class FlightValidator implements Validator {
      * @return - false, if everything checks out correctly; true - if the data is invalid
      */
     private boolean checkDate(Flight flight) {
+        boolean result = true;
         Date yesterdayDate = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L);
         Date flightDate = flight.getDate();
-        return yesterdayDate.after(flightDate);
+        if (flightDate != null) {
+            result = yesterdayDate.after(flightDate);
+        }
+        return result;
     }
 
 

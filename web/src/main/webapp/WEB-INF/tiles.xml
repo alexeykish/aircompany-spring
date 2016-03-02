@@ -7,7 +7,7 @@
         <put-attribute name="title" value=""/>
         <put-attribute name="header" value="/WEB-INF/view/common/header.jspx"/>
         <put-attribute name="menu" value="/WEB-INF/view/common/menu.jspx"/>
-        <put-attribute name="message" value="/WEB-INF/view/main/message.jspx"/>
+        <put-attribute name="message" value="/WEB-INF/view/common/message.jspx"/>
         <put-attribute name="right-content" value=""/>
     </definition>
 
@@ -23,7 +23,12 @@
 
     <definition name="main" extends="default">
         <put-attribute name="title" value="page.title.main"/>
-        <put-attribute name="right-content" value="/WEB-INF/view/main/message.jspx"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/common/message.jspx"/>
+    </definition>
+
+    <definition name="error" extends="default">
+        <put-attribute name="title" value="page.title.error"/>
+        <put-attribute name="right-content" value="/WEB-INF/view/common/error.jspx"/>
     </definition>
 
     <definition name="user/list" extends="default">

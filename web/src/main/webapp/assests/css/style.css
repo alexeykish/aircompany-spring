@@ -117,3 +117,14 @@ body {
     text-align: center;
     padding-top: 5px
 }
+
+.error-message {
+    color: indianred;
+    font-size: 14px;
+    height: 25px;
+    border: solid 1px red;
+    border-radius: 5px;
+    margin: 5px;
+    text-align: center;
+    padding-top: 5px
+}

@@ -43,8 +43,11 @@
             <form action="${changePlaneStatus}" method="post">
                 <h4><s:message code="label.plane.status"/>: ${plane.status}</h4>
                 <select class="inputForm" name="status" title="Status">
+                    <option value="${plane.status}">${plane.status}</option>
                     <c:forEach items="${requestScope.statuses}" var="status">
-                        <option value="${status}">${status}</option>
+                        <c:if test="${plane.status != status}">
+                            <option value="${status}">${status}</option>
+                        </c:if>
                     </c:forEach>
                 </select>
                 <s:message code="button.status" var="status"/>

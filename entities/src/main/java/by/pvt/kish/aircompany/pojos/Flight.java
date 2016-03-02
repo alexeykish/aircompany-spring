@@ -42,7 +42,6 @@ public class Flight implements Serializable {
 
     @Temporal(TemporalType.DATE)
     @Column
-    @NotNull()
     public Date getDate() {
         return date;
     }

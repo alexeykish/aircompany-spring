@@ -53,7 +53,7 @@ public class AirportController {
             if (!bindingResult.hasErrors()) {
                 if (airport != null) {
                     airportService.add(airport);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_ADD_AIRPORT", null, locale));
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("message.success.airport.add", null, locale));
                     return "redirect:/airport/main";
                 }
             }
@@ -72,7 +72,7 @@ public class AirportController {
                               HttpServletRequest request) {
         try {
             airportService.delete(id);
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_DELETE_AIRPORT", null, locale));
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("message.success.airport.delete", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
@@ -114,7 +114,7 @@ public class AirportController {
             if (!bindingResult.hasErrors()) {
                 if (airport != null) {
                     airportService.update(airport);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_UPDATE_AIRPORT", null, locale));
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("message.success.airport.update", null, locale));
                     return "redirect:/airport/main";
                 }
             }
