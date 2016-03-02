@@ -1,6 +1,5 @@
 package by.pvt.kish.aircompany.dao;
 
-import by.pvt.kish.aircompany.enums.UserStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.pojos.User;
 

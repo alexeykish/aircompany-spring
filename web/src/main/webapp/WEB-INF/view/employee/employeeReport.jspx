@@ -64,8 +64,18 @@
                             <tr>
                                 <td>${flight.fid}</td>
                                 <td>${flight.date}</td>
-                                <td>${flight.departure.name}</td>
-                                <td>${flight.arrival.name}</td>
+                                <td><c:forEach items="${flight.waypoints}" var="waypoint">
+                                    <c:if test="${(waypoint.key == 'DEPARTURE')}">
+                                        ${waypoint.value.name}
+                                    </c:if>
+                                </c:forEach>
+                                </td>
+                                <td><c:forEach items="${flight.waypoints}" var="waypoint">
+                                    <c:if test="${(waypoint.key == 'ARRIVAL')}">
+                                        ${waypoint.value.name}
+                                    </c:if>
+                                </c:forEach>
+                                </td>
                                 <td>${flight.status}</td>
                             </tr>
                         </c:forEach>

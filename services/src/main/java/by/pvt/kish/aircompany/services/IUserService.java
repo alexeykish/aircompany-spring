@@ -1,10 +1,8 @@
 package by.pvt.kish.aircompany.services;
 
 import by.pvt.kish.aircompany.pojos.User;
-import by.pvt.kish.aircompany.enums.UserStatus;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceLoginException;
-import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 
 /**
  * This interface represents a contract for a IUserService for the {@link User} model.

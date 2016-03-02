@@ -3,7 +3,6 @@
  */
 package by.pvt.kish.aircompany.validators;
 
-import by.pvt.kish.aircompany.constants.Message;
 import by.pvt.kish.aircompany.enums.Position;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
@@ -28,6 +27,11 @@ import java.util.Set;
 @Component
 public class TeamValidator {
 
+    private static final String ERROR_EMPTY = "Empty data at request";
+    private static final String ERROR_TEAM_VALID = "Duplicate employees in flight crew";
+    private static final String ERROR_TEAM_POSITIONS_VALID = "Wrong employee position in flight crew";
+    private static final String ERROR_TEAM_MEMBER_VALID = "Employee is already busy in the other team at this day";
+
     @Autowired
     private IFlightService flightService;
 
@@ -43,22 +47,20 @@ public class TeamValidator {
      *
      * @param id   - The flight id
      * @param team - The flight team being checked
-     * @return - Null, if everything checks out correctly; error page if the data is incorrect
      */
-    public String validate(Long id, List<Long> team) throws ServiceException, ServiceValidateException {
+    public void validate(Long id, List<Long> team) throws ServiceException, ServiceValidateException {
         if (checkEmpty(team)) {
-            return Message.ERROR_EMPTY;
+            throw new ServiceValidateException(ERROR_EMPTY);
         }
         if (checkEntry(team)) {
-            return Message.ERROR_TEAM_VALID;
+            throw new ServiceValidateException(ERROR_TEAM_VALID);
         }
         if (checkPositions(id, team)) {
-            return Message.ERROR_TEAM_POSITIONS_VALID;
+            throw new ServiceValidateException(ERROR_TEAM_POSITIONS_VALID);
         }
         if (checkEmployee(id, team)) {
-            return Message.ERROR_TEAM_MEMBER_VALID;
+            throw new ServiceValidateException(ERROR_TEAM_MEMBER_VALID);
         }
-        return null;
     }
 
 

@@ -39,24 +39,6 @@ public class Airport implements Serializable {
     }
     private String name;
 
-    @OneToMany(mappedBy = "departure")
-    public Set<Flight> getDerartureFlights() {
-        return derartureFlights;
-    }
-    public void setDerartureFlights(Set<Flight> derartureFlights) {
-        this.derartureFlights = derartureFlights;
-    }
-    private Set<Flight> derartureFlights;
-
-    @OneToMany(mappedBy = "arrival")
-    public Set<Flight> getArrivalFlights() {
-        return arrivalFlights;
-    }
-    public void setArrivalFlights(Set<Flight> arrivalFlights) {
-        this.arrivalFlights = arrivalFlights;
-    }
-    private Set<Flight> arrivalFlights;
-
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "country", column = @Column(name = "F_CONTRY")),
@@ -108,4 +90,6 @@ public class Airport implements Serializable {
                 ", address=" + address +
                 '}';
     }
+
+
 }

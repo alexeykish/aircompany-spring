@@ -13,11 +13,21 @@
             </tr>
             <tr>
                 <td><s:message code="label.departure"/>:</td>
-                <td>${flight.departure.name}</td>
+                <td><c:forEach items="${flight.waypoints}" var="waypoint">
+                        <c:if test="${(waypoint.key == 'DEPARTURE')}">
+                            ${waypoint.value.name}
+                        </c:if>
+                    </c:forEach>
+                </td>
             </tr>
             <tr>
                 <td><s:message code="label.arrival"/>:</td>
-                <td>${flight.arrival.name}</td>
+                <td><c:forEach items="${flight.waypoints}" var="waypoint">
+                        <c:if test="${(waypoint.key == 'ARRIVAL')}">
+                            ${waypoint.value.name}
+                        </c:if>
+                    </c:forEach>
+                </td>
             </tr>
             <tr>
                 <td><s:message code="label.plane"/>:</td>

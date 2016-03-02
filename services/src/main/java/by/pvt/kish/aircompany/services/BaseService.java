@@ -8,6 +8,9 @@ import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -126,5 +129,21 @@ public abstract class BaseService<T> implements IService<T> {
             throw new ServiceException(e.getMessage());
         }
         return t;
+    }
+
+    /**
+     * Returns the number of entities in the DB
+     *
+     * @throws DaoException If something fails at DB level
+     */
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public int getCount() throws ServiceException {
+        int count;
+        try {
+            count = dao.getCount();
+        } catch (HibernateException e) {
+            throw new ServiceException(e.getMessage());
+        }
+        return count;
     }
 }

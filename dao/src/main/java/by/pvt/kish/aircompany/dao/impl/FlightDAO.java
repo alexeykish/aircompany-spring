@@ -5,7 +5,6 @@ import by.pvt.kish.aircompany.dao.IFlightDAO;
 import by.pvt.kish.aircompany.enums.FlightStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.pojos.Flight;
-import by.pvt.kish.aircompany.utils.HibernateUtil;
 import org.hibernate.*;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;

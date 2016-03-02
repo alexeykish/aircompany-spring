@@ -3,6 +3,7 @@
  */
 package by.pvt.kish.aircompany.validators;
 
+import by.pvt.kish.aircompany.enums.Waypoint;
 import by.pvt.kish.aircompany.pojos.Flight;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -32,8 +33,8 @@ public class FlightValidator implements Validator {
         if (checkDate(flight)) {
             errors.rejectValue("date", "message.error.flight.date");
         }
-        if (checkEntry(flight)) {
-            errors.rejectValue("arrival", "message.error.flight.waypoints");
+        if (checkWaypoints(flight)) {
+            errors.rejectValue("waypoints['ARRIVAL']", "message.error.flight.waypoints");
         }
     }
 
@@ -43,8 +44,8 @@ public class FlightValidator implements Validator {
      * @param flight - Flight object being checked
      * @return - false, if everything checks out correctly; true - if the data is invalid
      */
-    private static boolean checkEntry(Flight flight) {
-        return flight.getDeparture().equals(flight.getArrival());
+    private static boolean checkWaypoints(Flight flight) {
+        return flight.getWaypoints().get(Waypoint.DEPARTURE).equals(flight.getWaypoints().get(Waypoint.ARRIVAL));
     }
 
     /**

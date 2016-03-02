@@ -5,7 +5,6 @@ package by.pvt.kish.aircompany.dao.impl;
 
 import by.pvt.kish.aircompany.dao.BaseDAO;
 import by.pvt.kish.aircompany.dao.IUserDAO;
-import by.pvt.kish.aircompany.enums.UserStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.pojos.User;
 import org.hibernate.HibernateException;
@@ -14,8 +13,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

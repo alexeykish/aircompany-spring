@@ -1,42 +1,36 @@
-package by.pvt.kish.aircompany.dao;
+package by.pvt.kish.aircompany.services;
 
-import by.pvt.kish.aircompany.dao.impl.EmployeeDAO;
-import by.pvt.kish.aircompany.dao.impl.FlightDAO;
 import by.pvt.kish.aircompany.enums.FlightStatus;
 import by.pvt.kish.aircompany.enums.Position;
 import by.pvt.kish.aircompany.enums.Waypoint;
 import by.pvt.kish.aircompany.pojos.*;
-import org.hibernate.HibernateException;
+import by.pvt.kish.aircompany.services.impl.EmployeeService;
+import by.pvt.kish.aircompany.services.impl.FlightService;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.RollbackRuleAttribute;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * @author Kish Alexey
  */
-@ContextConfiguration("/testDaoContext.xml")
+@ContextConfiguration("/testServiceContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional()
-public class FlightDAOTest {
+public class FlightServiceTest {
 
     @Autowired
-    private FlightDAO flightDAO;
+    private FlightService flightService;
 
     @Autowired
-    private EmployeeDAO employeeDAO;
+    private EmployeeService employeeService;
 
     private Flight testFlight1;
     private Flight testFlight2;
@@ -101,8 +95,8 @@ public class FlightDAOTest {
         testFlight1.setCrew(testCrew1);
         testFlight2.setCrew(testCrew2);
 
-        testFlight1 = flightDAO.add(testFlight1);
-        testFlight2 = flightDAO.add(testFlight2);
+        testFlight1 = flightService.add(testFlight1);
+        testFlight2 = flightService.add(testFlight2);
 
         id1 = testFlight1.getFid();
         id2 = testFlight2.getFid();
@@ -112,15 +106,15 @@ public class FlightDAOTest {
     public void testAdd() throws Exception {
         assertNotNull("Add method failed: null", testFlight1);
         assertNotNull("Add method failed: null", testFlight2);
-        Flight addedFlight1 = flightDAO.getById(id1);
-        Flight addedFlight2 = flightDAO.getById(id2);
+        Flight addedFlight1 = flightService.getById(id1);
+        Flight addedFlight2 = flightService.getById(id2);
         assertEquals("Add method failed: wrong firstname", addedFlight1.getCrew().size(), testFlight1.getCrew().size());
         assertEquals("Add method failed: wrong firstname", addedFlight2.getCrew().size(), testFlight2.getCrew().size());
     }
 
     @Test
     public void testUpdate() throws Exception {
-        Flight prepareToUpdateFlight = flightDAO.getById(id1);
+        Flight prepareToUpdateFlight = flightService.getById(id1);
         Airport changedDepartureAirport = new Airport("changedDepartureAirport", testAddress2);
         Airport changedArrivalAirport = new Airport("changedArrivalAirport", testAddress1);
         prepareToUpdateFlight.setDate(new Date());
@@ -128,37 +122,37 @@ public class FlightDAOTest {
         changedWaypoints.put(Waypoint.ARRIVAL, changedArrivalAirport);
         changedWaypoints.put(Waypoint.DEPARTURE, changedDepartureAirport);
         prepareToUpdateFlight.setWaypoints(changedWaypoints);
-        flightDAO.update(prepareToUpdateFlight);
-        Flight updatedFlight = flightDAO.getById(id1);
+        flightService.update(prepareToUpdateFlight);
+        Flight updatedFlight = flightService.getById(id1);
         assertEquals("Update method failed: wrong eid", updatedFlight, prepareToUpdateFlight);
     }
 
     @Test
     public void testGetAll() throws Exception {
-        int count = flightDAO.getAll().size();
-        int countFact = flightDAO.getCount();
+        int count = flightService.getAll().size();
+        int countFact = flightService.getCount();
         assertEquals("Get all method failed", count, countFact);
     }
 
     @Test
     public void testDelete() throws Exception {
-        flightDAO.delete(id1);
-        flightDAO.delete(id2);
-        assertNull("Delete employee: failed", flightDAO.getById(id1));
-        assertNull("Delete employee: failed", flightDAO.getById(id2));
+        flightService.delete(id1);
+        flightService.delete(id2);
+        assertNull("Delete employee: failed", flightService.getById(id1));
+        assertNull("Delete employee: failed", flightService.getById(id2));
     }
 
     @Test
     public void testSetStatus() throws Exception {
-        Flight prepareToUpdateStatusFlight = flightDAO.getById(id1);
-        flightDAO.setFlightStatus(id1, FlightStatus.CANCELED);
-        Flight updatedStatusFlight = flightDAO.getById(id1);
+        Flight prepareToUpdateStatusFlight = flightService.getById(id1);
+        flightService.setStatus(id1, FlightStatus.CANCELED);
+        Flight updatedStatusFlight = flightService.getById(id1);
         assertEquals("Update method failed: wrong status", updatedStatusFlight.getStatus(), prepareToUpdateStatusFlight.getStatus());
     }
 
     @Test
     public void testGetCrewByFlightId() throws Exception {
-        List<Employee> executedCrew = employeeDAO.getFlightCrewByFlightId(id1);
+        List<Employee> executedCrew = employeeService.getFlightCrewByFlightId(id1);
         assertEquals("Get crew method failed", testFlight1.getCrew().size(), executedCrew.size());
     }
 

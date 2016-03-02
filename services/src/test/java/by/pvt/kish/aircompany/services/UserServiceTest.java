@@ -1,8 +1,10 @@
-package by.pvt.kish.aircompany.dao;
+package by.pvt.kish.aircompany.services;
 
-import by.pvt.kish.aircompany.dao.impl.UserDAO;
 import by.pvt.kish.aircompany.enums.UserRole;
+import by.pvt.kish.aircompany.exceptions.ServiceException;
+import by.pvt.kish.aircompany.exceptions.ServiceLoginException;
 import by.pvt.kish.aircompany.pojos.User;
+import by.pvt.kish.aircompany.services.impl.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,13 +18,13 @@ import static org.junit.Assert.*;
 /**
  * @author Kish Alexey
  */
-@ContextConfiguration("/testDaoContext.xml")
+@ContextConfiguration("/testServiceContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class UserDAOTest {
+public class UserServiceTest {
 
     @Autowired
-    private UserDAO userDao;
+    private UserService userService;
 
     private Long id;
     private User testUser;
@@ -37,51 +39,59 @@ public class UserDAOTest {
         testUser.setEmail("test@test.com");
         testUser.setRole(UserRole.ROLE_DISPATCHER);
 
-        testUser = userDao.add(testUser);
+        testUser = userService.addUser(testUser);
         id = testUser.getUid();
     }
 
     @Test
     public void testAdd() throws Exception {
         assertNotNull("Add method failed: null", testUser);
-        User addedUser = userDao.getById(id);
+        User addedUser = userService.getById(id);
         assertEquals("Add method failed: wrong user", testUser, addedUser);
     }
 
     @Test
     public void testCheckLogin() throws Exception {
-        assertFalse("CheckLogin method positive test failed", userDao.checkLogin(testUser.getLogin()));
-        assertTrue("CheckLogin method negative test failed", userDao.checkLogin("wrongLogin"));
+        assertFalse("CheckLogin method positive test failed", userService.checkLogin(testUser.getLogin()));
+        assertTrue("CheckLogin method negative test failed", userService.checkLogin("wrongLogin"));
     }
 
     @Test
     public void testGetUser() throws Exception {
-        User receivedUser = userDao.getUser(testUser.getLogin(), testUser.getPassword());
+        User receivedUser = userService.getUser(testUser.getLogin(), testUser.getPassword());
         assertEquals("Get method failed: wrong user", testUser, receivedUser);
-        User wrongReceivedUser = userDao.getUser("wrongLogin", "wrongPassword");
+    }
+
+    @Test(expected = ServiceLoginException.class)
+    public void testGetWrongUser() throws Exception {
+        User wrongReceivedUser = userService.getUser("wrongLogin", "wrongPassword");
         assertNull("Get method failed: wrong user", wrongReceivedUser);
     }
 
     @Test
     public void testGetAll() throws Exception {
-        int count = userDao.getAll().size();
-        int countFact = userDao.getCount();
+        int count = userService.getAll().size();
+        int countFact = userService.getCount();
         assertEquals("Get all method failed", count, countFact);
 
     }
 
     @Test
     public void testDelete() throws Exception {
-        userDao.delete(id);
-        assertNull("Delete user: failed", userDao.getById(id));
+        userService.delete(id);
+        assertNull("Delete user: failed", userService.getById(id));
     }
 
     @Test
     public void testGetUserByLogin() throws Exception {
         String login = testUser.getLogin();
-        User receivedUser = userDao.getByLogin(login);
+        User receivedUser = userService.getByLogin(login);
         assertEquals("GetByLogin method failed: wrong user", testUser, receivedUser);
-        User wrongReceivedUser = userDao.getByLogin("wrongLogin");
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testGetUserByWrongLogin() throws Exception {
+        User wrongReceivedUser = userService.getByLogin("wrongLogin");
         assertNull("Get method failed: wrong user", wrongReceivedUser);
     }
 }

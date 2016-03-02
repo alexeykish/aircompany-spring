@@ -1,8 +1,8 @@
-package by.pvt.kish.aircompany.dao;
+package by.pvt.kish.aircompany.services;
 
-import by.pvt.kish.aircompany.dao.impl.AirportDAO;
 import by.pvt.kish.aircompany.pojos.Address;
 import by.pvt.kish.aircompany.pojos.Airport;
+import by.pvt.kish.aircompany.services.impl.AirportService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,20 +11,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * @author Kish Alexey
  */
-@ContextConfiguration("/testDaoContext.xml")
+@ContextConfiguration("/testServiceContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class AirportDAOTest {
+public class AirportServiceTest {
 
     @Autowired
-    private AirportDAO airportDAO;
+    private AirportService airportService;
 
     private Long id;
     private Airport testAirport;
@@ -36,14 +34,14 @@ public class AirportDAOTest {
         testAirport = new Airport();
         testAirport.setName("testName");
         testAirport.setAddress(testAddress);
-        testAirport = airportDAO.add(testAirport);
+        testAirport = airportService.add(testAirport);
         id = testAirport.getAid();
     }
 
     @Test
     public void testAdd() throws Exception {
         assertNotNull("Add method failed: null", testAirport);
-        addedAirport = airportDAO.getById(id);
+        addedAirport = airportService.getById(id);
         assertEquals("Add method failed: notEquals", testAirport, addedAirport);
     }
 
@@ -52,21 +50,21 @@ public class AirportDAOTest {
         Airport prepareToUpdateAirport = new Airport();
         prepareToUpdateAirport.setAid(id);
         prepareToUpdateAirport.setName("updatedCity");
-        airportDAO.update(prepareToUpdateAirport);
-        Airport updatedAirport = airportDAO.getById(id);
+        airportService.update(prepareToUpdateAirport);
+        Airport updatedAirport = airportService.getById(id);
         assertEquals("Update method failed", prepareToUpdateAirport, updatedAirport);
     }
 
     @Test
     public void testGetAll() throws Exception {
-        int countAirports = airportDAO.getAll().size();
-        int countLines = airportDAO.getCount();
+        int countAirports = airportService.getAll().size();
+        int countLines = airportService.getCount();
         assertEquals("Get all method failed", countLines, countAirports);
     }
 
     @Test
     public void testDelete() throws Exception {
-        airportDAO.delete(id);
-        assertNull("Delete method: failed", airportDAO.getById(id));
+        airportService.delete(id);
+        assertNull("Delete method: failed", airportService.getById(id));
     }
 }

@@ -53,4 +53,10 @@ public interface IService<T> {
      * @throws ServiceException - if something fails at Service layer
      */
     T getById(Long id) throws ServiceException, ServiceValidateException;
+
+    /**
+     * Returns the number of entities in the DB
+     * @throws ServiceException If something fails at Service level
+    */
+    int getCount() throws ServiceException;
 }

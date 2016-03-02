@@ -9,9 +9,9 @@ http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-3.0.xsd
 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
-	
-	<context:annotation-config/>
 
+	<context:annotation-config/>
+	<context:component-scan base-package="by.pvt.kish.aircompany"/>
 	<aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="false"/>
 
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
@@ -54,24 +54,44 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
 	<tx:annotation-driven transaction-manager="txManager"/>
 
-	<bean id="airportDao" class="by.pvt.kish.aircompany.dao.impl.AirportDAO">
-		<constructor-arg ref="sessionFactory"/>
-	</bean>
+	<!--<bean id="airportDao" class="by.pvt.kish.aircompany.dao.impl.AirportDAO">-->
+		<!--<constructor-arg ref="sessionFactory"/>-->
+	<!--</bean>-->
 
-	<bean id="employeeDao" class="by.pvt.kish.aircompany.dao.impl.EmployeeDAO">
-		<constructor-arg ref="sessionFactory"/>
-	</bean>
+	<!--<bean id="employeeDao" class="by.pvt.kish.aircompany.dao.impl.EmployeeDAO">-->
+		<!--<constructor-arg ref="sessionFactory"/>-->
+	<!--</bean>-->
 
-	<bean id="flightDao" class="by.pvt.kish.aircompany.dao.impl.FlightDAO">
-		<constructor-arg ref="sessionFactory"/>
-	</bean>
+	<!--<bean id="flightDao" class="by.pvt.kish.aircompany.dao.impl.FlightDAO">-->
+		<!--<constructor-arg ref="sessionFactory"/>-->
+	<!--</bean>-->
 
-	<bean id="planeDao" class="by.pvt.kish.aircompany.dao.impl.PlaneDAO">
-		<constructor-arg ref="sessionFactory"/>
-	</bean>
+	<!--<bean id="planeDao" class="by.pvt.kish.aircompany.dao.impl.PlaneDAO">-->
+		<!--<constructor-arg ref="sessionFactory"/>-->
+	<!--</bean>-->
 
-	<bean id="userDao" class="by.pvt.kish.aircompany.dao.impl.UserDAO">
-		<constructor-arg ref="sessionFactory"/>
-	</bean>
+	<!--<bean id="userDao" class="by.pvt.kish.aircompany.dao.impl.UserDAO">-->
+		<!--<constructor-arg ref="sessionFactory"/>-->
+	<!--</bean>-->
+
+	<!--<bean id="airportService" class="by.pvt.kish.aircompany.services.impl.AirportService">-->
+		<!--&lt;!&ndash;<constructor-arg ref="airportDao"/>&ndash;&gt;-->
+	<!--</bean>-->
+
+	<!--<bean id="employeeService" class="by.pvt.kish.aircompany.services.impl.EmployeeService">-->
+		<!--&lt;!&ndash;<constructor-arg ref="employeeDao"/>&ndash;&gt;-->
+	<!--</bean>-->
+
+	<!--<bean id="flightService" class="by.pvt.kish.aircompany.services.impl.FlightService">-->
+		<!--&lt;!&ndash;<constructor-arg ref="flightDao"/>&ndash;&gt;-->
+	<!--</bean>-->
+
+	<!--<bean id="planeService" class="by.pvt.kish.aircompany.services.impl.PlaneService">-->
+		<!--&lt;!&ndash;<constructor-arg ref="planeDao"/>&ndash;&gt;-->
+	<!--</bean>-->
+
+	<!--<bean id="userService" class="by.pvt.kish.aircompany.services.impl.UserService">-->
+		<!--&lt;!&ndash;<constructor-arg ref="userDao"/>&ndash;&gt;-->
+	<!--</bean>-->
 
 </beans>

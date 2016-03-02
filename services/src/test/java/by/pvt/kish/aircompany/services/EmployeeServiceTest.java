@@ -1,11 +1,11 @@
-package by.pvt.kish.aircompany.dao;
+package by.pvt.kish.aircompany.services;
 
-import by.pvt.kish.aircompany.dao.impl.EmployeeDAO;
-import by.pvt.kish.aircompany.dao.impl.FlightDAO;
 import by.pvt.kish.aircompany.enums.EmployeeStatus;
 import by.pvt.kish.aircompany.enums.Position;
 import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Flight;
+import by.pvt.kish.aircompany.services.impl.EmployeeService;
+import by.pvt.kish.aircompany.services.impl.FlightService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -24,16 +23,16 @@ import static org.junit.Assert.*;
 /**
  * @author Kish Alexey
  */
-@ContextConfiguration("/testDaoContext.xml")
+@ContextConfiguration("/testServiceContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class EmployeeDAOTest {
+public class EmployeeServiceTest {
 
     @Autowired
-    private EmployeeDAO employeeDao;
+    private EmployeeService employeeService;
 
     @Autowired
-    private FlightDAO flightDao;
+    private FlightService flightService;
 
     private Employee testEmployee;
     Employee addedEmployee;
@@ -45,47 +44,47 @@ public class EmployeeDAOTest {
         testEmployee.setFirstName("FirstName");
         testEmployee.setLastName("LastName");
         testEmployee.setPosition(Position.PILOT);
-        testEmployee = employeeDao.add(testEmployee);
+        testEmployee = employeeService.add(testEmployee);
         id = testEmployee.getEid();
     }
 
     @Test
     public void testAdd() throws Exception {
         assertNotNull("Add method failed: null", testEmployee);
-        addedEmployee = employeeDao.getById(id);
+        addedEmployee = employeeService.getById(id);
         assertEquals("Add method failed: wrong firstname", addedEmployee, testEmployee);
     }
 
     @Test
     public void testUpdate() throws Exception {
-        Employee prepareToUpdateEmployee = employeeDao.getById(id);
+        Employee prepareToUpdateEmployee = employeeService.getById(id);
         prepareToUpdateEmployee.setFirstName("updatedFirstname");
         prepareToUpdateEmployee.setLastName("updatedLastname");
         prepareToUpdateEmployee.setPosition(Position.NAVIGATOR);
-        employeeDao.update(prepareToUpdateEmployee);
-        Employee updatedEmployee = employeeDao.getById(id);
+        employeeService.update(prepareToUpdateEmployee);
+        Employee updatedEmployee = employeeService.getById(id);
         assertEquals("Update method failed: wrong eid", updatedEmployee, prepareToUpdateEmployee);
     }
 
     @Test
     public void testGetAll() throws Exception {
-        int count =  employeeDao.getAll().size();
-        int countFact = employeeDao.getCount();
+        int count =  employeeService.getAll().size();
+        int countFact = employeeService.getCount();
         assertEquals("Get all method failed", count, countFact);
     }
 
     @Test
     public void testDelete() throws Exception {
-        employeeDao.delete(id);
-        assertNull("Delete employee: failed", employeeDao.getById(id));
+        employeeService.delete(id);
+        assertNull("Delete employee: failed", employeeService.getById(id));
     }
 
     @Test
     public void testSetStatus() throws Exception {
         Employee prepareToUpdateEmployee = new Employee();
         prepareToUpdateEmployee.setEid(id);
-        employeeDao.setEmployeeStatus(id, EmployeeStatus.BLOCKED);
-        Employee updatedEmployee = employeeDao.getById(id);
+        employeeService.setStatus(id, EmployeeStatus.BLOCKED);
+        Employee updatedEmployee = employeeService.getById(id);
         assertEquals("Update method failed: wrong status", updatedEmployee.getStatus(), prepareToUpdateEmployee.getStatus());
     }
 
@@ -97,10 +96,10 @@ public class EmployeeDAOTest {
         Set<Employee> testCrew = new HashSet<>();
         testCrew.add(testEmployee);
         testFlight.setCrew(testCrew);
-        flightDao.add(testFlight);
-        assertFalse("Expected false, but failed" , employeeDao.checkEmployeeAvailability(id, testDate1));
+        flightService.add(testFlight);
+        assertFalse("Expected false, but failed" , employeeService.checkEmployeeAvailability(id, testDate1));
         Date testDate2 = new Date(System.currentTimeMillis() + 1000L * 60L * 60L * 24L * 2);
-        assertTrue("Expected false, but failed" , employeeDao.checkEmployeeAvailability(id, testDate2));
+        assertTrue("Expected false, but failed" , employeeService.checkEmployeeAvailability(id, testDate2));
     }
 
 

@@ -17,8 +17,8 @@
                         <td><sf:errors path="date" class="reg-hint"/></td>
                     </tr>
                     <tr>
-                        <td><sf:label path="departure" class="input-label"><s:message code="label.departure"/>:</sf:label></td>
-                        <td><sf:select id="flightDeparture" path="departure" name="departure" class="inputForm">
+                        <td><sf:label path="waypoints['DEPARTURE']" class="input-label"><s:message code="label.departure"/>:</sf:label></td>
+                        <td><sf:select id="flightDeparture" path="waypoints['DEPARTURE']" name="departure" class="inputForm">
                                 <c:forEach items="${requestScope.airports}" var="airport">
                                     <sf:option value="${airport.aid}">${airport.name}</sf:option>
                                 </c:forEach>
@@ -26,14 +26,14 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><sf:label path="arrival" class="input-label"><s:message code="label.arrival"/>:</sf:label></td>
-                        <td><sf:select id="flightArrival" path="arrival" name="arrival" class="inputForm">
+                        <td><sf:label path="waypoints['ARRIVAL']" class="input-label"><s:message code="label.arrival"/>:</sf:label></td>
+                        <td><sf:select id="flightArrival" path="waypoints['ARRIVAL']" name="arrival" class="inputForm">
                                 <c:forEach items="${requestScope.airports}" var="airport">
                                     <sf:option value="${airport.aid}">${airport.name}</sf:option>
                                 </c:forEach>
                             </sf:select>
                         </td>
-                        <td><sf:errors path="arrival" class="reg-hint"/></td>
+                        <td><sf:errors path="waypoints['ARRIVAL']" class="reg-hint"/></td>
                     </tr>
                     <tr>
                         <td><sf:label path="plane" class="input-label"><s:message code="label.plane"/>:</sf:label></td>

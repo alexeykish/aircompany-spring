@@ -4,17 +4,17 @@
 package by.pvt.kish.aircompany.pojos;
 
 import by.pvt.kish.aircompany.enums.FlightStatus;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import by.pvt.kish.aircompany.enums.Waypoint;
+import org.hibernate.annotations.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class represents the Flight model.
@@ -50,27 +50,17 @@ public class Flight implements Serializable {
     }
     private Date date;
 
-    @ManyToOne()
-    @JoinColumn(name = "F_DEPARTURE_ID")
-    public Airport getDeparture() {
-        return departure;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @MapKeyEnumerated(EnumType.STRING)
+    public Map<Waypoint, Airport> getWaypoints() {
+        return waypoints;
     }
-    public void setDeparture(Airport departure) {
-        this.departure = departure;
+    public void setWaypoints(Map<Waypoint, Airport> waypoints) {
+        this.waypoints = waypoints;
     }
-    private Airport departure;
+    private Map<Waypoint, Airport> waypoints = new HashMap<>();
 
-    @ManyToOne()
-    @JoinColumn(name = "F_ARRIVAL_ID")
-    public Airport getArrival() {
-        return arrival;
-    }
-    public void setArrival(Airport arrival) {
-        this.arrival = arrival;
-    }
-    private Airport arrival;
-
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "F_PLANE_ID")
     public Plane getPlane() {
         return plane;
@@ -107,16 +97,14 @@ public class Flight implements Serializable {
 
     /**
      * @param date      - flight date (departure date)
-     * @param departure - the place where the flight departs
-     * @param arrival   - the place where the flight arrives
+     * @param waypoints - the places of departure and arrival of the flight departs
      * @param plane     - the plane on which the flight is carried out
      * @param crew      - the flight team that serves the flight
      * @param status    - the status of the flight
      */
-    public Flight(Date date, Airport departure, Airport arrival, Plane plane, FlightStatus status, Set<Employee> crew) {
+    public Flight(Date date, Map waypoints, Plane plane, FlightStatus status, Set<Employee> crew) {
         this.date = date;
-        this.departure = departure;
-        this.arrival = arrival;
+        this.waypoints = waypoints;
         this.plane = plane;
         this.status = status;
         this.crew = crew;
@@ -131,8 +119,6 @@ public class Flight implements Serializable {
 
         if (fid != null ? !fid.equals(flight.fid) : flight.fid != null) return false;
         if (date != null ? !date.equals(flight.date) : flight.date != null) return false;
-        if (departure != null ? !departure.equals(flight.departure) : flight.departure != null) return false;
-        if (arrival != null ? !arrival.equals(flight.arrival) : flight.arrival != null) return false;
         if (plane != null ? !plane.equals(flight.plane) : flight.plane != null) return false;
         return status == flight.status;
 
@@ -142,8 +128,6 @@ public class Flight implements Serializable {
     public int hashCode() {
         int result = fid != null ? fid.hashCode() : 0;
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (departure != null ? departure.hashCode() : 0);
-        result = 31 * result + (arrival != null ? arrival.hashCode() : 0);
         result = 31 * result + (plane != null ? plane.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
@@ -154,8 +138,7 @@ public class Flight implements Serializable {
         return "Flight{" +
                 "fid=" + fid +
                 ", date=" + date +
-                ", departure=" + departure +
-                ", arrival=" + arrival +
+                ", waypoints=" + waypoints +
                 ", plane=" + plane +
                 ", status=" + status +
                 '}';

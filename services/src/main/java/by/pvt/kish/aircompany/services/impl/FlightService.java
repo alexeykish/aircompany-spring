@@ -46,7 +46,7 @@ public class FlightService extends BaseService<Flight> implements IFlightService
      */
     @Override
     public void setStatus(Long id, FlightStatus status) throws ServiceException, ServiceValidateException {
-        if (id < 0) {
+        if (id == null) {
             throw new ServiceValidateException("ERROR_ID_MISSING");
         }
         try {
@@ -67,7 +67,7 @@ public class FlightService extends BaseService<Flight> implements IFlightService
      */
     @Override
     public void addTeam(Long id, List<Long> team) throws ServiceException, ServiceValidateException {
-        if (id < 0) {
+        if (id == null) {
             throw new ServiceValidateException("ERROR_ID_MISSING");
         }
         Set<Employee> crew = teamCreator.getEmployeeListById(team);
@@ -100,22 +100,5 @@ public class FlightService extends BaseService<Flight> implements IFlightService
             throw new ServiceException(e.getMessage());
         }
         return results;
-    }
-
-    /**
-     * Returns the number of flights in the DB
-     *
-     * @throws DaoException If something fails at DB level
-     */
-    @Override
-    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    public int getCount() throws DaoException, ServiceException {
-        int count;
-        try {
-            count = flightDAO.getCount();
-        } catch (DaoException e) {
-            throw new ServiceException(e.getMessage());
-        }
-        return count;
     }
 }

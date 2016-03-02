@@ -9,6 +9,16 @@
         <s:url value="/flight/update" var="updateFlight"/>
         <sf:form action="${updateFlight}" method="post" modelAttribute="flight">
             <fieldset>
+                <c:forEach items="${flight.waypoints}" var="waypoint">
+                    <c:if test="${(waypoint.key == 'DEPARTURE')}">
+                        <c:set var="departure" value="${waypoint.value}"/>
+                    </c:if>
+                </c:forEach>
+                <c:forEach items="${flight.waypoints}" var="waypoint">
+                    <c:if test="${(waypoint.key == 'ARRIVAL')}">
+                        <c:set var="arrival" value="${waypoint.value}"/>
+                    </c:if>
+                </c:forEach>
                 <table>
                     <tr>
                         <td><sf:label path="fid" class="input-label">ID:</sf:label></td>
@@ -21,11 +31,11 @@
                         <td><sf:errors path="date" class="reg-hint"/></td>
                     </tr>
                     <tr>
-                        <td><sf:label path="departure" class="input-label"><s:message code="label.departure"/>:</sf:label></td>
-                        <td><sf:select id="flightDeparture" path="departure" name="departure" class="inputForm">
-                            <option value="${flight.departure.aid}">${flight.departure.name}</option>
+                        <td><sf:label path="waypoints['DEPARTURE']" class="input-label"><s:message code="label.departure"/>:</sf:label></td>
+                        <td><sf:select id="flightDeparture" path="waypoints['DEPARTURE']" name="departure" class="inputForm">
+                            <option value="${departure.aid}">${departure.name}</option>
                             <c:forEach items="${requestScope.airports}" var="airport">
-                                <c:if test="${flight.departure.aid != airport.aid}">
+                                <c:if test="${departure.aid != airport.aid}">
                                     <option value="${airport.aid}">${airport.name}</option>
                                 </c:if>
                             </c:forEach>
@@ -33,11 +43,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><sf:label path="arrival" class="input-label"><s:message code="label.arrival"/>:</sf:label></td>
-                        <td><sf:select id="flightArrival" path="arrival" name="arrival" class="inputForm">
-                            <option value="${flight.arrival.aid}">${flight.arrival.name}</option>
+                        <td><sf:label path="waypoints['ARRIVAL']" class="input-label"><s:message code="label.arrival"/>:</sf:label></td>
+                        <td><sf:select id="flightArrival" path="waypoints['ARRIVAL']" name="arrival" class="inputForm">
+                            <option value="${arrival.aid}">${arrival.name}</option>
                             <c:forEach items="${requestScope.airports}" var="airport">
-                                <c:if test="${flight.arrival.aid != airport.aid}">
+                                <c:if test="${arrival.aid != airport.aid}">
                                     <option value="${airport.aid}">${airport.name}</option>
                                 </c:if>
                             </c:forEach>
@@ -62,5 +72,4 @@
             </fieldset>
         </sf:form>
     </div>
-
 </jsp:root>

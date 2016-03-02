@@ -9,7 +9,6 @@ import by.pvt.kish.aircompany.enums.EmployeeStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.pojos.Employee;
 import by.pvt.kish.aircompany.pojos.Flight;
-import by.pvt.kish.aircompany.utils.HibernateUtil;
 import org.apache.log4j.Logger;
 import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;

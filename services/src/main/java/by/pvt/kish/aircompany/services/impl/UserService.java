@@ -1,7 +1,6 @@
 package by.pvt.kish.aircompany.services.impl;
 
 import by.pvt.kish.aircompany.dao.IUserDAO;
-import by.pvt.kish.aircompany.enums.UserStatus;
 import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceLoginException;
@@ -9,7 +8,6 @@ import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.User;
 import by.pvt.kish.aircompany.services.BaseService;
 import by.pvt.kish.aircompany.services.IUserService;
-import by.pvt.kish.aircompany.validators.UserValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService extends BaseService<User> implements IUserService {
 
     private static Logger logger = Logger.getLogger(UserService.class);
-    private UserValidator userValidator = new UserValidator();
 
     @Autowired
     private IUserDAO userDAO;
