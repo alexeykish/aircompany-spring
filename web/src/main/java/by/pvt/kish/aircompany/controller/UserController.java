@@ -18,7 +18,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +39,7 @@ public class UserController {
     private static final String PATH_USER_SIGNIN = "signIn";
     private static final String PATH_USER_REGISTRATION = "registration";
     private static final String PATH_USER_LIST = "user/list";
+    private static final String PATH_MAIN = "main";
 
     @Autowired
     private IUserService userService;
@@ -58,7 +58,7 @@ public class UserController {
 
     @RequestMapping(value = "/login")
     public String loginUser() {
-        return "main";
+        return PATH_MAIN;
     }
 
     @RequestMapping(value = "/logout")
@@ -75,12 +75,13 @@ public class UserController {
     public String addUser(ModelMap model,
                           @Valid @ModelAttribute User user,
                           BindingResult bindingResult,
+                          Locale locale,
                           HttpServletRequest request) {
         try {
             if (!bindingResult.hasErrors()) {
                 if (user != null) {
                     userService.addUser(user);
-                    model.addAttribute(Attribute.LOGIN_MESSAGE, "message.success.registration");
+                    model.addAttribute(Attribute.LOGIN_MESSAGE, messageSource.getMessage("message.success.registration", null, locale));
                     return PATH_USER_SIGNIN;
                 }
             } else {

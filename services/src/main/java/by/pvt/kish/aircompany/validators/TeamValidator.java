@@ -48,7 +48,7 @@ public class TeamValidator {
      * @param id   - The flight id
      * @param team - The flight team being checked
      */
-    public void validate(Long id, List<Long> team) throws ServiceException, ServiceValidateException {
+    public void validate(Long id, List<Long> team, boolean updateKey) throws ServiceException, ServiceValidateException {
         if (checkEmpty(team)) {
             throw new ServiceValidateException(ERROR_EMPTY);
         }
@@ -58,8 +58,10 @@ public class TeamValidator {
         if (checkPositions(id, team)) {
             throw new ServiceValidateException(ERROR_TEAM_POSITIONS_VALID);
         }
-        if (checkEmployee(id, team)) {
-            throw new ServiceValidateException(ERROR_TEAM_MEMBER_VALID);
+        if (!updateKey) {
+            if (checkEmployee(id, team)) {
+                throw new ServiceValidateException(ERROR_TEAM_MEMBER_VALID);
+            }
         }
     }
 
@@ -129,7 +131,7 @@ public class TeamValidator {
         return set.size() != team.size();
     }
 
-    public boolean checkEmployee(Long id, List<Long> team) throws ServiceException, ServiceValidateException {
+    private boolean checkEmployee(Long id, List<Long> team) throws ServiceException, ServiceValidateException {
         Date flightDate = (Date) flightService.getById(id).getDate();
         for (Long eid : team) {
             if (employeeService.checkEmployeeAvailability(eid, flightDate)) {

@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.Valid;
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * This class represents the Airport model.

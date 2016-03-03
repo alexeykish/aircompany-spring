@@ -1,8 +1,6 @@
 <jsp:root xmlns="http://www.w3.org/1999/xhtml"
           xmlns:jsp="http://java.sun.com/JSP/Page"
-          xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:s="http://www.springframework.org/tags"
-          xmlns:sec="http://www.springframework.org/security/tags"
           version="2.0">
 
     <div class="container">
@@ -31,7 +29,8 @@
             <a href="${registration}" style="font-size: 10px; color: #666666; margin: 5px;"><s:message code="link.registration"/></a>
         </div>
         <div>
-            <a href="showindex" style="font-size: 10px; color: #666666; margin: 5px;"><s:message code="link.back"/></a>
+            <s:url value="/index.jsp" var="index"/>
+            <a href="${index}" style="font-size: 10px; color: #666666; margin: 5px;"><s:message code="link.back"/></a>
         </div>
         <p style="text-align: center; font-size: 12px; color: red;">${requestScope.login_message}</p>
     </div>

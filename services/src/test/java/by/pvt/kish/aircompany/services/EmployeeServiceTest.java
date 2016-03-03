@@ -35,7 +35,7 @@ public class EmployeeServiceTest {
     private FlightService flightService;
 
     private Employee testEmployee;
-    Employee addedEmployee;
+    private Employee addedEmployee;
     private Long id;
 
     @Before
@@ -97,9 +97,9 @@ public class EmployeeServiceTest {
         testCrew.add(testEmployee);
         testFlight.setCrew(testCrew);
         flightService.add(testFlight);
-        assertFalse("Expected false, but failed" , employeeService.checkEmployeeAvailability(id, testDate1));
+        assertTrue("Expected false, but failed" , employeeService.checkEmployeeAvailability(id, testDate1));
         Date testDate2 = new Date(System.currentTimeMillis() + 1000L * 60L * 60L * 24L * 2);
-        assertTrue("Expected false, but failed" , employeeService.checkEmployeeAvailability(id, testDate2));
+        assertFalse("Expected false, but failed" , employeeService.checkEmployeeAvailability(id, testDate2));
     }
 
 

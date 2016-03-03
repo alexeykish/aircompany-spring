@@ -77,7 +77,7 @@ public class FlightService extends BaseService<Flight> implements IFlightService
      * @throws ServiceException If something fails at DAO level
      */
     @Override
-    public Void addTeam(Long id, List<Long> team) throws ServiceException, ServiceValidateException {
+    public Void addCrew(Long id, List<Long> team) throws ServiceException, ServiceValidateException {
         checkNullId(id);
         Set<Employee> crew = teamCreator.getEmployeeListById(team);
         return transactionTemplate.execute(new TransactionCallback<Void>() {
@@ -98,12 +98,38 @@ public class FlightService extends BaseService<Flight> implements IFlightService
     }
 
     /**
+     * Delete flight crew from existed flight
+     *
+     * @param id   - The ID of the existed flight
+     * @throws ServiceException If something fails at DAO level
+     */
+    @Override
+    public Void deleteCrew(Long id) throws ServiceException, ServiceValidateException {
+        checkNullId(id);
+        return transactionTemplate.execute(new TransactionCallback<Void>() {
+            @Override
+            public Void doInTransaction(TransactionStatus transactionStatus) {
+                try {
+                    Flight flight = flightDAO.getById(id);
+                    flight.setCrew(null);
+                    flightDAO.update(flight);
+                    logger.debug(SUCCESSFUL_TRANSACTION);
+                } catch (DaoException e) {
+                    transactionStatus.setRollbackOnly();
+                    logger.debug(TRANSACTION_FAILED, e);
+                }
+                return null;
+            }
+        });
+    }
+
+    /**
      * Returns a list of flights ordered by date, prepared for pagination from the DB
      *
      * @param pageSize   - The number of flights at the page
      * @param pageNumber - The number of the showed page
      * @return - the list of the flights, ordered by date
-     * @throws DaoException If something fails at DB level
+     * @throws DaoException If something fails at DAO level
      */
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

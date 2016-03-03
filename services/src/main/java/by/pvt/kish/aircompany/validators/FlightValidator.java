@@ -62,10 +62,10 @@ public class FlightValidator implements Validator {
      */
     private boolean checkDate(Flight flight) {
         boolean result = true;
-        Date yesterdayDate = new Date(System.currentTimeMillis() - 1000L * 60L * 60L * 24L);
+        Date todayDate = new Date(System.currentTimeMillis());
         Date flightDate = flight.getDate();
         if (flightDate != null) {
-            result = yesterdayDate.after(flightDate);
+            result = todayDate.after(flightDate);
         }
         return result;
     }

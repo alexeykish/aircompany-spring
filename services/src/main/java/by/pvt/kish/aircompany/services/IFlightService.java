@@ -29,7 +29,7 @@ public interface IFlightService extends IService<Flight> {
      * @param team - The set of the employees that is flight crew
      * @throws ServiceException If something fails at DAO level
      */
-    Void addTeam(Long id, List<Long> team) throws ServiceException, ServiceValidateException;
+    Void addCrew(Long id, List<Long> team) throws ServiceException, ServiceValidateException;
 
     /**
      * Returns a list of flights ordered by date, prepared for pagination from the DB
@@ -37,8 +37,15 @@ public interface IFlightService extends IService<Flight> {
      * @param pageSize - The number of flights at the page
      * @param pageNumber - The number of the showed page
      * @return - the list of the flights, ordered by date
-     * @throws DaoException If something fails at DB level
+     * @throws DaoException If something fails at DAO level
      */
     List<Flight> getAllToPage(int pageSize, int pageNumber) throws DaoException, ServiceException;
 
+    /**
+     * Delete flight crew from existed flight
+     *
+     * @param id   - The ID of the existed flight
+     * @throws ServiceException If something fails at DAO level
+     */
+    Void deleteCrew(Long id) throws ServiceException, ServiceValidateException;
 }

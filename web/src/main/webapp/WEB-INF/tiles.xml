@@ -31,12 +31,11 @@
 
     <definition name="main" extends="default">
         <put-attribute name="title" value="page.title.main"/>
-        <put-attribute name="right-content" value="/WEB-INF/view/common/message.jspx"/>
     </definition>
 
     <definition name="error" extends="default">
         <put-attribute name="title" value="page.title.error"/>
-        <put-attribute name="right-content" value="/WEB-INF/view/common/error.jspx"/>
+        <put-attribute name="message" value="/WEB-INF/view/common/error.jspx"/>
     </definition>
 
     <definition name="user/list" extends="default">

@@ -13,7 +13,6 @@ public class Attribute {
     public static final String FLIGHT = "flight";
     public static final String FLIGHTS = "flights";
     public static final String TEAM = "team";
-    public static final String USER_TYPE = "userType";
     public static final String USERS = "users";
     public static final String PLANE = "plane";
     public static final String PLANES = "planes";

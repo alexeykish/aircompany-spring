@@ -28,7 +28,7 @@ public class AirportDAOTest {
 
     private Long id;
     private Airport testAirport;
-    Airport addedAirport;
+    private Airport addedAirport;
 
     @Before
     public void setUp() throws Exception {

@@ -1,18 +1,14 @@
 package by.pvt.kish.aircompany.authentication;
 
-import by.pvt.kish.aircompany.dao.impl.UserDAO;
-import by.pvt.kish.aircompany.exceptions.DaoException;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.pojos.User;
 import by.pvt.kish.aircompany.services.IUserService;
-import by.pvt.kish.aircompany.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;

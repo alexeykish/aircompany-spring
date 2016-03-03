@@ -94,10 +94,10 @@ public class FlightStatusHandler {
     }
 
     /**
-     * Check if flightw crew is set
+     * Check if flight crew is set
      *
      * @param flight - the flight to be checked
-     * @return MATCHED - if crew is set, EMPPTY - if doesn`t
+     * @return MATCHED - if crew is set, EMPTY - if doesn`t
      */
     private static String checkTeam(Flight flight) {
         if (!flight.getCrew().isEmpty()) {

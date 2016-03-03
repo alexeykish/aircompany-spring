@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -26,7 +27,8 @@
         </div>
     </div>
     <div style="text-align: center;">
-        <form action="/signIn" method="post">
+        <c:url value="/signIn" var="signIn"/>
+        <form action="${signIn}" method="post">
             <input class="button" type="submit" value="Sign in"/>
         </form>
     </div>

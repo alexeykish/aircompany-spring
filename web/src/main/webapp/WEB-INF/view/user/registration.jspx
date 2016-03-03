@@ -60,7 +60,8 @@
                 <input class="button" type="submit" name="submit" value="${register}"/>
             </fieldset>
         </sf:form>
-        <form action="signIn" method="post">
+        <s:url value="/signIn" var="signIn"/>
+        <form action="${signIn}" method="post">
             <s:message code="link.back" var="back"/>
             <input class="button" type="submit" name="submit" value="${back}"/>
         </form>

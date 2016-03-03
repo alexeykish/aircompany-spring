@@ -9,7 +9,7 @@ public enum Waypoint {
 
     private String waypoint;
 
-    private Waypoint(final String waypoint){
+    Waypoint(final String waypoint){
         this.waypoint = waypoint;
     }
 

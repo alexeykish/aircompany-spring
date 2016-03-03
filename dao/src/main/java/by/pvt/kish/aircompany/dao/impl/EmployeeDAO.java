@@ -103,7 +103,7 @@ public class EmployeeDAO extends BaseDAO<Employee> implements IEmployeeDAO{
 			query.setParameter(QUERY_PARAMETER_DATE, flightDate);
 			query.setParameter(QUERY_PARAMETER_ID, id);
 			results = query.list();
-			if (!results.isEmpty()) {
+			if (results.isEmpty()) {
 				return false;
 			}
 		} catch (HibernateException e) {

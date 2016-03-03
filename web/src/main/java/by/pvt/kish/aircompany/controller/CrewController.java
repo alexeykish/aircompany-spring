@@ -1,6 +1,7 @@
 package by.pvt.kish.aircompany.controller;
 
 import by.pvt.kish.aircompany.constants.Attribute;
+import by.pvt.kish.aircompany.enums.FlightStatus;
 import by.pvt.kish.aircompany.exceptions.ServiceException;
 import by.pvt.kish.aircompany.exceptions.ServiceValidateException;
 import by.pvt.kish.aircompany.pojos.Employee;
@@ -89,9 +90,14 @@ public class CrewController {
                                    RedirectAttributes redirectAttributes,
                                    HttpServletRequest request) {
         try {
+            Flight flight = flightService.getById(id);
             List<Long> crew = getCrew(request, num);
-            teamValidator.validate(id, crew);
-            flightService.addTeam(id, getCrew(request, num));
+            if (flight.getCrew().isEmpty()) {
+                teamValidator.validate(id, crew, false);
+            } else {
+                teamValidator.validate(id, crew, true);
+            }
+            flightService.addCrew(id, getCrew(request, num));
             redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("message.success.crew.change", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
@@ -101,8 +107,27 @@ public class CrewController {
         return REDIRECT_PATH_FLIGHT_MAIN;
     }
 
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    public String deleteCrew(@PathVariable("id") Long id,
+                             RedirectAttributes redirectAttributes,
+                             Locale locale,
+                             HttpServletRequest request) {
+        try {
+            Flight flight = flightService.getById(id);
+            if (flight.getStatus() == FlightStatus.READY) {
+                flightService.deleteCrew(id);
+            }
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("message.success.crew.delete", null, locale));
+        } catch (ServiceException e) {
+            return ErrorHandler.returnErrorPage(e.getMessage(), className);
+        } catch (ServiceValidateException e) {
+            return ErrorHandler.returnValidateErrorPage(request, e.getMessage(),className);
+        }
+        return REDIRECT_PATH_FLIGHT_MAIN;
+    }
 
-    public static List<Long> getCrew(HttpServletRequest request, int count) {
+
+    private static List<Long> getCrew(HttpServletRequest request, int count) {
         List<Long> team = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             team.add(Long.parseLong(request.getParameter(String.valueOf(i))));

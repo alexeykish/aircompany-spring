@@ -57,14 +57,27 @@
                     <s:url value="/crew/addPage/${flight.fid}" var="addCrewPage"/>
                     <form action="${addCrewPage}" method="get">
                            <c:if test="${(requestScope.flight.crew.size() == 0)}">
-                               <s:message code="button.crew.add" var="addCrew"/>
-                               <input class="table-button" style="width: 100px;  color:red;" type="submit" name="submit" value="${addCrew}"/>
+                                <c:if test="${(flight.status == 'CREATED')}">
+                                    <s:message code="button.crew.add" var="addCrew"/>
+                                    <input class="table-button" style="width: 100px;  color:red;" type="submit" name="submit" value="${addCrew}"/>
+                                </c:if>
                            </c:if>
                            <c:if test="${(requestScope.flight.crew.size() != 0)}">
-                               <s:message code="button.crew.update" var="updateCrew"/>
-                               <input class="table-button" style="width: 100px;" type="submit" name="submit" value="${updateCrew}"/>
-                           </c:if>
+                               <c:if test="${(flight.status == 'READY')}">
+                                    <s:message code="button.crew.update" var="updateCrew"/>
+                                    <input class="table-button" style="width: 100px;" type="submit" name="submit" value="${updateCrew}"/>
 
+                               </c:if>
+                           </c:if>
+                    </form>
+                    <s:url value="/crew/delete/${flight.fid}" var="deleteCrewUrl"/>
+                    <form action="${deleteCrewUrl}" method="get">
+                        <c:if test="${(requestScope.flight.crew.size() != 0)}">
+                            <c:if test="${(flight.status == 'READY')}">
+                                <s:message code="button.crew.delete" var="deleteCrew"/>
+                                <input class="table-button" style="width: 100px;" type="submit" name="submit" value="${deleteCrew}"/>
+                            </c:if>
+                        </c:if>
                     </form>
                 </sec:authorize>
             <!--</c:if>-->

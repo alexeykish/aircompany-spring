@@ -5,14 +5,10 @@ package by.pvt.kish.aircompany.pojos;
 
 import by.pvt.kish.aircompany.enums.FlightStatus;
 import by.pvt.kish.aircompany.enums.Waypoint;
-import org.hibernate.annotations.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
 
@@ -50,7 +46,7 @@ public class Flight implements Serializable {
     }
     private Date date;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @MapKeyEnumerated(EnumType.STRING)
     public Map<Waypoint, Airport> getWaypoints() {
         return waypoints;
@@ -60,7 +56,7 @@ public class Flight implements Serializable {
     }
     private Map<Waypoint, Airport> waypoints = new HashMap<>();
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "F_PLANE_ID")
     public Plane getPlane() {
         return plane;
