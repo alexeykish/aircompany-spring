@@ -20,6 +20,12 @@ import java.util.Date;
 @Component
 public class FlightValidator implements Validator {
 
+    private static final String CHECKED_FIELD_DATE = "date";
+    private static final String CHECKED_FIELD_WAYPOINT = "waypoints['ARRIVAL']";
+
+    private static final String ERROR_EMPTY_DATE = "NotEmpty.flight.date";
+    private static final String ERROR_EMPTY_FLIGHT_DATE = "message.error.flight.date";
+    private static final String ERROR_EMPTY_FLIGHT_WAYPOINT = "message.error.flight.waypoints";
 
     @Override
     public boolean supports(Class aClass) {
@@ -29,12 +35,12 @@ public class FlightValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Flight flight = (Flight) o;
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "date", "NotEmpty.flight.date");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, CHECKED_FIELD_DATE, ERROR_EMPTY_DATE);
         if (checkDate(flight)) {
-            errors.rejectValue("date", "message.error.flight.date");
+            errors.rejectValue(CHECKED_FIELD_DATE, ERROR_EMPTY_FLIGHT_DATE);
         }
         if (checkWaypoints(flight)) {
-            errors.rejectValue("waypoints['ARRIVAL']", "message.error.flight.waypoints");
+            errors.rejectValue(CHECKED_FIELD_WAYPOINT, ERROR_EMPTY_FLIGHT_WAYPOINT);
         }
     }
 
@@ -63,6 +69,4 @@ public class FlightValidator implements Validator {
         }
         return result;
     }
-
-
 }

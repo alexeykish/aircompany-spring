@@ -16,10 +16,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +33,12 @@ public class PlaneController {
     private static String className = PlaneController.class.getName();
     private static Logger logger = Logger.getLogger(PlaneController.class.getName());
 
+    private static final String REDIRECT_PATH_PLANE_MAIN = "redirect:/plane/main";
+    private static final String PATH_PLANE_ADD = "plane/add";
+    private static final String PATH_PLANE_UPDATE = "plane/update";
+    private static final String PATH_PLANE_LIST = "plane/list";
+    private static final String PATH_PLANE_REPORT = "plane/report";
+
     @Autowired
     private IPlaneService planeService;
 
@@ -51,7 +54,7 @@ public class PlaneController {
         return new Plane();
     }
 
-    @RequestMapping(value = "/add")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addPlane(@Valid @ModelAttribute("plane") Plane plane,
                            BindingResult bindingResult,
                            Locale locale,
@@ -62,43 +65,43 @@ public class PlaneController {
                     PlaneCrew planeCrew = plane.getPlaneCrew();
                     planeCrew.setPlane(plane);
                     planeService.add(plane);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_ADD_PLANE", null, locale));
-                    return "redirect:/plane/main";
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("message.success.plane.add", null, locale));
+                    return REDIRECT_PATH_PLANE_MAIN;
                 }
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
-        return "plane/add";
+        return PATH_PLANE_ADD;
     }
 
-    @RequestMapping(value = "/delete/{id}")
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String deletePlane(RedirectAttributes redirectAttributes,
                               Locale locale,
                               @PathVariable("id") Long id,
                               HttpServletRequest request) {
         try {
             planeService.delete(id);
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_DELETE_PLANE", null, locale));
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("message.success.plane.delete", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "redirect:/plane/main";
+        return REDIRECT_PATH_PLANE_MAIN;
     }
 
-    @RequestMapping(value = "/main")
+    @RequestMapping(value = "/main", method = RequestMethod.GET)
     public String getAllPlanes(ModelMap model) {
         try {
             model.addAttribute(Attribute.PLANES, planeService.getAll());
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
-        return "plane/list";
+        return PATH_PLANE_LIST;
     }
 
-    @RequestMapping(value = "/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String createPlaneReport(ModelMap model,
                                     @PathVariable("id") Long id,
                                     HttpServletRequest request) {
@@ -115,10 +118,10 @@ public class PlaneController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "plane/report";
+        return PATH_PLANE_REPORT;
     }
 
-    @RequestMapping(value = "/changeStatus/{id}")
+    @RequestMapping(value = "/changeStatus/{id}", method = RequestMethod.POST)
     public String changePlaneStatus(RedirectAttributes redirectAttributes,
                                     @PathVariable("id") Long id,
                                     @RequestParam("status") String status,
@@ -126,16 +129,16 @@ public class PlaneController {
                                     HttpServletRequest request) {
         try {
             planeService.setStatus(id, PlaneStatus.valueOf(status));
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_SET_STATUS_PLANE", null, locale));
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("message.success.plane.set.status", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "redirect:/plane/main";
+        return REDIRECT_PATH_PLANE_MAIN;
     }
 
-    @RequestMapping(value = "/update")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String updatePlane(@Valid @ModelAttribute("plane") Plane plane,
                               BindingResult bindingResult,
                               Locale locale,
@@ -144,22 +147,22 @@ public class PlaneController {
             if (!bindingResult.hasErrors()) {
                 if (plane != null) {
                     planeService.update(plane);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_UPDATE_PLANE", null, locale));
-                    return "redirect:/planeList";
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("message.success.plane.update", null, locale));
+                    return REDIRECT_PATH_PLANE_MAIN;
                 }
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
-        return "plane/update";
+        return PATH_PLANE_UPDATE;
     }
 
-    @RequestMapping(value = "/addPage")
+    @RequestMapping(value = "/addPage", method = RequestMethod.GET)
     public String showAddPlanePage() {
-        return "plane/add";
+        return PATH_PLANE_ADD;
     }
 
-    @RequestMapping(value = "/updatePage/{id}")
+    @RequestMapping(value = "/updatePage/{id}", method = RequestMethod.GET)
     public String showUpdatePlanePage(ModelMap model,
                                       @PathVariable("id") Long id,
                                       HttpServletRequest request) {
@@ -170,7 +173,7 @@ public class PlaneController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "plane/update";
+        return PATH_PLANE_UPDATE;
     }
 
     private Map<String, Integer> getCrew(Plane plane) {

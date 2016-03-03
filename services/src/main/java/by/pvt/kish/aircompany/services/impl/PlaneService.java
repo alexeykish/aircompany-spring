@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+import static by.pvt.kish.aircompany.utils.ServiceUtils.checkNullId;
+
 /**
  * This class represents a concrete implementation of the IService interface for plane model.
  *
@@ -41,14 +43,12 @@ public class PlaneService extends BaseService<Plane> implements IPlaneService{
      */
     @Override
     public void setStatus(Long id, PlaneStatus status) throws ServiceException, ServiceValidateException {
-        if (id == null) {
-            throw new ServiceValidateException("ERROR_ID_MISSING");
-        }
+        checkNullId(id);
         try {
             planeDAO.setPlaneStatus(id, status);
             logger.debug(SUCCESSFUL_TRANSACTION);
         } catch (DaoException e) {
-            logger.debug(TRANSACTION_FAILED);
+            logger.debug(TRANSACTION_FAILED, e);
             throw new ServiceException(e.getMessage());
         }
     }
@@ -58,15 +58,13 @@ public class PlaneService extends BaseService<Plane> implements IPlaneService{
      *
      * @param id - The ID of the plane
      * @return - the list of last five flight of the concrete plane
-     * @throws DaoException If something fails at DB level
+     * @throws DaoException If something fails at DAO level
      */
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public List<Flight> getPlaneLastFiveFlights(Long id) throws ServiceException, ServiceValidateException {
         List<Flight> results;
-        if (id < 0) {
-            throw new ServiceValidateException("ERROR_ID_MISSING");
-        }
+        checkNullId(id);
         try {
             results =  planeDAO.getPlaneLastFiveFlights(id);
         } catch (DaoException e) {

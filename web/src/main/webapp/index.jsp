@@ -26,7 +26,7 @@
         </div>
     </div>
     <div style="text-align: center;">
-        <form action="/signIn" method="get">
+        <form action="/signIn" method="post">
             <input class="button" type="submit" value="Sign in"/>
         </form>
     </div>

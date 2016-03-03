@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -35,6 +36,10 @@ public class CrewController {
 
     private static String className = CrewController.class.getName();
     private static Logger logger = Logger.getLogger(CrewController.class.getName());
+
+    private static final String REDIRECT_PATH_FLIGHT_MAIN = "redirect:/flight/main?page=1";
+    private static final String PATH_CREW_ADD = "crew/add";
+    private static final String PATH_CREW_UPDATE = "crew/update";
 
     @Autowired
     private IFlightService flightService;
@@ -55,7 +60,7 @@ public class CrewController {
         this.messageSource = messageSource;
     }
 
-    @RequestMapping(value = "/addPage/{id}")
+    @RequestMapping(value = "/addPage/{id}", method = RequestMethod.GET)
     public String addCrew(ModelMap model,
                           @PathVariable("id") Long id,
                           HttpServletRequest request) {
@@ -67,17 +72,17 @@ public class CrewController {
             model.addAttribute(Attribute.POSITIONS, TeamCreator.getPlanePositions(planeService.getById(flight.getPlane().getPid())));
             if (crew.size() != 0) {
                 model.addAttribute(Attribute.TEAM, crew);
-                return "crew/update";
+                return PATH_CREW_UPDATE;
             }
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "crew/add";
+        return PATH_CREW_ADD;
     }
 
-    @RequestMapping(value = "/save/{id}")
+    @RequestMapping(value = "/save/{id}", method = RequestMethod.POST)
     public String saveCrewToFlight(@PathVariable("id") Long id,
                                    @RequestParam("num") Integer num,
                                    Locale locale,
@@ -87,13 +92,13 @@ public class CrewController {
             List<Long> crew = getCrew(request, num);
             teamValidator.validate(id, crew);
             flightService.addTeam(id, getCrew(request, num));
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_TEAM_CHANGE", null, locale));
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("message.success.crew.change", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(),className);
         }
-        return "redirect:/flight/main?page=1";
+        return REDIRECT_PATH_FLIGHT_MAIN;
     }
 
 

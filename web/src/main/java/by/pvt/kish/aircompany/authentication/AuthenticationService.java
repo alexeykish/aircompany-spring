@@ -23,6 +23,8 @@ import java.util.Arrays;
 //@Service
 public class AuthenticationService implements UserDetailsService {
 
+    private static final String ERROR_USER_NOT_FOUND = "Username not found";
+
     @Autowired
     private IUserService userService;
 
@@ -35,7 +37,7 @@ public class AuthenticationService implements UserDetailsService {
             user = userService.getByLogin(login);
             authority = new SimpleGrantedAuthority(user.getRole().toString());
             if (user == null) {
-                throw new UsernameNotFoundException("Username not found");
+                throw new UsernameNotFoundException(ERROR_USER_NOT_FOUND);
             }
         } catch (ServiceException e) {
             e.printStackTrace(); //TODO Exception handling

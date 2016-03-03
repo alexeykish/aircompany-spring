@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static by.pvt.kish.aircompany.utils.ServiceUtils.checkNullId;
+
 /**
  * The abstract class represents a implementation of the IService interface
  *
@@ -52,7 +54,7 @@ public abstract class BaseService<T> implements IService<T> {
             t = dao.add(t);
             logger.debug(SUCCESSFUL_TRANSACTION);
         } catch (DaoException e) {
-            logger.debug(TRANSACTION_FAILED);
+            logger.debug(TRANSACTION_FAILED, e);
             throw new ServiceException(e.getMessage());
         }
         return t;
@@ -69,7 +71,7 @@ public abstract class BaseService<T> implements IService<T> {
             dao.update(t);
             logger.debug(SUCCESSFUL_TRANSACTION);
         } catch (DaoException e) {
-            logger.debug(TRANSACTION_FAILED);
+            logger.debug(TRANSACTION_FAILED, e);
             throw new ServiceException(e.getMessage());
         }
     }
@@ -99,13 +101,11 @@ public abstract class BaseService<T> implements IService<T> {
      */
     public void delete(Long id) throws ServiceException, ServiceValidateException {
         try {
-            if (id == null) {
-                throw new ServiceValidateException("ERROR_ID_MISSING");
-            }
+            checkNullId(id);
             dao.delete(id);
             logger.debug(SUCCESSFUL_TRANSACTION);
         } catch (DaoException e) {
-            logger.debug(TRANSACTION_FAILED);
+            logger.debug(TRANSACTION_FAILED, e);
             throw new ServiceException(e.getMessage());
         }
     }
@@ -121,9 +121,7 @@ public abstract class BaseService<T> implements IService<T> {
     public T getById(Long id) throws ServiceException, ServiceValidateException {
         T t;
         try {
-            if (id == null) {
-                throw new ServiceValidateException("ERROR_ID_MISSING");
-            }
+            checkNullId(id);
             t = dao.getById(id);
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage());

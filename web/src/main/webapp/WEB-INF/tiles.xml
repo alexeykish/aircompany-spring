@@ -11,6 +11,14 @@
         <put-attribute name="right-content" value=""/>
     </definition>
 
+    <definition name="pagination" template="/WEB-INF/view/layouts/default.jspx">
+        <put-attribute name="title" value=""/>
+        <put-attribute name="header" value="/WEB-INF/view/common/headerPagination.jspx"/>
+        <put-attribute name="menu" value="/WEB-INF/view/common/menu.jspx"/>
+        <put-attribute name="message" value="/WEB-INF/view/common/message.jspx"/>
+        <put-attribute name="right-content" value=""/>
+    </definition>
+
     <definition name="signIn" template="/WEB-INF/view/user/login.jspx">
         <put-attribute name="title" value="page.title.authorisation"/>
         <put-attribute name="authorisation" value="/WEB-INF/view/user/auth.jspx"/>
@@ -66,7 +74,7 @@
         <put-attribute name="right-content" value="/WEB-INF/view/crew/updateCrew.jspx"/>
     </definition>
 
-    <definition name="flight/list" extends="default">
+    <definition name="flight/list" extends="pagination">
         <put-attribute name="title" value="page.title.flights"/>
         <put-attribute name="right-content" value="/WEB-INF/view/flight/flightList.jspx"/>
     </definition>

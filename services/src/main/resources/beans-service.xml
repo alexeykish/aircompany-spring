@@ -24,5 +24,9 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
     <tx:annotation-driven transaction-manager="txManager"/>
 
     <bean id="teamCreator" class="by.pvt.kish.aircompany.utils.TeamCreator"/>
-    <bean id="flightStatusValidator" class="by.pvt.kish.aircompany.validators.FlightStatusValidator"/>
+    <bean id="flightStatusHandler" class="by.pvt.kish.aircompany.handlers.FlightStatusHandler"/>
+
+    <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="txManager"/>
+    </bean>
 </beans>

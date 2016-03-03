@@ -46,7 +46,7 @@
                         <input class="table-button" type="submit" name="submit" value="${delete}"/>
                     </form>
                     <s:url value="/flight/updatePage/${flight.fid}" var="updateFlight"/>
-                    <form action="${updateFlight}" method="post">
+                    <form action="${updateFlight}" method="get">
                         <s:message code="button.update" var="update"/>
                         <input class="table-button" type="submit" name="submit" value="${update}"/>
                     </form>
@@ -55,7 +55,7 @@
             <!--<c:if test="${((flight.status == 'READY')and(flight.status == 'CREATED'))}">-->
                 <sec:authorize access="hasRole('ROLE_DISPATCHER')">
                     <s:url value="/crew/addPage/${flight.fid}" var="addCrewPage"/>
-                    <form action="${addCrewPage}" method="post">
+                    <form action="${addCrewPage}" method="get">
                            <c:if test="${(requestScope.flight.crew.size() == 0)}">
                                <s:message code="button.crew.add" var="addCrew"/>
                                <input class="table-button" style="width: 100px;  color:red;" type="submit" name="submit" value="${addCrew}"/>

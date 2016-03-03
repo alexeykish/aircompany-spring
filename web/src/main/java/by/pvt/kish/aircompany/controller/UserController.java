@@ -36,6 +36,11 @@ public class UserController {
     private static String className = UserController.class.getName();
     private static Logger logger = Logger.getLogger(UserController.class.getName());
 
+    private static final String REDIRECT_PATH_SIGNIN = "redirect:/signIn";
+    private static final String PATH_USER_SIGNIN = "signIn";
+    private static final String PATH_USER_REGISTRATION = "registration";
+    private static final String PATH_USER_LIST = "user/list";
+
     @Autowired
     private IUserService userService;
 
@@ -63,7 +68,7 @@ public class UserController {
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/signIn";
+        return REDIRECT_PATH_SIGNIN;
     }
 
     @RequestMapping(value = "/user/add")
@@ -76,7 +81,7 @@ public class UserController {
                 if (user != null) {
                     userService.addUser(user);
                     model.addAttribute(Attribute.LOGIN_MESSAGE, "message.success.registration");
-                    return "signIn";
+                    return PATH_USER_SIGNIN;
                 }
             } else {
                 model.addAttribute(Attribute.USERROLES, Arrays.asList(UserRole.values()));
@@ -86,7 +91,7 @@ public class UserController {
         } catch (ServiceLoginException e) {
             return ErrorHandler.returnLoginErrorPage(request, e.getMessage(), className);
         }
-        return "registration";
+        return PATH_USER_REGISTRATION;
     }
 
     @RequestMapping(value = "/user/main")
@@ -96,24 +101,24 @@ public class UserController {
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
-        return "user/list";
+        return PATH_USER_LIST;
     }
 
     @RequestMapping(value = "/signIn")
     public String showAuthorisationPage() {
-        return "signIn";
+        return PATH_USER_SIGNIN;
     }
 
     @RequestMapping(value = "/registrationPage")
     public String showRegistrationPage(ModelMap model) {
         model.addAttribute(Attribute.USERROLES, Arrays.asList(UserRole.values()));
-        return "registration";
+        return PATH_USER_REGISTRATION;
     }
 
-    @RequestMapping(value = "/access_denied", method = RequestMethod.GET)
+    @RequestMapping(value = "/access_denied")
     public String accessDeniedPage(Locale locale,
                                    RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute(Attribute.LOGIN_MESSAGE, messageSource.getMessage("message.access.denied", null, locale));
-        return "redirect:/signIn";
+        return REDIRECT_PATH_SIGNIN;
     }
 }

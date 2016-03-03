@@ -13,7 +13,7 @@ import by.pvt.kish.aircompany.services.IFlightService;
 import by.pvt.kish.aircompany.services.IPlaneService;
 import by.pvt.kish.aircompany.services.IService;
 import by.pvt.kish.aircompany.utils.ErrorHandler;
-import by.pvt.kish.aircompany.validators.FlightStatusValidator;
+import by.pvt.kish.aircompany.handlers.FlightStatusHandler;
 import by.pvt.kish.aircompany.validators.FlightValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,6 @@ import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -45,6 +44,12 @@ public class FlightController {
     private static String className = FlightController.class.getName();
     private static Logger logger = Logger.getLogger(FlightController.class.getName());
 
+    private static final String REDIRECT_PATH_FLIGHT_MAIN = "redirect:/flight/main?page=1";
+    private static final String PATH_FLIGHT_ADD = "flight/add";
+    private static final String PATH_FLIGHT_UPDATE = "flight/update";
+    private static final String PATH_FLIGHT_LIST = "flight/list";
+    private static final String PATH_FLIGHT_REPORT = "flight/report";
+
     @Autowired
     private IFlightService flightService;
 
@@ -55,7 +60,7 @@ public class FlightController {
     private IService<Airport> airportService;
 
     @Autowired
-    private FlightStatusValidator flightStatusValidator;
+    private FlightStatusHandler flightStatusHandler;
 
     @Autowired
     private FlightValidator flightValidator;
@@ -101,9 +106,9 @@ public class FlightController {
         binder.setValidator(flightValidator);
     }
 
-    @RequestMapping(value = "/add")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addFlight(ModelMap model,
-                            @Valid @ModelAttribute("flight") Flight flight,
+                            @Valid @ModelAttribute Flight flight,
                             BindingResult bindingResult,
                             Locale locale,
                             RedirectAttributes redirectAttributes) {
@@ -111,38 +116,36 @@ public class FlightController {
             if (!bindingResult.hasErrors()) {
                 if (flight != null) {
                     flightService.add(flight);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_ADD_FLIGHT", null, locale));
-                    return "redirect:/flight/main?page=1";
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("message.success.flight.add", null, locale));
+                    return REDIRECT_PATH_FLIGHT_MAIN;
                 }
             } else {
                 model.addAttribute(Attribute.AIRPORTS, airportService.getAll());
                 model.addAttribute(Attribute.PLANES, planeService.getAll());
             }
-        } catch (IllegalArgumentException e) {
-            return ErrorHandler.returnErrorPage("ERROR_IAE", className);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
-        return "flight/add";
+        return PATH_FLIGHT_ADD;
     }
 
-    @RequestMapping(value = "/delete/{id}")
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public String deleteFlight(RedirectAttributes redirectAttributes,
                                Locale locale,
                                @PathVariable("id") Long id,
                                HttpServletRequest request) {
         try {
             flightService.delete(id);
-            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_DELETE_FLIGHT", null, locale));
+            redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("message.success.flight.delete", null, locale));
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "redirect:/flight/main?page=1";
+        return REDIRECT_PATH_FLIGHT_MAIN;
     }
 
-    @RequestMapping(value = "/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String createFlightReport(ModelMap model,
                                      @PathVariable("id") Long id,
                                      HttpServletRequest request) {
@@ -154,10 +157,10 @@ public class FlightController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "flight/report";
+        return PATH_FLIGHT_REPORT;
     }
 
-    @RequestMapping(value = "/main")
+    @RequestMapping(value = "/main", method = RequestMethod.GET)
     public String getAllFlights(ModelMap model,
                                 @RequestParam("page") Integer page,
                                 HttpServletRequest request) {
@@ -169,7 +172,7 @@ public class FlightController {
         try {
             int noOfRecords = flightService.getCount();
             int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
-            flightStatusValidator.updateFlightsStatus();
+            flightStatusHandler.updateFlightsStatus();
             model.addAttribute(Attribute.FLIGHTS, flightService.getAllToPage(recordsPerPage, currentPage));
             model.addAttribute("noOfPages", noOfPages);
             model.addAttribute("currentPage", currentPage);
@@ -178,10 +181,10 @@ public class FlightController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "flight/list";
+        return PATH_FLIGHT_LIST;
     }
 
-    @RequestMapping(value = "/update")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String updateFlight(ModelMap model,
                                RedirectAttributes redirectAttributes,
                                @Valid @ModelAttribute Flight flight,
@@ -191,23 +194,21 @@ public class FlightController {
             if (!bindingResult.hasErrors()) {
                 if (flight != null) {
                     flightService.update(flight);
-                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("SUCCESS_UPDATE_FLIGHT", null, locale));
-                    return "redirect:/flight/main?page=1";
+                    redirectAttributes.addFlashAttribute(Attribute.MESSAGE, messageSource.getMessage("message.success.flight.update", null, locale));
+                    return REDIRECT_PATH_FLIGHT_MAIN;
                 }
             } else {
                 model.addAttribute(Attribute.STATUSES, Arrays.asList(FlightStatus.values()));
                 model.addAttribute(Attribute.AIRPORTS, airportService.getAll());
                 model.addAttribute(Attribute.PLANES, planeService.getAll());
             }
-        } catch (IllegalArgumentException e) {
-            return ErrorHandler.returnErrorPage("ERROR_IAE", className);
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
-        return "flight/update";
+        return PATH_FLIGHT_UPDATE;
     }
 
-    @RequestMapping(value = "/addPage")
+    @RequestMapping(value = "/addPage", method = RequestMethod.GET)
     public String showAddFlightPage(Model model) {
         try {
             model.addAttribute(Attribute.AIRPORTS, airportService.getAll());
@@ -215,10 +216,10 @@ public class FlightController {
         } catch (ServiceException e) {
             return ErrorHandler.returnErrorPage(e.getMessage(), className);
         }
-        return "flight/add";
+        return PATH_FLIGHT_ADD;
     }
 
-    @RequestMapping(value = "/updatePage/{id}")
+    @RequestMapping(value = "/updatePage/{id}", method = RequestMethod.GET)
     public String showUpdateFlightPage(Model model,
                                        @PathVariable("id") Long id,
                                        HttpServletRequest request) {
@@ -232,7 +233,7 @@ public class FlightController {
         } catch (ServiceValidateException e) {
             return ErrorHandler.returnValidateErrorPage(request, e.getMessage(), className);
         }
-        return "flight/update";
+        return PATH_FLIGHT_UPDATE;
     }
 
 }

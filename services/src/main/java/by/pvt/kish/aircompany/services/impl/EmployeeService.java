@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+import static by.pvt.kish.aircompany.utils.ServiceUtils.checkNullId;
+
 /**
  * This class represents a concrete implementation of the IService interface for employee model.
  *
@@ -28,6 +30,8 @@ import java.util.List;
 public class EmployeeService extends BaseService<Employee> implements IEmployeeService{
 
     private static Logger logger = Logger.getLogger(EmployeeService.class);
+
+
 
     @Autowired
     private IEmployeeDAO employeeDao;
@@ -42,14 +46,12 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public void setStatus(Long id, EmployeeStatus status) throws ServiceException, ServiceValidateException {
-        if (id == null) {
-            throw new ServiceValidateException("ERROR_ID_MISSING");
-        }
+        checkNullId(id);
         try {
             employeeDao.setEmployeeStatus(id, status);
             logger.debug(SUCCESSFUL_TRANSACTION);
         } catch (DaoException e) {
-            logger.debug(TRANSACTION_FAILED);
+            logger.debug(TRANSACTION_FAILED, e);
             throw new ServiceException(e.getMessage());
         }
     }
@@ -83,9 +85,7 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
     @Override
     public boolean checkEmployeeAvailability(Long id, Date flightDate) throws ServiceException, ServiceValidateException {
         boolean result;
-        if (id == null) {
-            throw new ServiceValidateException("ERROR_ID_MISSING");
-        }
+        checkNullId(id);
         try {
             result =  employeeDao.checkEmployeeAvailability(id, flightDate);
         } catch (DaoException e) {
@@ -104,9 +104,7 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
     @Override
     public List<Flight> getEmployeeLastFiveFlights(Long id) throws ServiceException, ServiceValidateException {
         List<Flight> results;
-        if (id == null) {
-            throw new ServiceValidateException("ERROR_ID_MISSING");
-        }
+        checkNullId(id);
         try {
             results =  employeeDao.getEmployeeLastFiveFlights(id);
         } catch (DaoException e) {
@@ -125,9 +123,7 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
     @Override
     public List<Employee> getFlightCrewByFlightId(Long id) throws ServiceException, ServiceValidateException {
         List<Employee> results;
-        if (id == null) {
-            throw new ServiceValidateException("ERROR_ID_MISSING");
-        }
+        checkNullId(id);
         try {
             results =  employeeDao.getFlightCrewByFlightId(id);
         } catch (DaoException e) {
@@ -135,4 +131,6 @@ public class EmployeeService extends BaseService<Employee> implements IEmployeeS
         }
         return results;
     }
+
+
 }

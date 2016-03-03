@@ -20,7 +20,7 @@ public interface IFlightService extends IService<Flight> {
      * @param status - The status to be changed
      * @throws ServiceException If something fails at DAO level
      */
-    void setStatus(Long id, FlightStatus status) throws ServiceException, ServiceValidateException;
+    Void setStatus(Long id, FlightStatus status) throws ServiceException, ServiceValidateException;
 
     /**
      * Add flight crew to existed flight
@@ -29,7 +29,7 @@ public interface IFlightService extends IService<Flight> {
      * @param team - The set of the employees that is flight crew
      * @throws ServiceException If something fails at DAO level
      */
-    void addTeam(Long id, List<Long> team) throws ServiceException, ServiceValidateException;
+    Void addTeam(Long id, List<Long> team) throws ServiceException, ServiceValidateException;
 
     /**
      * Returns a list of flights ordered by date, prepared for pagination from the DB
@@ -41,10 +41,4 @@ public interface IFlightService extends IService<Flight> {
      */
     List<Flight> getAllToPage(int pageSize, int pageNumber) throws DaoException, ServiceException;
 
-    /**
-     * Returns the number of flights in the DB
-     *
-     * @throws DaoException If something fails at DB level
-     */
-    int getCount() throws DaoException, ServiceException;
 }

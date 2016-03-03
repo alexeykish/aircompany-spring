@@ -7,7 +7,7 @@
     <div>
         <sec:authorize access="hasRole('ROLE_ADMIN')">
             <s:url value="/flight/addPage" var="addFlightPage"/>
-            <form action="${addFlightPage}" method="post">
+            <form action="${addFlightPage}" method="get">
                 <s:message code="button.add" var="add"/>
                 <input class="button" type="submit" name="submit" value="${add}"/>
             </form>
@@ -41,7 +41,7 @@
                     <td>${flight.status}</td>
                     <td style="width: 70px;">
                         <s:url value="/flight/${flight.fid}" var="flightReport"/>
-                        <form action="${flightReport}" method="post">
+                        <form action="${flightReport}" method="get">
                             <s:message code="button.report" var="report"/>
                             <c:if test="${(flight.crew.size() == 0)}">
                                 <input class="table-button" style="width: 90px;  color:red;" type="submit" name="submit" value="${report}"/>

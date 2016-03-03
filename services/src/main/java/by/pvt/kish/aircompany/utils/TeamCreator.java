@@ -50,6 +50,12 @@ public class TeamCreator {
         return positions;
     }
 
+    /**
+     * Returns set of employees by its ids
+     *
+     * @param team - set od employees id
+     * @return set of members of the crew
+     */
     public Set<Employee> getEmployeeListById(List<Long> team) throws ServiceException, ServiceValidateException {
         Set<Employee> employees = new HashSet<>();
         for (Long l: team) {

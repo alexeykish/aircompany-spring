@@ -5,9 +5,9 @@
           xmlns:sec="http://www.springframework.org/security/tags"
           version="2.0">
     <div style="float: right">
-        <a href="?locale=en">en</a>
+        <a href="${pageContext.request.contextPath}/flight/main?page=${requestScope.currentPage}&amp;locale=en">en</a>
         |
-        <a href="?locale=ru">ru</a>
+        <a href="${pageContext.request.contextPath}/flight/main?page=${requestScope.currentPage}&amp;locale=ru">ru</a>
     </div>
     <div class="user-container">
         <div style="font-size: 12px;"><s:message code="label.user.current"/>:

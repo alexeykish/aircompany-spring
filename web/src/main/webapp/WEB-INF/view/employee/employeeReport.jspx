@@ -44,7 +44,7 @@
                         <input class="button" type="submit" name="submit" value="${delete}"/>
                     </form>
                     <s:url value="/employee/updatePage/${employee.eid}" var="updateEmployee"/>
-                    <form action="${updateEmployee}" method="post">
+                    <form action="${updateEmployee}" method="get">
                         <s:message code="button.update" var="update"/>
                         <input class="button" type="submit" name="submit" value="${update}"/>
                     </form>

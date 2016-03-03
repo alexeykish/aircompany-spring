@@ -38,7 +38,7 @@
                         <input class="button" type="submit" name="submit" value="${delete}"/>
                     </form>
                     <s:url value="/airport/updatePage/${airport.aid}" var="updateAirport"/>
-                    <form action="${updateAirport}" method="post">
+                    <form action="${updateAirport}" method="get">
                         <s:message code="button.update" var="update"/>
                         <input class="button" type="submit" name="submit" value="${update}"/>
                     </form>

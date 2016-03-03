@@ -14,11 +14,7 @@
     <title><spring:message code="${title}"/></title>
 </head>
 <body>
-<div style="float: right">
-    <a href="?locale=en">en</a>
-    |
-    <a href="?locale=ru">ru</a>
-</div>
+
 <tiles:insertAttribute name="header"/>
 <table style="border-collapse: collapse;">
     <tbody>
